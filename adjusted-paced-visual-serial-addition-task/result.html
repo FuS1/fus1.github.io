@@ -23,7 +23,7 @@
                 });
                 $("#download").on('click',function(){
                     var result = getLocalStorage('result-'+getUrlParameter('result_id'));
-                    let Heading = [['題目出現時間', '回答時間', '前一數字', '當前數字', '使用者回答', '測驗結果', '使用者反應時間']];
+                    let Heading = [['題目出現時間', '回答時間', '前一數字', '當前數字', '使用者回答', '測驗結果', '當前答題時間', '使用者反應時間']];
                     result = result.map(function(item){
                         item['reflectTime'] = Number(item['userAnswerTime']) - Number(item['questionStartTime']);
                         return item;
