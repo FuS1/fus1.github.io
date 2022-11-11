@@ -19,7 +19,7 @@
         <script>
             $(function() {
                 $('#reset').on('click',function(){
-                    window.location.assign('/');
+                    window.location.assign('./');
                 });
                 $("#download").on('click',function(){
                     var result = getLocalStorage('result-'+getUrlParameter('result_id'));
