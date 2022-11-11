@@ -25,14 +25,39 @@
                 padding-top: unset;
                 padding-bottom: unset;
             }
+            
+            .form-floating>.form-control:focus, .form-floating>.form-control:not(:placeholder-shown){
+                padding-top: unset;
+                padding-bottom: unset;
+            }
+            .teach-img > span{
+                width: 100%;
+
+            }
+
+            @media screen and (min-width:992px) { 
+                .teach-img {
+                    display: inline-flex; 
+                }
+                .teach-img > span{
+                    width: 100%;
+                    border: 2px solid #785f64;
+                    margin: 0 0.3rem;
+                    border-radius: 1rem;
+                    padding: 0.7rem;
+                }
+                .teach-img > hr{
+                    display: none;
+                }
+            }
         </style>
         <script>
             $(function() {
                 $('#back').on('click',function(){
-                    window.location.assign('index.html');
+                    window.location.assign('rule2.html?initTimerInterval='+getUrlParameter('initTimerInterval')+"&changeQuestionTimerInterval="+getUrlParameter('changeQuestionTimerInterval'));
                 });
                 $('#confirm').on('click',function(){
-                    window.location.assign('rule2.html?initTimerInterval='+getUrlParameter('initTimerInterval')+"&changeQuestionTimerInterval="+getUrlParameter('changeQuestionTimerInterval'));
+                    window.location.assign('learningPage.html?initTimerInterval='+getUrlParameter('initTimerInterval')+"&changeQuestionTimerInterval="+getUrlParameter('changeQuestionTimerInterval'));
                 });
             });
         </script>
@@ -46,16 +71,23 @@
                         <div>Adjusted Paced Visual Serial Addition Task<br>適性序列視覺加法作業</div>
                     </div>
                     <hr style="margin-bottom: 2rem; margin-top: 2rem;">
-                    <div class="fs-4">
-                        <p>等一下你會看到一些阿拉伯數字，這些數字會與下方方格數字方格一起顯示：</p>
-                        <img src="number.png" style="width:100%;">
-                        <p>這些阿拉伯數字有 1 到 9，每隔一段時間便會出現一個數字，你需要做的是仔細看前兩個數字，把鄰近兩個數字的數字合算出來，然後儘快在按鈕按下你的答案</p>
-                        <p>後續請繼續將下一個數宇添加到前面的每個數宇中。<br>『記得將每個新數字添加到它之前的數字，只求和這些數字，而不是保持總和』</p>
+                    <div class="fs-4 text-center">
+                        <p>接下來，你將做一些練習項目</p>
+                        <p>在練習中，你會得到反饋表明你的回答正確或錯誤。</p>
+                        <p>請在腦中進行所有工作</p>
+                        <p>準備好就開始練習！</p>
+                        <div class="text-center teach-img">
+                            <span><div><img width="100%" src="correct.jpg"></div><div style="background-color: #198754; color: #FFF; border-radius: 20px;">正確</div></span>
+                            <hr>
+                            <span><div><img width="100%" src="wrong.jpg"></div><div style="background-color: #dc3545; color: #FFF; border-radius: 20px;">錯誤 / 未作答</div></span>
+                        </div>
                     </div>
                     <hr style="margin: 4rem 5% ;">
                     <div class="text-center" style="margin-bottom: 5vh;">
                         <button class="w-25 btn btn-lg btn-secondary mx-4" id="back">返回</button>
-                        <button class="w-50 btn btn-lg btn-success mx-4" id="confirm">下一頁</button>
+                        <button class="w-50 btn btn-lg btn-success mx-4" id="confirm">我了解了，開始練習題</button>
+                    </div>
+                    <div class="text-center">
                     </div>
                 </div>
             </div>

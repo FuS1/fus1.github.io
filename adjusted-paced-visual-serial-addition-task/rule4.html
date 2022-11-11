@@ -29,10 +29,10 @@
         <script>
             $(function() {
                 $('#back').on('click',function(){
-                    window.location.assign('index.html');
+                    window.location.assign('rule.html?initTimerInterval='+getUrlParameter('initTimerInterval')+"&changeQuestionTimerInterval="+getUrlParameter('changeQuestionTimerInterval'));
                 });
                 $('#confirm').on('click',function(){
-                    window.location.assign('rule2.html?initTimerInterval='+getUrlParameter('initTimerInterval')+"&changeQuestionTimerInterval="+getUrlParameter('changeQuestionTimerInterval'));
+                    window.location.assign('testPage.html?initTimerInterval='+getUrlParameter('initTimerInterval')+"&changeQuestionTimerInterval="+getUrlParameter('changeQuestionTimerInterval'));
                 });
             });
         </script>
@@ -47,15 +47,15 @@
                     </div>
                     <hr style="margin-bottom: 2rem; margin-top: 2rem;">
                     <div class="fs-4">
-                        <p>等一下你會看到一些阿拉伯數字，這些數字會與下方方格數字方格一起顯示：</p>
-                        <img src="number.png" style="width:100%;">
-                        <p>這些阿拉伯數字有 1 到 9，每隔一段時間便會出現一個數字，你需要做的是仔細看前兩個數字，把鄰近兩個數字的數字合算出來，然後儘快在按鈕按下你的答案</p>
-                        <p>後續請繼續將下一個數宇添加到前面的每個數宇中。<br>『記得將每個新數字添加到它之前的數字，只求和這些數字，而不是保持總和』</p>
+                        <p>接下來，你將會進入正式測驗</p>
+                        <p>在正式測驗中，不會再告知你答對或答錯</p>
+                        <p>請儘量保持專注往下計算下去</p>
+                        <p>準備好就開始測試。</p>
                     </div>
                     <hr style="margin: 4rem 5% ;">
                     <div class="text-center" style="margin-bottom: 5vh;">
                         <button class="w-25 btn btn-lg btn-secondary mx-4" id="back">返回</button>
-                        <button class="w-50 btn btn-lg btn-success mx-4" id="confirm">下一頁</button>
+                        <button class="w-50 btn btn-lg btn-success mx-4" id="confirm">我了解了，開始測驗</button>
                     </div>
                 </div>
             </div>

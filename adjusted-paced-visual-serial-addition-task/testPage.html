@@ -40,7 +40,24 @@
                 text-align: center;
             }
             .question-number{
+                height: 15vh;
                 font-size: 8rem;
+                position: relative;
+            }
+            .question-number > .wrong-icon,
+            .question-number > .correct-icon{
+                font-size: 6rem;
+                position: absolute;
+                display: block;
+                right: 30%;
+                top: 3rem;
+                display: none;
+            }
+            .question-number > .correct-icon{
+                color:#198754;
+            }
+            .question-number > .wrong-icon{
+                color:#dc3545;
             }
             .number > div {
                 margin:4rem 0;
@@ -77,21 +94,31 @@
                 .question-number{
                     font-size: 7rem;
                 }
+                .question-number > .wrong-icon,
+                .question-number > .correct-icon{
+                    right: 20%;
+                }
             }
             @media screen and (max-width:768px) { 
                 .number{
                     font-size: 2.5rem;
                 }
                 .question-number{
-                    font-size: 5rem;
+                    font-size: 7rem;
+                }
+                
+                .question-number > .wrong-icon,
+                .question-number > .correct-icon{
+                    font-size: 5.5rem;
                 }
             }
             @media screen and (max-width:500px) { 
                 .number{
                     font-size: 1.8rem;
                 }
+                
                 .question-number{
-                    font-size: 3.5rem;
+                    font-size: 7rem;
                 }
             }
         </style>
@@ -137,7 +164,7 @@
                 <div class="col-12 col-12 mx-auto">
                     <div class="text-center" style="font-size: x-large;">
                         <div class="number question-number"><nowQuestionNumber></nowQuestionNumber></div>
-                        <button class="w-25 btn btn-lg btn-success mx-4" style="display:none;" id="restart">繼續測驗</button>
+                        <button class="w-25 btn btn-lg btn-success mx-4 mt-5" style="display:none;" id="restart">繼續測驗</button>
                     </div>
                     <hr style="margin-bottom: 2rem; margin-top: 2rem;">
                     <div class="number answer-number">
