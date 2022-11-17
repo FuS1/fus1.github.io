@@ -70,15 +70,23 @@
                 console.log(response.data);
                 
                 let data = response.data;
-                for (const key in data) {
-                    document.getElementsByName(key).text(data[key]);
-                }
-
                 let userData = parseJwt(response.data.id_token); 
-                for (const key in userData) {
-                    document.getElementsByName(key).text(userData[key]);
+                for (const key in data) {
+                    try {
+                        document.getElementsByName(key).value = data[key];
+                    } catch (error) {
+
+                    }
                 }
-                document.getElementsByName('picture').src(userData['picture']);
+                
+                for (const key in userData) {
+                    try {
+                        document.getElementsByName(key).innerHTML = userData[key];
+                    } catch (error) {
+
+                    }
+                }
+                document.getElementsByName('picture').src = userData['picture'];
                 
             });
 
