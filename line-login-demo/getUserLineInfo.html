@@ -73,7 +73,7 @@
                 let userData = parseJwt(response.data.id_token); 
                 for (const key in data) {
                     try {
-                        document.getElementsByName(key).value = data[key];
+                        document.getElementsByName(key)[0].value = data[key];
                     } catch (error) {
 
                     }
@@ -81,12 +81,12 @@
                 
                 for (const key in userData) {
                     try {
-                        document.getElementsByName(key).innerHTML = userData[key];
+                        document.getElementsByName(key)[0].innerHTML = userData[key];
                     } catch (error) {
 
                     }
                 }
-                document.getElementsByName('picture').src = userData['picture'];
+                document.getElementsByName('picture')[0].src = userData['picture'];
                 
             });
 
