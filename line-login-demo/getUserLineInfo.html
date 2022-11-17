@@ -73,7 +73,7 @@
                 let userData = parseJwt(response.data.id_token); 
                 for (const key in data) {
                     try {
-                        document.getElementsByName(key)[0].value = data[key];
+                        document.getElementsByName(key)[0].innerHTML = data[key];
                     } catch (error) {
 
                     }
