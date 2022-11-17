@@ -68,7 +68,17 @@
                 },
             }).then(function (response) {
                 console.log(response.data);
-                console.log(parseJwt(response.data.id_token));
+                
+                let data = response.data;
+                for (const key in data) {
+                    document.getElementsByName(key).text(data[key]);
+                }
+
+                let userData = parseJwt(response.data.id_token); 
+                for (const key in userData) {
+                    document.getElementsByName(key).text(userData[key]);
+                }
+                document.getElementsByName('picture').src(userData['picture']);
                 
             });
 
@@ -76,8 +86,32 @@
         </script>
     </head>
     
-    <body>
-        <a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657658890&redirect_uri=https://fus1.github.io/line-login-demo/getUserLineInfo.html&state=12345abcde&scope=profile%20openid%20email"><img src="img/Line-Login-Button.png"></a>
-            
+    <body class="bg-slate-800">
+
+        <div class="py-20 px-8 mx-auto w-fit" >
+            <a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657658890&redirect_uri=https://fus1.github.io/line-login-demo/getUserLineInfo.html&state=12345abcde&scope=profile%20openid%20email"><img src="img/Line-Login-Button.png"></a>    
+        </div>
+        
+        <figure class="mx-auto w-11/12 bg-slate-800 rounded-xl py-8 border-2 border-sky-400">
+            <img class="w-24 h-24 rounded-full mx-auto" name="picture" src="https://profile.line-scdn.net/0hvYsFw8MyKXZOPzxb8kRWIXJ6Jxs5ES8-NgpgFGw-IxFqB2codlkzFTw9JBMwC2smJlhgRG49dkIx" alt="" width="384" height="512">
+            <div class="pt-6 text-center space-y-4">
+              <blockquote>
+                <p class="text-white text-lg font-medium" name="access_token">
+                  “Tailwind CSS is the only framework that I've seen scale
+                  on large teams. It’s easy to customize, adapts to any design,
+                  and the build size is tiny.”
+                </p>
+              </blockquote>
+              <figcaption class="font-medium">
+                <div class="text-sky-400" name="name">
+                  Sarah Dayan
+                </div>
+                <div>
+                  <span class="text-slate-700" >Line ID :</span> <span class="text-slate-500" name="sub"></span>
+                </div>
+              </figcaption>
+            </div>
+        </figure>
+
     </body>
 </html>
