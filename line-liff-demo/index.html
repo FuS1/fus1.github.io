@@ -35,7 +35,6 @@
                     liffId: '1657658890-VGmOdD80', // Use own liffId
                     withLoginOnExternalBrowser: true, // Enable automatic login process
                 }).then(() => {
-                alert(liff.getLineVersion());
                     console.log('LIFF init');
                     document.getElementsByName('OS')[0].innerHTML = liff.getOS();
                     document.getElementsByName('Language')[0].innerHTML = liff.getLanguage();
@@ -45,15 +44,12 @@
                     document.getElementsByName('isLoggedIn')[0].innerHTML = liff.isLoggedIn() ? 'true':'false';
                     if(liff.isLoggedIn()){
                       userData = liff.getDecodedIDToken();
-                      document.getElementsByName('userId')[0].innerHTML = userData['userId'];
+                      document.getElementsByName('userId')[0].innerHTML = userData['sub'];
                       document.getElementsByName('name')[0].innerHTML = userData['name'];
                       document.getElementsByName('picture')[0].src = userData['picture'];
                       document.getElementsByName('access_token')[0].innerHTML = liff.getAccessToken();
                     }
 
-
-
-                    alert(liff.getContext());
                     liff.shareTargetPicker([
                         {
                             type: 'text',
