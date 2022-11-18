@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <meta name="author" content="injWang, a271954@gmail.com">
+        <meta name="description" content="如有需求請聯繫上方Email">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta property="og:url"                content="https://fus1.github.io/line-liff-demo" />
+        <meta property="og:type"               content="website" />
+        <meta property="og:locale"             content="zh_TW" />
+        <meta property="og:title"              content="LINE-liff-測試" />
+        <meta property="og:description"        content="LINE-liff-測試" />
+        <meta property="og:image"              content="img/Line-Logo.png" />
+        <meta property="og:site_name" content="LINE-liff-測試">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
+        <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+        <title>LayMoon Cafe</title>
+        <style>
+            html,body{
+                font-family: 'Noto Sans TC', sans-serif;
+                margin:0;
+                padding:0;
+                background-color: #f6f6f6;
+            }
+        </style>
+        <script>
+            /***************************************
+             *  Made By injWang                    *
+             *  contact Email : a271954@gmail.com  *
+             ***************************************/   
+               
+            liff.init({
+                liffId: '1657658890-VGmOdD80', // Use own liffId
+                withLoginOnExternalBrowser: true, // Enable automatic login process
+            }).then(function(){
+                console.log(liff.getOS());
+                console.log(liff.getLanguage());
+                console.log(liff.getVersion());
+                console.log(liff.getLineVersion());
+                console.log(liff.isInClient());
+                console.log(liff.isLoggedIn());
+                //liff.closeWindow() //關閉liff
+                console.log(liff.getIDToken());
+                console.log(liff.getAccessToken());
+                console.log(liff.getContext());
+                liff.shareTargetPicker([
+                    {
+                        type: 'text',
+                        text: 'Hello, World!',
+                    },
+                ]);
+            });
+
+
+        </script>
+    </head>
+    
+    <body class="bg-slate-800">
+
+        <div class="py-20 px-8 mx-auto w-fit" >
+            <a href="https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657658890&redirect_uri=https://fus1.github.io/line-liff-demo/getUserLineInfo.html&state=12345abcde&scope=profile%20openid%20email"><img src="img/Line-liff-Button.png"></a>    
+        </div>
+        
+        <figure class="mx-auto w-11/12 bg-slate-800 rounded-xl py-8 border-2 border-sky-400">
+            <img class="w-24 h-24 rounded-full mx-auto" name="picture" src="data:image/png;base64,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">
+            <div class="pt-6 text-center space-y-4">
+              <figcaption class="font-medium">
+                <div class="text-sky-400" name="name">
+                
+                </div>
+                <div class="text-slate-700">
+                  <span>Line ID :</span> <span name="sub"></span>
+                </div>
+              </figcaption>
+              <blockquote>
+                <p class="text-white text-lg font-medium break-all" name="access_token">
+                  
+                </p>
+              </blockquote>
+            </div>
+        </figure>
+
+    </body>
+</html>
