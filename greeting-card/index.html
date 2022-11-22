@@ -10,22 +10,25 @@
         <meta property="og:description"        content="賀卡" />
         <!-- <meta property="og:image"              content="img/Line-Logo.png" /> -->
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <style>
-            video {
-                position: fixed;
-                text-align: center;
-                top: 50%;
-                left: 50%;
-                -webkit-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%);
-            }
-        </style>
+        <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+
     </head>
     
     <body>
-        <video autoplay="autoplay" loop="" class="myVideo" id="myVideo">
-            <source src="https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4" type="video/mp4">
-            您的瀏覽器不支援播放影片，請更換瀏覽器
-          </video> 
+        <video
+            id="my-player"
+            class="video-js"
+            muted 
+            autoplay
+            controls
+            poster="//vjs.zencdn.net/v/oceans.png"
+            data-setup='{}'>
+        <source src="https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4" type="video/mp4"></source>
+        <p class="vjs-no-js">
+            您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
+        </p>
+        </video>
+
     </body>
 </html>
