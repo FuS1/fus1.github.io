@@ -14,7 +14,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5media/1.1.5/html5media.min.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
         <title>交通部鐵道局祝您佳節愉快</title>
         <style>
@@ -104,7 +103,7 @@
                         
                         if (!$this.paused && !$this.ended) {
                             ctx.drawImage($this, 0, 0, canvas.width, canvas.height);
-                            setTimeout(loop, 1000 / 30); // drawing at 30fps
+                            setTimeout(loop, 1000 / 25); // drawing at 25fps
                         }
                     })();
                 }, 0);
@@ -155,13 +154,13 @@
                     </button>
                 </div>
             </div>
-            <div class="align-middle inline-flex video-container items-center" style="max-height: calc(100% - 80px);">
-                <video id="video" src="video/testvideo_v1123.mp4" muted playsinline autoplay class="h-screen max-h-full hidden" preload="auto" >
-                    <!-- <source src="" type="video/mp4"></source>
+            <div class="align-middle inline-flex video-container items-center" style="max-height: calc(100% - 120px);">
+                <video id="video" muted autoplay class="h-screen max-h-full hidden" >
+                    <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
                     <source src="video/testvideo_v1123.webm" type="video/webm"></source>
                     <p>
                         您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
-                    </p> -->
+                    </p>
                 </video>
                 <canvas id="canvas" class="h-screen max-h-full"></canvas>
             </div>
