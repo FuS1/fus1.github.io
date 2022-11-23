@@ -39,7 +39,10 @@
             video{
                 width:auto;
                 height: screen;
-                /* box-shadow: 0px 0px 6px 4px rgb(0 0 0 / 35%); */
+            }
+            canvas{
+                
+                box-shadow: 0px 0px 6px 4px rgb(0 0 0 / 35%);
             }
             ::-moz-selection { /* Code for Firefox */
                 background: rgba(0, 0, 0, 0.1);
@@ -75,26 +78,51 @@
                     right: 10px;  
                 }
             }
-            @media (max-width: 1136px) { 
-                video{
-                    box-shadow:unset;
-                }
-            }
+            
         </style>
         <script>
             $(function() {
-                var _video = document.getElementById("video");
+                //將影片渲染到Canvas上，使其在iPhone上不會開啟影片播放器
+                var canvas = document.getElementById('canvas');
+                var ctx    = canvas.getContext('2d');
+                var video  = document.getElementById('video');
+                var video_ratio = 16/9;
+
+                video.addEventListener('loadedmetadata', function() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    video_ratio = video.videoWidth / video.videoHeight;
+                });
+
+                video.addEventListener('play', function () {
+                    var $this = this; 
+                    (function loop() {
+                        canvas.width = $('#video').width();
+                        canvas.height = canvas.width / video_ratio;
+                        
+                        $('canvas').width(canvas.width) ;
+                        $('canvas').height(canvas.height) ;
+                        
+                        if (!$this.paused && !$this.ended) {
+                            ctx.drawImage($this, 0, 0, canvas.width, canvas.height);
+                            setTimeout(loop, 1000 / 30); // drawing at 30fps
+                        }
+                    })();
+                }, 0);
+
+                video.play();
+
                 $('.replayBtn').on('click',function(){
-                    _video.currentTime = 0;
+                    video.currentTime = 0;
                 });
                 $('.musicBtn-off').on('click',function(){
-                    _video.muted = false; 
+                    video.muted = false; 
                     $(".musicHint").hide();
                     $('.musicBtn-on').show();
                     $(this).hide();
                 });
                 $('.musicBtn-on').on('click',function(){
-                    _video.muted = true; 
+                    video.muted = true; 
                     $(".musicHint").show();
                     $('.musicBtn-off').show();
                     $(this).hide();
@@ -103,7 +131,7 @@
         </script>
     </head>
     
-    <body  class="md:overflow-y-hidden bg-scroll bg-no-repeat bg-cover flex h-screen justify-center items-center" >
+    <body  class=" bg-scroll bg-no-repeat bg-cover flex h-screen justify-center items-center" >
         <div class="text-center w-full xl:w-10/12 h-screen mx-auto">
             <div class="mb-2 pt-2 text-right">
                 <div class="inline-flex action-bar mr-10">
@@ -122,15 +150,16 @@
                     </button>
                 </div>
             </div>
-            <div class="align-middle inline-flex video-container">
-                <video id="video" muted loop autoplay poster="images/video-poster.jpg" class="h-screen max-h-full">
-                    <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
+            <div class="align-middle inline-flex video-container items-center">
+                <video id="video" muted loop poster="images/video-poster.jpg" class="h-screen max-h-full hidden">
                     <source src="video/testvideo_v1123.webm" type="video/webm"></source>
-                    <source src="video/testvideo_v1123.mp4" type="video/ogv"></source>
+                    <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
+                    <source src="video/testvideo_v1123.ogv" type="video/ogv"></source>
                     <p>
                         您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
                     </p>
                 </video>
+                <canvas id="canvas" class="h-screen max-h-full"></canvas>
             </div>
             <div class="text-zinc-600 text-sm my-2">Copyright © 2022 交通部鐵道局版權所有</div>
         </div>
