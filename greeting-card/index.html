@@ -11,6 +11,7 @@
         <meta property="og:image"              content="images/company-logo-with-text.png" />
         <link rel="icon" type="image/x-icon" href="images/company-Logo.png">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
         <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
@@ -36,7 +37,13 @@
                 width:auto;
                 height: screen;
             }
+            ::-moz-selection { /* Code for Firefox */
+                background: rgba(0, 0, 0, 0.1);
+            }
             
+            ::selection {
+                background: rgba(0, 0, 0, 0.1);
+            }
             .musicHint{
                 box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
                 animation-name: look;
@@ -50,11 +57,11 @@
             }
             @keyframes look {
                 from {
-                right: 0px;
+                    right: 0px;
                 }
 
                 to {
-                right: 10px;  
+                    right: 10px;  
                 }
             }
         </style>
@@ -84,10 +91,10 @@
         <div class="text-center w-full xl:w-10/12 2xl:w-8/12 h-screen mx-auto">
             <div class="mb-2 pt-2 text-right">
                 <div class="inline-flex action-bar mr-10">
-                    <span class="musicHint bg-white text-black rounded-xl h-fit my-auto px-2"> 開啟聲音→</span>
-                    <button class="musicBtn-off playBtn w-10 text-red" style="display: block;"><img src="images/pause.svg" alt="music off" title="music off"></button>
-                    <button class="musicBtn-on pauseBtn w-10" style="display: none;"><img src="images/play.svg" alt="music on" title="music on"></button>
-                    <button class="replayBtn w-10"><img src="images/replay.svg" alt="Replay" title="Replay"></button>
+                    <span class="musicHint bg-white text-black rounded-xl h-fit my-auto px-2 cursor-default"> 開啟聲音→</span>
+                    <button class="musicBtn-off playBtn w-10 rounded-full bg-zinc-500 text-white hover:bg-zinc-400" style="display: block;"><i class="fa-solid fa-volume-xmark"></i></button>
+                    <button class="musicBtn-on pauseBtn w-10 rounded-full bg-zinc-500 text-white hover:bg-zinc-400" style="display: none;"><i class="fa-solid fa-volume-high"></i></button>
+                    <button class="replayBtn w-10 rounded-full bg-zinc-500 text-white hover:bg-zinc-400"><i class="fa-solid fa-arrow-rotate-left"></i></button>
                 </div>
             </div>
             <div class="align-middle inline-flex video-container">
@@ -98,7 +105,7 @@
                     </p>
                 </video>
             </div>
-            <div class="text-white text-sm m-1">Copyright © 2022 滾滾創意工作室版權所有</div>
+            <div class="text-zinc-600 text-sm my-2">Copyright © 2022 滾滾創意工作室版權所有</div>
         </div>
     </body>
 </html>
