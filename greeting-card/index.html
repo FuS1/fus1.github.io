@@ -106,6 +106,13 @@
             </div>
             <div class="align-middle inline-flex video-container items-center" >
                 <canvas id="canvas" class="xl:h-screen max-h-full"></canvas>
+                <!------------------------------------- 
+                    需注意要自動播放
+                    必須有autoplay muted標籤，且影片不可使用CSS隱藏標籤
+                    iOS相關必須要有playsinline標籤
+                    且iOS必須在非省電模式下
+                    在Safari上播放，mp4格式必須為H.264，可使用 > ffmpeg -i input.mp4 -vcodec libx264 -acodec aac output.mp4 進行轉檔
+                ----------------------------------------->
                 <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full" style="position: absolute;" >
                     <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
                     <source src="video/testvideo_v1123.webm" type="video/webm"></source>
