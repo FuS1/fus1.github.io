@@ -105,14 +105,14 @@
                 </div>
             </div>
             <div class="align-middle inline-flex video-container items-center" >
-                <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full hidden" >
+                <canvas id="canvas" class="xl:h-screen max-h-full"></canvas>
+                <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full opacity-0" style="position: absolute;" >
                     <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
                     <source src="video/testvideo_v1123.webm" type="video/webm"></source>
                     <p>
                         您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
                     </p>
                 </video>
-                <canvas id="canvas" class="xl:h-screen max-h-full"></canvas>
             </div>
             <div class="text-zinc-600 text-sm my-2">Copyright © 2022 交通部鐵道局版權所有</div>
         </div>
@@ -126,8 +126,8 @@
             var video_ratio = 16/9;
 
             video.addEventListener('loadedmetadata', function() {
+                
                 console.log('loadedmetadata')
-                video.play();
                 video_ratio = video.videoWidth / video.videoHeight;
                 canvas.width = $('#video').width();
                 canvas.height = canvas.width / video_ratio;
@@ -148,7 +148,6 @@
             });
 
             
-
             $( window ).resize(function() {
                 canvas.width = $('#video').width();
                 canvas.height = canvas.width / video_ratio;
