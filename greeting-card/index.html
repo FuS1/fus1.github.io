@@ -109,6 +109,7 @@
                 }, 0);
 
                 video.addEventListener('ended', function() {
+                    video.pause();
                     this.currentTime = 1;//back to 1 seconds
                     video.play();
                 });
