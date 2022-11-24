@@ -82,57 +82,7 @@
                 }
             }
         </style>
-        <script>
-            $(function() {
-                //將影片渲染到Canvas上，使其在iPhone上不會開啟影片播放器
-                var canvas = document.getElementById('canvas');
-                var ctx    = canvas.getContext('2d');
-                var video  = document.getElementById('video');
-                var video_ratio = 16/9;
-
-                video.addEventListener('loadedmetadata', function() {
-                    video_ratio = video.videoWidth / video.videoHeight;
-                    canvas.width = $('#video').width();
-                    canvas.height = canvas.width / video_ratio;
-                });
-
-                video.addEventListener('play', function () {
-                    var $this = this; 
-                    (function loop() {
-                        ctx.drawImage($this, 0, 0, canvas.width, canvas.height);
-                        setTimeout(loop, 1000 / 25); // drawing at 25fps
-                    })();
-                }, 0);
-
-                video.addEventListener('ended', function() {
-                    video.pause();
-                    this.currentTime = 1;//back to 1 seconds
-                    video.play();
-                });
-
-                video.play();
-
-                $( window ).resize(function() {
-                    canvas.width = $('#video').width();
-                    canvas.height = canvas.width / video_ratio;
-                });
-                $('.replayBtn').on('click',function(){
-                    video.currentTime = 0;
-                });
-                $('.musicBtn-off').on('click',function(){
-                    video.muted = false; 
-                    $(".musicHint").hide();
-                    $('.musicBtn-on').show();
-                    $(this).hide();
-                });
-                $('.musicBtn-on').on('click',function(){
-                    video.muted = true; 
-                    $(".musicHint").show();
-                    $('.musicBtn-off').show();
-                    $(this).hide();
-                });
-            });
-        </script>
+        
     </head>
     
     <body  class="flex justify-center items-center" >
@@ -155,7 +105,7 @@
                 </div>
             </div>
             <div class="align-middle inline-flex video-container items-center" >
-                <video id="video" autoplay muted preload="auto" playsinline class="xl:h-screen max-h-full hidden" >
+                <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full hidden" >
                     <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
                     <source src="video/testvideo_v1123.webm" type="video/webm"></source>
                     <p>
@@ -167,4 +117,57 @@
             <div class="text-zinc-600 text-sm my-2">Copyright © 2022 交通部鐵道局版權所有</div>
         </div>
     </body>
+    <script>
+        $(function() {
+            //將影片渲染到Canvas上，使其在iPhone上不會開啟影片播放器
+            var canvas = document.getElementById('canvas');
+            var ctx    = canvas.getContext('2d');
+            var video  = document.getElementById('video');
+            var video_ratio = 16/9;
+
+            video.addEventListener('loadedmetadata', function() {
+                console.log('loadedmetadata')
+                video.play();
+                video_ratio = video.videoWidth / video.videoHeight;
+                canvas.width = $('#video').width();
+                canvas.height = canvas.width / video_ratio;
+            });
+
+            video.addEventListener('play', function () {
+                var $this = this; 
+                (function loop() {
+                    ctx.drawImage($this, 0, 0, canvas.width, canvas.height);
+                    setTimeout(loop, 1000 / 25); // drawing at 25fps
+                })();
+            }, 0);
+
+            video.addEventListener('ended', function() {
+                video.pause();
+                this.currentTime = 1;//back to 1 seconds
+                video.play();
+            });
+
+            
+
+            $( window ).resize(function() {
+                canvas.width = $('#video').width();
+                canvas.height = canvas.width / video_ratio;
+            });
+            $('.replayBtn').on('click',function(){
+                video.currentTime = 0;
+            });
+            $('.musicBtn-off').on('click',function(){
+                video.muted = false; 
+                $(".musicHint").hide();
+                $('.musicBtn-on').show();
+                $(this).hide();
+            });
+            $('.musicBtn-on').on('click',function(){
+                video.muted = true; 
+                $(".musicHint").show();
+                $('.musicBtn-off').show();
+                $(this).hide();
+            });
+        });
+    </script>
 </html>
