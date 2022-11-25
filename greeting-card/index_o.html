@@ -1,0 +1,180 @@
+<html>
+    <head>
+        <meta name="author" content="injWang, a271954@gmail.com">
+        <meta name="description" content="如有需求請聯繫上方Email">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta property="og:url"                content="https://fus1.github.io/greeting-card" />
+        <meta property="og:type"               content="website" />
+        <meta property="og:locale"             content="zh_TW" />
+        <meta property="og:title"              content="交通部鐵道局祝您佳節愉快" />
+        <meta property="og:description"        content="交通部鐵道局祝您佳節愉快" />
+        <meta property="og:image"              content="images/company-logo-with-text.png" />
+        <link rel="icon" type="image/x-icon" href="images/company-logo.png">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>交通部鐵道局祝您佳節愉快</title>
+        <style>
+            html,body{
+                margin:0;
+                padding:0;
+                /* background-image: url('images/bg.jpg'); */
+                background-color: #FEF5EA;
+                overflow-x: hidden;
+                font-family: 'Noto Sans TC', sans-serif;
+                /* font-family: Poppins, Arial, "GenJyuuGothicX-Medium", "微軟正黑體", "Microsoft JhengHei", "新細明體"; */
+            }
+            .action-bar > * {
+                margin-left:1rem;
+                position: relative;
+            }
+            .video-container{
+                width:fit-content;
+                height: calc(100vh - 6.5rem);
+            }
+            video{
+                width:auto;
+                height: screen;
+            }
+            canvas{
+                
+                box-shadow: 0px 0px 6px 4px rgb(0 0 0 / 35%);
+            }
+            ::-moz-selection { /* Code for Firefox */
+                background: rgba(0, 0, 0, 0.1);
+            }
+            
+            ::selection {
+                background: rgba(0, 0, 0, 0.1);
+            }
+            .musicHint{
+                padding:3px 0px;
+                box-shadow: 0px 2px 2px 2px rgb(0 0 0 / 40%);
+                animation-name: look;
+                animation-duration: 0.8s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+                -webkit-animation-name: look;
+                -webkit-animation-duration: 0.8s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-direction: alternate;
+            }
+            .musicBtn-off,
+            .musicBtn-on,
+            .replayBtn{
+                min-height: 1rem;
+                padding: 0.25rem 0;
+            }
+            @keyframes look {
+                from {
+                    right: 0px;
+                }
+
+                to {
+                    right: 10px;  
+                }
+            }
+            @media screen and (max-width:1280px) { 
+                .video-container{
+                    height: unset;
+                }
+            }
+        </style>
+        
+    </head>
+    
+    <body  class="flex justify-center items-center" >
+        <div class="text-center w-full 2xl:w-10/12 xl:h-screen mx-auto">
+            <div class="mb-2 pt-2 text-right">
+                <div class="inline-flex action-bar mr-10">
+                    <span class="musicHint bg-white text-black rounded-xl h-fit my-auto px-2 cursor-default text-sm"> 開啟聲音→</span>
+                    <button class="musicBtn-off playBtn w-10 rounded-full text-white hover:bg-yellow-100" style="display: block;">
+                        <img src="images/pause.svg" alt="music off" title="music off">
+                        <!-- <i class="fa-solid fa-volume-xmark"></i> -->
+                    </button>
+                    <button class="musicBtn-on pauseBtn w-10 rounded-full text-white hover:bg-yellow-100" style="display: none;">
+                        <img src="images/play.svg" alt="music on" title="music on">
+                        <!-- <i class="fa-solid fa-volume-high"></i> -->
+                    </button>
+                    <button class="replayBtn w-10 rounded-full text-white hover:bg-yellow-100">
+                        <img src="images/replay.svg" alt="Replay" title="Replay">
+                        <!-- <i class="fa-solid fa-arrow-rotate-left"></i> -->
+                    </button>
+                </div>
+            </div>
+            <div class="align-middle inline-flex video-container items-center" >
+                <!------------------------------------- 
+                    需注意要自動播放
+                    必須有autoplay muted標籤，且影片不可使用CSS隱藏標籤
+                    iOS相關必須要有playsinline標籤
+                    且iOS必須在非省電模式下
+                    在Safari上播放，mp4格式必須為H.264，可使用 > ffmpeg -i input.mp4 -vcodec libx264 -acodec aac output.mp4 進行轉檔
+                ----------------------------------------->
+                <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full" style="position: absolute; z-index: -1;" >
+                    <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
+                    <source src="video/testvideo_v1123.webm" type="video/webm"></source>
+                    <p>
+                        您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
+                    </p>
+                </video>
+                <canvas id="canvas" class="xl:h-screen max-h-full"></canvas>
+            </div>
+            <div class="text-zinc-600 text-sm my-2">Copyright © 2022 交通部鐵道局版權所有</div>
+        </div>
+    </body>
+    <script>
+        $(function() {
+
+            //將影片渲染到Canvas上，使其在iPhone上不會開啟影片播放器
+            var canvas = document.getElementById('canvas');
+            var ctx    = canvas.getContext('2d');
+            var video  = document.getElementById('video');
+            var video_ratio = 16/9;
+
+            video.addEventListener('loadedmetadata', function() {
+                
+                console.log('loadedmetadata')
+                video_ratio = video.videoWidth / video.videoHeight;
+                canvas.width = $('#video').width();
+                canvas.height = canvas.width / video_ratio;
+            });
+
+            video.addEventListener('play', function () {
+                var $this = this; 
+                (function loop() {
+                    ctx.drawImage($this, 0, 0, canvas.width, canvas.height);
+                    setTimeout(loop, 1000 / 25); // drawing at 25fps
+                })();
+            }, 0);
+
+            video.addEventListener('ended', function() {
+                video.pause();
+                this.currentTime = 1;//back to 1 seconds
+                video.play();
+            });
+
+            
+            $( window ).resize(function() {
+                canvas.width = $('#video').width();
+                canvas.height = canvas.width / video_ratio;
+            });
+            $('.replayBtn').on('click',function(){
+                video.currentTime = 0;
+            });
+            $('.musicBtn-off').on('click',function(){
+                video.muted = false; 
+                $(".musicHint").hide();
+                $('.musicBtn-on').show();
+                $(this).hide();
+            });
+            $('.musicBtn-on').on('click',function(){
+                video.muted = true; 
+                $(".musicHint").show();
+                $('.musicBtn-off').show();
+                $(this).hide();
+            });
+        });
+    </script>
+</html>
