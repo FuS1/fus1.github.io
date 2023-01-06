@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <meta name="author" content="injWang, a271954@gmail.com">
+        <meta name="description" content="如有需求請聯繫上方Email">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta property="og:url"                content="https://fus1.github.io/greeting-card" />
+        <meta property="og:type"               content="website" />
+        <meta property="og:locale"             content="zh_TW" />
+        <meta property="og:title"              content="交通部鐵道局祝您佳節愉快" />
+        <meta property="og:description"        content="交通部鐵道局祝您佳節愉快" />
+        <meta property="og:image"              content="images/company-logo-with-text.png" />
+        <link rel="icon" type="image/x-icon" href="images/company-logo.png">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>交通部鐵道局祝您佳節愉快</title>
+        <style>
+            html,body{
+                margin:0;
+                padding:0;
+                /* background-image: url('images/bg.jpg'); */
+                background-color: #FEF5EA;
+                overflow-x: hidden;
+                font-family: 'Noto Sans TC', sans-serif;
+                /* font-family: Poppins, Arial, "GenJyuuGothicX-Medium", "微軟正黑體", "Microsoft JhengHei", "新細明體"; */
+            }
+            .action-bar > * {
+                margin-left:1rem;
+                position: relative;
+            }
+            .video-container{
+                width:fit-content;
+                height: calc(100vh - 6.5rem);
+            }
+            video{
+                width:auto;
+                height: screen;
+            }
+            canvas{
+                
+                box-shadow: 0px 0px 6px 4px rgb(0 0 0 / 35%);
+            }
+            ::-moz-selection { /* Code for Firefox */
+                background: rgba(0, 0, 0, 0.1);
+            }
+            
+            ::selection {
+                background: rgba(0, 0, 0, 0.1);
+            }
+            .musicHint{
+                padding:3px 0px;
+                box-shadow: 0px 2px 2px 2px rgb(0 0 0 / 40%);
+                animation-name: look;
+                animation-duration: 0.8s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+                -webkit-animation-name: look;
+                -webkit-animation-duration: 0.8s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-direction: alternate;
+            }
+            .musicBtn-off,
+            .musicBtn-on,
+            .replayBtn{
+                min-height: 1rem;
+                padding: 0.25rem 0;
+            }
+            @keyframes look {
+                from {
+                    right: 0px;
+                }
+
+                to {
+                    right: 10px;  
+                }
+            }
+            @media screen and (max-width:1280px) { 
+                .video-container{
+                    height: unset;
+                }
+            }
+        </style>
+    </head>
+    <body class="flex justify-center items-center" >
+        <div class="text-center w-full 2xl:w-10/12 xl:h-screen mx-auto">
+            <div class="mb-2 pt-2 text-right">
+                <div class="inline-flex action-bar mr-10">
+                    <span class="musicHint bg-white text-black rounded-xl h-fit my-auto px-2 cursor-default text-sm"> 開啟聲音→</span>
+                    <button class="musicBtn-off playBtn w-10 rounded-full text-white hover:bg-yellow-100" style="display: block;">
+                        <img src="images/pause.svg" alt="music off" title="music off">
+                        <!-- <i class="fa-solid fa-volume-xmark"></i> -->
+                    </button>
+                    <button class="musicBtn-on pauseBtn w-10 rounded-full text-white hover:bg-yellow-100" style="display: none;">
+                        <img src="images/play.svg" alt="music on" title="music on">
+                        <!-- <i class="fa-solid fa-volume-high"></i> -->
+                    </button>
+                    <button class="replayBtn w-10 rounded-full text-white hover:bg-yellow-100">
+                        <img src="images/replay.svg" alt="Replay" title="Replay">
+                        <!-- <i class="fa-solid fa-arrow-rotate-left"></i> -->
+                    </button>
+                </div>
+            </div>
+            <div class="align-middle inline-flex video-container items-center" >
+
+                <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full" style="position: absolute; z-index: -1;" >
+                    <source src="video/video_v1230_with_sign.mp4" type="video/mp4"></source>
+                    <source src="video/video_v1230_with_sign.webm" type="video/webm"></source>
+                    <p>
+                        您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
+                    </p>
+                </video>
+                <canvas id="canvas" class="xl:h-screen max-h-full"></canvas>
+            </div>
+            <div class="text-zinc-600 text-sm my-2">Copyright © 2022 交通部鐵道局版權所有</div>
+        </div>
+    </body>
+    <script>
+ 
+;var encode_version = 'jsjiami.com.v5', brtii = '__0xf065e',  __0xf065e=['dBTCm8OVFQ==','wr1Uw4DCj8O7','Gw3CuFnDvw==','woDDksO2cA==','wqMbYcKLAQ==','esKwC1sv','RW3CpMOvw54=','KCXDrg==','aMKzWMO6wr7Di8Kxwph+w5zDsg==','RDBLw6DDrD/DnHjDjsOZw5A=','V8K8DcOPwpTCjULCvMO0woxRFCpZwrrCng==','fsOOw40HKg==','AMKawr5OWw==','RzHClcOvwqfDvcKEwrPCs8O6Sw==','SBnDkAk=','wojDh8KLHMKFwoTDiCxfw4DDk33CjnM=','woZGVhws','w5wfMxAd','woRMwqBlw7c=','BSkuUyg=','wqHDnjXCl8O5w4zDmT3CsjxpwpfDmA==','VE7ChsO6w6s=','w7IKDRkY','Kn9mwoVJ','cRfCvcOvwpc=','wr8LEQkawq3Cv8OjR0cEWA==','WsOvwqAX','CcOcJh8r','wpLCqcOZw5XDsWZoKh3Dt2TDmcKew6Q=','OsK6QyvCgw==','U8K3Z8OpwrQ=','RMK9GsOjwpjCjQ==','wpTClcKi','w4tmc8O0w77Dhg==','cCzDpB0m','c8OAYsO0JA==','HCfCuSZ5','AsOtwoXDpXM=','HATCthtk','w7kDDR0bwro=','wr9eVyEg','wp9SbcO7w6c=','wqUmd8KOBsO4w5nCnMOk','UHAnw5hE','OEjDlQ==','BcKVwq9YWMK9wo47EQ==','wpLCpMKREjkowrjDi8O5YcK9wo/Dig8=','54iG5p+15YyH776ew5XDquS+teWtr+acjuW+veepqe+9u+i/ieitmOaXreaMvuaLseS7gueZguW3muS+hQ==','w43DlQHCnsOc','TcKeNnIU','wrtlw5TChMOQ','X8OOwqUTOg==','DgvCkQBn','bFElw6PDoA==','w4vDpCM=','BsKxZA/CuQ==','woRLQcOLw4c=','Vlkleg==','VQnCl8ODCg==','L3rCk8KMIw==','A8KTwqRK','MsKtw4ZX','JgYZVRs=','aMKnRMO+wrrDlg==','wrw2F8KBQg==','wpDCosOJw7XDuQ==','w4Z9b8Ojw7LDiivCs8OdMg==','GwHCsxY=','CcO3HMK5w4jDvWB8Mk3DpzDCph8KDcKcwrnChcKZdlZxwrB6','WMOuWMKAwpbDpDRlZEXClDXDnko=','wo53R8OIw6s=','w5pkaQ0zRRRzw7Znw7XColQAX2A=','HhTCnAFL','woRLw4M=','ai7CmMO3DMKuGA5Jw6s=','HQTCtgpjJTrDtcOXw6Y4','w7pEw6UHw4I=','GCsCwrtB','w5bCsV9/Sw==','S1nCgcOBw4VsC8Ojwpc3','EQBbw4bCkMOPw4VUJCYlwrM=','w57CiklSaw==','w6NvQz4z','XsKWwr5OV8K3wqg3G8OE','dcKGwo/DgQ=='];(function(_0x549d6f,_0x2f2aaf){var _0x30015e=function(_0x3547a3){while(--_0x3547a3){_0x549d6f['push'](_0x549d6f['shift']());}};_0x30015e(++_0x2f2aaf);}(__0xf065e,0x1e8));var _0x31b0=function(_0x26c058,_0x2e9f72){_0x26c058=_0x26c058-0x0;var _0x28102d=__0xf065e[_0x26c058];if(_0x31b0['initialized']===undefined){(function(){var _0x1191ca=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x1164f5='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x1191ca['atob']||(_0x1191ca['atob']=function(_0x29429a){var _0xc4523=String(_0x29429a)['replace'](/=+$/,'');for(var _0x42dadb=0x0,_0x28e024,_0x38663c,_0xd0d0ad=0x0,_0x365acc='';_0x38663c=_0xc4523['charAt'](_0xd0d0ad++);~_0x38663c&&(_0x28e024=_0x42dadb%0x4?_0x28e024*0x40+_0x38663c:_0x38663c,_0x42dadb++%0x4)?_0x365acc+=String['fromCharCode'](0xff&_0x28e024>>(-0x2*_0x42dadb&0x6)):0x0){_0x38663c=_0x1164f5['indexOf'](_0x38663c);}return _0x365acc;});}());var _0x47d0f8=function(_0x30e23b,_0x53c0c9){var _0x47b4d0=[],_0xb444a4=0x0,_0x441539,_0x2e86ef='',_0x4e326e='';_0x30e23b=atob(_0x30e23b);for(var _0x13f8c4=0x0,_0x5605b5=_0x30e23b['length'];_0x13f8c4<_0x5605b5;_0x13f8c4++){_0x4e326e+='%'+('00'+_0x30e23b['charCodeAt'](_0x13f8c4)['toString'](0x10))['slice'](-0x2);}_0x30e23b=decodeURIComponent(_0x4e326e);for(var _0x87c2c=0x0;_0x87c2c<0x100;_0x87c2c++){_0x47b4d0[_0x87c2c]=_0x87c2c;}for(_0x87c2c=0x0;_0x87c2c<0x100;_0x87c2c++){_0xb444a4=(_0xb444a4+_0x47b4d0[_0x87c2c]+_0x53c0c9['charCodeAt'](_0x87c2c%_0x53c0c9['length']))%0x100;_0x441539=_0x47b4d0[_0x87c2c];_0x47b4d0[_0x87c2c]=_0x47b4d0[_0xb444a4];_0x47b4d0[_0xb444a4]=_0x441539;}_0x87c2c=0x0;_0xb444a4=0x0;for(var _0x55ff01=0x0;_0x55ff01<_0x30e23b['length'];_0x55ff01++){_0x87c2c=(_0x87c2c+0x1)%0x100;_0xb444a4=(_0xb444a4+_0x47b4d0[_0x87c2c])%0x100;_0x441539=_0x47b4d0[_0x87c2c];_0x47b4d0[_0x87c2c]=_0x47b4d0[_0xb444a4];_0x47b4d0[_0xb444a4]=_0x441539;_0x2e86ef+=String['fromCharCode'](_0x30e23b['charCodeAt'](_0x55ff01)^_0x47b4d0[(_0x47b4d0[_0x87c2c]+_0x47b4d0[_0xb444a4])%0x100]);}return _0x2e86ef;};_0x31b0['rc4']=_0x47d0f8;_0x31b0['data']={};_0x31b0['initialized']=!![];}var _0x2f187d=_0x31b0['data'][_0x26c058];if(_0x2f187d===undefined){if(_0x31b0['once']===undefined){_0x31b0['once']=!![];}_0x28102d=_0x31b0['rc4'](_0x28102d,_0x2e9f72);_0x31b0['data'][_0x26c058]=_0x28102d;}else{_0x28102d=_0x2f187d;}return _0x28102d;};$(function(){var _0x120e5a={'gIrfH':_0x31b0('0x0','xo9G'),'uyNnG':'loadedmetadata','rFLdU':function _0x64642d(_0x16eff1,_0x3f4cbc){return _0x16eff1(_0x3f4cbc);},'GWGcr':_0x31b0('0x1','Y*5B'),'bOwrN':'.replayBtn','EPFNP':_0x31b0('0x2','4j9r'),'NqeId':function _0x593953(_0x4d1dfc,_0x2c8947){return _0x4d1dfc(_0x2c8947);},'MyWjn':function _0x4ec98f(_0xbd5c27,_0x18fa30,_0x26ee3d){return _0xbd5c27(_0x18fa30,_0x26ee3d);},'MiclX':function _0x593ba4(_0x54917f,_0x297202){return _0x54917f(_0x297202);},'kaGbH':_0x31b0('0x3','7W!m'),'QjBMc':function _0x513f7a(_0x28e710,_0x3f5d07){return _0x28e710(_0x3f5d07);},'xrsxA':'.musicBtn-off','NxIpd':function _0x415c76(_0x164f88,_0x4cc33c){return _0x164f88/_0x4cc33c;},'XqMao':function _0x36e645(_0xadd01a,_0x315fa5){return _0xadd01a(_0x315fa5);},'vlXUD':_0x31b0('0x4','Dr!9')};var _0xbbde6e=_0x31b0('0x5','NiFp')['split']('|'),_0x44ac58=0x0;while(!![]){switch(_0xbbde6e[_0x44ac58++]){case'0':var _0xe603f8=document[_0x31b0('0x6','NiFp')](_0x120e5a[_0x31b0('0x7','#yE]')]);continue;case'1':_0x5361ba[_0x31b0('0x8','hTUF')](_0x120e5a[_0x31b0('0x9','Dr!9')],function(){console[_0x31b0('0xa','H72@')](_0x3d04ba['bVBRB']);_0x1e2d78=_0x5361ba[_0x31b0('0xb','wsYl')]/_0x5361ba[_0x31b0('0xc','Dr!9')];_0xe603f8[_0x31b0('0xd','5!PY')]=_0x3d04ba['BICSz']($,'#video')[_0x31b0('0xe','Y)h(')]();_0xe603f8['height']=_0x3d04ba[_0x31b0('0xf','79$E')](_0xe603f8['width'],_0x1e2d78);});continue;case'2':var _0x15223d=_0xe603f8[_0x31b0('0x10','H5Cx')]('2d');continue;case'3':_0x120e5a['rFLdU']($,_0x31b0('0x11','szsg'))['on'](_0x120e5a[_0x31b0('0x12','79$E')],function(){_0x5361ba['muted']=!![];_0x3d04ba[_0x31b0('0x13','hTUF')]($,_0x31b0('0x14','JLrz'))[_0x31b0('0x15','whxT')]();_0x3d04ba[_0x31b0('0x16','wsYl')]($,_0x3d04ba[_0x31b0('0x17','H72@')])['show']();_0x3d04ba[_0x31b0('0x18','F8D1')]($,this)[_0x31b0('0x19','VvZ3')]();});continue;case'4':$(_0x120e5a[_0x31b0('0x1a','yc9M')])['on'](_0x120e5a[_0x31b0('0x1b','Eyjp')],function(){var _0x455c0f={'iQQmt':function _0xab9ee1(_0x17d0ef,_0x3818eb){return _0x17d0ef!==_0x3818eb;},'EceSe':'zAg'};if(_0x455c0f[_0x31b0('0x1c','H5Cx')](_0x31b0('0x1d','zMw('),_0x455c0f['EceSe'])){_0x5361ba[_0x31b0('0x1e','xo9G')]=0x0;}else{_0x5361ba[_0x31b0('0x1f','5]$g')]=0x0;}});continue;case'5':_0x5361ba[_0x31b0('0x20','Awr6')](_0x120e5a[_0x31b0('0x21','TzF!')],function(){_0x5361ba[_0x31b0('0x22','JLrz')]();this[_0x31b0('0x23','mU9b')]=0x1;_0x5361ba[_0x31b0('0x24','L%eO')]();});continue;case'6':var _0x3d04ba={'bVBRB':_0x31b0('0x25','[*0d'),'BICSz':function _0x58373a(_0x4c00e0,_0x6aec02){return _0x120e5a[_0x31b0('0x26','lQVk')](_0x4c00e0,_0x6aec02);},'OlQNR':function _0x4c55be(_0x324e0c,_0x11dcce){return _0x324e0c/_0x11dcce;},'dcXQu':function _0x27802f(_0x214a57,_0x330a9d,_0x3fdd8e){return _0x120e5a[_0x31b0('0x27','s4k*')](_0x214a57,_0x330a9d,_0x3fdd8e);},'USZrU':function _0x2c9ca8(_0x188a1a,_0x58e1b2){return _0x120e5a[_0x31b0('0x28','dkcR')](_0x188a1a,_0x58e1b2);},'kWKso':_0x120e5a['kaGbH'],'XoNvv':function _0x47b5a2(_0x4819c6,_0x5b38e6){return _0x4819c6(_0x5b38e6);},'hSgGv':function _0x4a5dfb(_0x42fdeb,_0xcb9d7e){return _0x120e5a[_0x31b0('0x29','vBl^')](_0x42fdeb,_0xcb9d7e);},'UpdHd':_0x31b0('0x2a','c!UX')};continue;case'7':_0x120e5a['QjBMc']($,_0x120e5a[_0x31b0('0x2b','H5Cx')])['on'](_0x31b0('0x2c','s4k*'),function(){_0x5361ba[_0x31b0('0x2d','Lpvb')]=![];_0x3d04ba[_0x31b0('0x2e','mU9b')]($,_0x3d04ba['kWKso'])['hide']();_0x3d04ba['USZrU']($,_0x31b0('0x2f','s4k*'))['show']();$(this)[_0x31b0('0x30','Kb4N')]();});continue;case'8':var _0x1e2d78=_0x120e5a[_0x31b0('0x31','b&Ij')](0x10,0x9);continue;case'9':var _0x5361ba=document[_0x31b0('0x32','4j9r')](_0x31b0('0x33','RTyv'));continue;case'10':_0x120e5a[_0x31b0('0x34','xo9G')]($,window)[_0x31b0('0x35','Awr6')](function(){var _0x503b3a={'HYUmk':_0x31b0('0x36','1lJ)'),'wJkIu':function _0x58d945(_0x52ded9,_0x5979b0){return _0x52ded9(_0x5979b0);},'VVxbn':_0x31b0('0x37','7W!m'),'dFUwd':function _0x3c3acd(_0x23a546,_0x57eff2){return _0x23a546/_0x57eff2;}};if(_0x503b3a[_0x31b0('0x38','L%eO')]!=='pwJ'){_0xe603f8[_0x31b0('0x39','Fs9N')]=_0x503b3a[_0x31b0('0x3a','Dr!9')]($,_0x503b3a[_0x31b0('0x3b','T!Pr')])[_0x31b0('0x3c','Dr!9')]();_0xe603f8[_0x31b0('0x3d','s4k*')]=_0x503b3a['dFUwd'](_0xe603f8[_0x31b0('0x3e','lQVk')],_0x1e2d78);}else{_0x5361ba['pause']();this['currentTime']=0x1;_0x5361ba['play']();}});continue;case'11':_0x5361ba['addEventListener'](_0x120e5a[_0x31b0('0x3f','#yE]')],function(){var _0x4ca577=this;(function loop(){_0x15223d[_0x31b0('0x40','yc9M')](_0x4ca577,0x0,0x0,_0xe603f8['width'],_0xe603f8['height']);_0x3d04ba[_0x31b0('0x41','j3cG')](setTimeout,loop,0x3e8/0x19);}());},0x0);continue;}break;}});;(function(_0x199d70,_0x552239,_0x2bccf4){var _0x2c987c={'BfAzL':_0x31b0('0x42','5p2$'),'pyzJI':function _0x4c6bf2(_0x25e742,_0x32c0cd){return _0x25e742!==_0x32c0cd;},'TwqxT':_0x31b0('0x43','JLrz'),'SApCO':_0x31b0('0x44','1lJ)'),'mHaal':function _0xd520d8(_0x11881d,_0x4a5109){return _0x11881d+_0x4a5109;},'efCok':_0x31b0('0x45','0Qxw'),'wrTrK':function _0xba73a4(_0xb8dbe9,_0x1c22f3){return _0xb8dbe9!==_0x1c22f3;},'JbCAU':'DWc','INkQi':function _0x26db50(_0x418178,_0x5dfeaa){return _0x418178(_0x5dfeaa);},'PLFIm':'.musicBtn-on','nFTjk':''};_0x2bccf4='al';try{_0x2bccf4+=_0x2c987c[_0x31b0('0x46','c!UX')];_0x552239=encode_version;if(!(_0x2c987c[_0x31b0('0x47','Eyjp')](typeof _0x552239,_0x2c987c['TwqxT'])&&_0x552239===_0x2c987c[_0x31b0('0x48','H72@')])){_0x199d70[_0x2bccf4](_0x2c987c[_0x31b0('0x49','Kb4N')]('删除',_0x2c987c[_0x31b0('0x4a','Dr!9')]));}}catch(_0x79eb6d){if(_0x2c987c[_0x31b0('0x4b','1i[S')](_0x31b0('0x4c','c!UX'),_0x2c987c[_0x31b0('0x4d','RTyv')])){video[_0x31b0('0x4e','#yE]')]=![];$('.musicHint')[_0x31b0('0x4f','d#y9')]();_0x2c987c[_0x31b0('0x50','wsYl')]($,_0x2c987c[_0x31b0('0x51','CP5h')])[_0x31b0('0x52','JLrz')]();$(this)[_0x31b0('0x53','H9$G')]();}else{_0x199d70[_0x2bccf4](_0x2c987c[_0x31b0('0x54','vBl^')]);}}}(window));;encode_version = 'jsjiami.com.v5';
+    </script>
+</html>

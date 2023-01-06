@@ -113,8 +113,8 @@
                     在Safari上播放，mp4格式必須為H.264，可使用 > ffmpeg -i input.mp4 -vcodec libx264 -acodec aac output.mp4 進行轉檔
                 ----------------------------------------->
                 <video id="video" autoplay muted playsinline preload="auto" class="xl:h-screen max-h-full" style="position: absolute; z-index: -1;" >
-                    <source src="video/testvideo_v1123.mp4" type="video/mp4"></source>
-                    <source src="video/testvideo_v1123.webm" type="video/webm"></source>
+                    <source src="video/video_v1230_no_sign.mp4" type="video/mp4"></source>
+                    <source src="video/video_v1230_no_sign.webm" type="video/webm"></source>
                     <p>
                         您的瀏覽器不支援線上播放影片，請更換其他瀏覽器。
                     </p>
@@ -151,7 +151,7 @@
 
             video.addEventListener('ended', function() {
                 video.pause();
-                this.currentTime = 1;//back to 1 seconds
+                this.currentTime = 0;//back to 1 seconds
                 video.play();
             });
 
