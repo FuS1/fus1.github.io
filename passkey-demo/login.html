@@ -43,10 +43,11 @@
                         PublicKeyCredential.isConditionalMediationAvailable(),  
                     ]).then(results => {  
                         if (results.every(r => r === true)) {  
-                            $("#passkey-login-btn").removeClass('hidden')
+                            alert('支援Passkey功能');
+                            $("#passkey-login-btn").removeClass('hidden');
                             // Display "Create a new passkey" button  
                         }else{
-                            alert('您的裝置或瀏覽器不支援Passkey功能')
+                            alert('您的裝置或瀏覽器不支援Passkey功能');
                         }
                     });  
                 }  
