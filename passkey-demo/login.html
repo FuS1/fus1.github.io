@@ -30,6 +30,8 @@
              *  contact Email : a271954@gmail.com  *
              ***************************************/   
                
+            // 參考文件：https://blog.techbridge.cc/2019/08/17/webauthn-intro/
+
             $(function() {
                 // Availability of `window.PublicKeyCredential` means WebAuthn is usable.  
                 // `isUserVerifyingPlatformAuthenticatorAvailable` means the feature detection is usable.  
@@ -45,6 +47,9 @@
                         if (results.every(r => r === true)) {  
                             alert('支援Passkey功能');
                             $("#passkey-login-btn").removeClass('hidden');
+                            $("#passkey-login-btn").on('click',function(){
+                                createCredential();
+                            });
                             // Display "Create a new passkey" button  
                         }else{
                             alert('您的裝置或瀏覽器不支援Passkey功能');
@@ -52,6 +57,45 @@
                     });  
                 }  
             });
+
+            //challenge：challenge 是由 server 產生的一個 buffer，裡面含有一串隨機加密過的 bytes，用來防止 "replay attacks"。這邊單純 demo，用 Unit8Array 與 window.crypto.getRandomValues 做個示範。
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+
+            const userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw=';
+            const id = Uint8Array.from(window.atob(userID), c=>c.charCodeAt(0));
+
+            var createCredential = async function(){
+                let publicKeyCredentialCreationOptions = {  
+                    challenge: challenge,  
+                    rp: {  
+                        name: "Example",  
+                        // id: "example.com",  //註冊與認證使用者的網域，若開發中可移除此項
+                    },  
+                    user: {  
+                        id: id,  
+                        name: "john78",  
+                        displayName: "John",  
+                    },  
+                    pubKeyCredParams: [{alg: -7, type: "public-key"},{alg: -257, type: "public-key"}],  
+                    authenticatorSelection: {  
+                        authenticatorAttachment: "platform",  
+                    },
+                    timeout: 60000,
+                    attestation: "direct",
+                    // excludeCredentials: [{  
+                    //     id: '*****',  
+                    //     type: 'public-key',  
+                    //     transports: ['internal'],  
+                    // }],  
+                };
+
+                let credential = await navigator.credentials.create({  
+                    publicKey: publicKeyCredentialCreationOptions  
+                });
+
+                return credential;
+            }
 
         </script>
     </head>
