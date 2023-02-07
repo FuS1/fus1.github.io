@@ -30,26 +30,27 @@
              *  contact Email : a271954@gmail.com  *
              ***************************************/   
                
-            // Availability of `window.PublicKeyCredential` means WebAuthn is usable.  
-            // `isUserVerifyingPlatformAuthenticatorAvailable` means the feature detection is usable.  
-            // `isConditionalMediationAvailable` means the feature detection is usable.  
-            if (window.PublicKeyCredential &&  
-                PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable &&  
-                PublicKeyCredential.isConditionalMediationAvailable) {  
-            // Check if user verifying platform authenticator is available.  
-            Promise.all([  
-                PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(),  
-                PublicKeyCredential.isConditionalMediationAvailable(),  
-            ]).then(results => {  
-                if (results.every(r => r === true)) {  
-                    $("#passkey-login-btn").removeClass('hidden')
-                    // Display "Create a new passkey" button  
-                }else{
-                    alert('您的裝置或瀏覽器不支援Passkey功能')
-                }
-            });  
-            }  
-
+            $(function() {
+                // Availability of `window.PublicKeyCredential` means WebAuthn is usable.  
+                // `isUserVerifyingPlatformAuthenticatorAvailable` means the feature detection is usable.  
+                // `isConditionalMediationAvailable` means the feature detection is usable.  
+                if (window.PublicKeyCredential &&  
+                    PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable &&  
+                    PublicKeyCredential.isConditionalMediationAvailable) {  
+                    // Check if user verifying platform authenticator is available.  
+                    Promise.all([  
+                        PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(),  
+                        PublicKeyCredential.isConditionalMediationAvailable(),  
+                    ]).then(results => {  
+                        if (results.every(r => r === true)) {  
+                            $("#passkey-login-btn").removeClass('hidden')
+                            // Display "Create a new passkey" button  
+                        }else{
+                            alert('您的裝置或瀏覽器不支援Passkey功能')
+                        }
+                    });  
+                }  
+            });
 
         </script>
     </head>
@@ -64,19 +65,19 @@
                     <div class="p-8">
                         <form method="POST" class="" action="#" onsubmit="return false;">
                             <div class="mb-5">
-                                <label for="email" class="block mb-2 text-sm font-medium text-gray-600">Email</label>
+                                <label for="account" class="block mb-2 text-sm font-medium text-gray-600">帳號</label>
     
-                                <input type="text" name="email" class="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none">
+                                <input type="text" name="account" class="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none">
                             </div>
                     
                             <div class="mb-5">
-                                <label for="password" class="block mb-2 text-sm font-medium text-gray-600">Password</label>
+                                <label for="password" class="block mb-2 text-sm font-medium text-gray-600">密碼</label>
     
                                 <input type="text" name="password" class="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none">
                             </div>
     
-                            <button class="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">Login</button>
-                            <button id="passkey-login-btn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded hidden">
+                            <button class="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">登入</button>
+                            <button id="passkey-login-btn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold w-full p-3 mt-4 rounded shadow hidden">
                                 <i class="fa-solid fa-fingerprint"></i> 使用 PassKey 快速登入
                             </button>
                         </form>
