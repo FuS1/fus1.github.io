@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="zh_tw">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <meta HTTP-EQUIV="EXPIRES" CONTENT="0">
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="./images/favicon/site.webmanifest">
+    <link rel="mask-icon" href="./images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>輝耀 - 後台 </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Font-awesome -->
+    <link href="lib/font-awesome-v6/css/all.min.css" type="text/css" rel="stylesheet">
+    <!-- Tabulator -->
+    <link href="lib/tabulator/tabulator.min.css" rel="stylesheet">
+    <link href="lib/tabulator/tabulator_bootstrap4.min.css" rel="stylesheet">
+    <link href="lib/tabulator/tabulator.custom.css" rel="stylesheet">
+    <!-- flowbite-->
+    <link href="lib/flowbite/flowbite.min.css" rel="stylesheet">
+    <!-- select2-->
+    <link href="lib/select2/select2.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="lib/app.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <!-- TailWind -->
+    <script src="lib/tailwind/tailwind.min.js"></script>
+    <!-- Tabulator -->
+    <script src="lib/tabulator/tabulator.min.js"></script>
+    <script src="lib/tabulator/tabulator.custom.js?=<?php echo filemtime('lib/tabulator/tabulator.custom.js');?>"></script>
+    <!-- sweetalert2 -->
+    <script src="lib/sweetalert2/sweetalert2.min.js"></script>
+    <!-- moment -->
+    <script src="lib/moment/moment-with-locales.js"></script>
+    <!-- underscore -->
+    <script src="lib/underscore/underscore-umd-min.js"></script>
+    <!-- flowbite-->
+    <script src="lib/flowbite/flowbite.min.js"></script>
+    <!-- select2-->
+    <script src="lib/select2/select2.full.min.js"></script>
+    <!-- Custom Script -->
+    <script src="lib/app.js"></script>
+    <script>
+
+        
+
+    </script>
+</head>
+
+<body>
+    
+    <top-nav class="h-6 md:h-12"></top-nav>
+	<section class="flex overflow-auto">
+		<div class="w-fill md:w-1/6 md:min-w-[150px] md:max-w-[230px]">
+            <side-menu class="w-fill md:w-1/6 md:min-w-[150px] md:max-w-[230px]"></side-menu>
+		</div>
+		<div class="w-full bg-gray-50">
+            <div class="py-2.5 px-5 w-full text-right shadow-md mb-5">
+                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300 btn-cancel">取消</button>	
+                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">儲存</button>	
+            </div>
+            <div class="container mx-auto px-2 md:px-8">
+                <form id="mainfood-form">
+				    <div class="flex my-2 required-star ">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">名稱</span>
+                        </label>
+                        
+                        <div class="w-full">
+                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
+                        </div>
+                    </div>
+                    <div class="flex my-2">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">另開連結</span>
+                        </label>
+                        
+                        <div class="w-full">
+                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入網址">
+                        </div>
+                    </div>
+                    <div class="flex my-2 required-star">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">狀態</span>
+                        </label>
+                        
+                        <div class="w-full">
+                            <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
+                                <option value="1" selected>啟用</option>
+                                <option value="0">停用</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex my-2">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">手機版圖片</span>
+                        </label>
+                        
+                        <div class="w-full">
+							<img class="border-2 object-cover w-72 h-56 md:w-[585px] md:h-[450px] rounded-lg" src="https://picsum.photos/390/300">
+                            <button type="button" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                            <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 780x600 px</p>
+                        </div>
+                    </div>
+
+                    <div class="flex my-2">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">電腦版圖片</span>
+                        </label>
+                        
+                        <div class="w-full">
+							<img class="border-2 object-cover w-72 h-30 md:w-[585px] md:h-[179px] rounded-lg" src="https://picsum.photos/784/240">
+                            <button type="button" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                            <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 1960x600 px</p>
+                        </div>
+                    </div>
+                    
+                </form>
+
+            </div>
+		</div>
+	</section>
+<body>
+</html>
+
+
+
+
+
+

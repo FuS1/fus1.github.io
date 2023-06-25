@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="zh_tw">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <meta HTTP-EQUIV="EXPIRES" CONTENT="0">
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="./images/favicon/site.webmanifest">
+    <link rel="mask-icon" href="./images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>輝耀 - 後台 </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Font-awesome -->
+    <link href="lib/font-awesome-v6/css/all.min.css" type="text/css" rel="stylesheet">
+    <!-- Tabulator -->
+    <link href="lib/tabulator/tabulator.min.css" rel="stylesheet">
+    <link href="lib/tabulator/tabulator_bootstrap4.min.css" rel="stylesheet">
+    <link href="lib/tabulator/tabulator.custom.css" rel="stylesheet">
+    <!-- flowbite-->
+    <link href="lib/flowbite/flowbite.min.css" rel="stylesheet">
+    <!-- select2-->
+    <link href="lib/select2/select2.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="lib/app.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <!-- TailWind -->
+    <script src="lib/tailwind/tailwind.min.js"></script>
+    <!-- Tabulator -->
+    <script src="lib/tabulator/tabulator.min.js"></script>
+    <script src="lib/tabulator/tabulator.custom.js?=<?php echo filemtime('lib/tabulator/tabulator.custom.js');?>"></script>
+    <!-- sweetalert2 -->
+    <script src="lib/sweetalert2/sweetalert2.min.js"></script>
+    <!-- moment -->
+    <script src="lib/moment/moment-with-locales.js"></script>
+    <!-- underscore -->
+    <script src="lib/underscore/underscore-umd-min.js"></script>
+    <!-- flowbite-->
+    <script src="lib/flowbite/flowbite.min.js"></script>
+    <!-- select2-->
+    <script src="lib/select2/select2.full.min.js"></script>
+    <!-- Custom Script -->
+    <script src="lib/app.js"></script>
+<style>
+
+.tree ul {
+    list-style: none;
+    padding-left: 32px;
+}
+.tree ul li {
+    padding: 50px 0px 0px 35px;
+    position: relative;
+}
+.tree ul li:before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -32px;
+    border-left: 2px dashed #a2a5b5;
+    width: 1px;
+    height: 107%;
+}
+.tree ul li:after {
+    content: "";
+    position: absolute;
+    border-top: 2px dashed #a2a5b5;
+    top: 70px;
+    left: -32px;
+    width: 65px;
+}
+.tree ul li:last-child:before {
+    top: -22px;
+    height: 90px;
+}
+.tree > ul > li:after, .tree > ul > li:last-child:before {
+    content: unset;   
+}
+.tree > ul > li:before {
+    top: 90px;
+    /* left: 36px; */
+}
+.tree > ul > li:not(:last-child) > ul > li:before {
+    content: unset;
+}
+.tree > ul > li > .tree_content:before {
+    height: 60px;
+    width: 60px;
+    top: -9.5px;
+    background-color: #526acd;
+    border: 6.5px solid #4e5b91;;
+    font-size: 22px;
+}
+
+.tree_content {
+    min-width:190px;
+    padding: 7px;
+    padding-left: 42.5px;
+    display: inline-block;
+    border-radius: 5px;
+    font-weight: 700;
+    border: 2px solid #262c45;
+    position: relative;
+    z-index: 1;
+}
+
+.tree_content:not([data-level="0"]):before {
+    content: attr(data-level);
+    position: absolute;
+    left: -27.5px;
+    top: -6.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    border: 5px solid #303e77;
+    background-color: #4e5b91;
+    color: #fff;
+    font-size: 20px;
+}
+
+.tree > ul > li > ul > li > ul > li > .tree_content:before {
+    border: 5px solid #0a1645;
+    background-color: #262c45 ;
+}
+
+.tree .level-title {
+    border-bottom: 0.1rem solid #e3e5ef;
+    font-size:1.5rem;
+}
+
+.tree .tree_content .btn-warp .btn{
+    margin: 0.2rem 0.2rem 0 0;
+    font-size: 1.2rem;
+    padding: 4px 10px;
+    border-radius: 13px;
+}
+@media (max-width: 768px) { 
+    .tree ul:first-child {
+        padding-left: 0;
+    }
+}
+</style>
+</head>
+<body>
+    <top-nav class="h-6 md:h-12"></top-nav>
+	<section class="flex overflow-auto">
+		<side-menu class="w-fill md:w-1/6 md:min-w-[150px] md:max-w-[230px]"></side-menu>
+		<div class="w-full bg-gray-50">
+            <div class="py-2.5 px-5 w-full text-right shadow-md mb-5 inline-block md:flex">
+                <div class="md:w-1/2">
+                    <select id="brand-selecter" class="max-w-md m-3 md:m-0 px-6 py-2.5 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block">
+                        <!-- <option value="6">Panasonic</option> -->
+                    </select>
+                </div>
+                <div class="md:w-1/2">
+                    <button class="float-right px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">新增品牌</button>	
+                </div>
+            </div>
+            <div class="container mx-auto px-2 md:px-8">
+                <div class="tree">
+                    <ul>
+                        <!-- <li>
+                            <div class="tree_content" data-level="1">
+                                <div class="level-title">Level A</div>
+                                <div class="btn-warp text-yy-blue">
+                                    <span class="btn hover:text-yy-green hover:bg-gray-200 cursor-pointer level-rename" title="更名"><i class="fa-solid fa-pen"></i></span>
+                                    <span class="btn hover:text-red-900 hover:bg-gray-200 cursor-pointer level-remove" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
+                                    <span class="btn hover:text-yy-green hover:bg-gray-200 cursor-pointer level-add" title="增加子項目"><i class="fa-solid fa-plus"></i></span>
+                                </div>
+                            </div>
+                            <ul>
+                                
+                            </ul>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+		</div>
+	</section>
+
+    <node-template class="hidden">
+        <li>
+            <div class="tree_content" data-level="">
+                <div class="level-title">Level A</div>
+                <div class="btn-warp text-yy-blue">
+                    <span class="btn hover:text-yy-green hover:bg-gray-200 cursor-pointer level-rename" title="更名"><i class="fa-solid fa-pen"></i></span>
+                    <span class="btn hover:text-red-900 hover:bg-gray-200 cursor-pointer level-remove" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
+                    <span class="btn hover:text-yy-green hover:bg-gray-200 cursor-pointer level-add" title="增加子項目"><i class="fa-solid fa-plus"></i></span>
+                </div>
+            </div>
+            <ul>
+            </ul>
+        </li>
+    </node-template>
+
+</body>
+<script>
+
+$(function() {
+
+    $('#brand-selecter').on('change',function(){
+        loadTree();
+    });
+
+    $(".tree").on("click", ".level-add", function() {
+        var _tree_content = $(this).closest('.tree_content');
+        Swal.fire({
+            title: '請輸入節點名稱',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonText: '儲存',
+            cancelButtonText: '取消',
+            showLoaderOnConfirm: true,
+            reverseButtons:true,
+            preConfirm: function(input) {
+                exec('/brand-tag/new','POST',{
+                    name: input, 
+                    parent: _tree_content.attr('data-brand-tag-id'), 
+                    brandId: $('#brand-selecter').val(),
+                },function(data){
+                    loadTree();
+                });
+            }
+        });
+    });
+
+    $(".tree").on("click", ".level-remove", function() {
+        var _tree_content = $(this).closest('.tree_content');
+        Swal.fire({
+            title: '確定刪除?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e62b00',
+            confirmButtonText: '確定刪除',
+            cancelButtonText: '取消',
+            reverseButtons: true
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                exec('/brand-tag/delete','POST',{
+                    brandTagId: _tree_content.attr('data-brand-tag-id'), 
+                },function(data){
+                    loadTree();
+                });
+            }
+        });
+    });
+    
+    $(".tree").on("click", ".level-rename", function() {
+        var _tree_content = $(this).closest('.tree_content');
+        Swal.fire({
+            title: '請輸入新名稱',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonText: '儲存',
+            cancelButtonText: '取消',
+            showLoaderOnConfirm: true,
+            reverseButtons:true,
+            preConfirm: function(input) {
+                exec('/brand-tag/edit','POST',{
+                    name: input, 
+                    brandTagId: _tree_content.attr('data-brand-tag-id'), 
+                },function(data){
+                    loadTree();
+                });
+            }
+        });
+    });
+    
+    exec('/brand/list','POST',{},function(brands){
+        brands.forEach(function(brand) {
+            $('#brand-selecter').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
+        });
+        $('#brand-selecter').val(7)
+        $('#brand-selecter').trigger('change');
+    });
+
+
+});
+
+
+function loadTree(){
+    $(".tree > ul").empty();
+    exec('brand-tag/list','POST',{
+        brandId : $('#brand-selecter').val(),
+    },function(data){
+        console.log(data);
+        refractNodeInfo(data);
+    });
+}
+
+
+/**
+ * 
+ * 整理階層資訊
+ * 1.確認parent值為0的節點僅有唯一一個，並將其作為主節點
+ * 2.為每一節點增加childs屬性
+ * 3.以parent值由大至小排序
+ * 4.依序將節點移至關係節點
+ * 
+ **/ 
+function refractNodeInfo(nodes){
+
+    // var nodeInfo = _.where(nodes, {parent: 0});
+    // if(nodeInfo.length!==1){
+    //     showErrMsg('該節點異常，請聯繫管理員協助修正');
+    //     return;
+    // }
+
+
+
+    nodes = _.map(nodes, function(node){ return Object.assign(node,{
+        childs:[],
+        level:1
+    }) });
+
+    nodes.push({
+        name:$('#brand-selecter option[value='+$('#brand-selecter').val()+']').text(),
+        parent:-1,
+        brandTagId:-1,
+        childs:[],
+        level:0
+    });
+
+    nodes = _.sortBy(nodes, 'parent').reverse();
+
+    nodes = moveNodeToParent(nodes);
+
+    console.log(nodes);
+
+    renderTreeNode($(".tree > ul"),nodes[0],0);
+}
+
+function moveNodeToParent(nodes){
+
+    var node = nodes[0];
+
+    if(node['parent']===-1){ //若跑到主節點，則結束
+        return nodes;
+    }
+
+    var index = _.findIndex(nodes, {
+        brandTagId: node.parent || -1 //若為第一層節點，則將其掛至品牌主節點下
+    });
+    
+    if(index=== -1){
+        showErrMsg('該節點異常，請聯繫管理員協助修正。節點編號: '+node['brandTagId']);
+        return;
+    }
+
+    nodes[index]['childs'].push(node);
+    nodes.splice(0, 1);
+
+    return moveNodeToParent(nodes);
+
+}
+
+function renderTreeNode(target,node,level){
+    var _nodeDom = $("node-template").clone().first();
+    _nodeDom.find('.tree_content').attr('data-level',level)
+    _nodeDom.find('.tree_content').attr('data-brand-tag-id',node['brandTagId']);
+
+    if(level >= 2){
+        _nodeDom.find('.level-add').addClass("invisible");
+    }
+
+    if(level === 0){
+        _nodeDom.find('.level-rename').addClass("invisible");
+        _nodeDom.find('.level-remove').addClass("invisible");
+    }
+
+    if(node['childs'].length > 0){
+        _nodeDom.find('.level-remove').addClass("invisible");
+    }
+
+    _nodeDom.find('.level-title').html(node['name']);
+
+    target.append(_nodeDom.html());
+    node['childs'].forEach(function(childNode) {
+        renderTreeNode($("[data-brand-tag-id="+node['brandTagId']+"] ").closest("li").find('> ul'),childNode,level+1);
+    });
+
+}
+
+</script>
+</html>
+
+
+
+
+
+
