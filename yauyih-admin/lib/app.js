@@ -197,8 +197,8 @@ $(function() {
 
   var _t=Date.now();
 
-  $("top-nav").load("_top_nav.html?t="+ _t, function() {
-    $("side-menu").load("_side_menu.html?t="+ _t, function() {
+  $("top-nav").load("top_nav.html?t="+ _t, function() {
+    $("side-menu").load("side_menu.html?t="+ _t, function() {
       
     });
   });

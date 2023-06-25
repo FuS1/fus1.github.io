@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="zh_tw">
-   <body>
 <aside class="w-full bg-white" aria-label="Sidebar">
    <div class="overflow-y-auto overflow-x-hidden py-4 px-2 md:px-3 rounded h-screen w-full">
       <ul class="space-y-2">
@@ -80,15 +77,14 @@
       </ul> -->
    </div>
 </aside>
-</body>
+
 
 <script>
    (function(){
       var _paths = window.location.pathname.split('/');
+      console.log(_paths[_paths.length-1]);
       $("a[href='"+_paths[_paths.length-1]+"']").addClass('text-yy-green');
    }());
 
    
 </script>
-
-</html>
