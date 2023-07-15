@@ -1,0 +1,141 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+<style>
+
+body {
+  font-family: monospace;
+}
+
+body::before{
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background: url(image/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background-size: cover;
+  position: absolute;
+  opacity: 0.2;
+  z-index: -9999;
+}
+
+</style>
+</head>
+<body>
+    <div class="container bg-white md:text-2xl max-w-[1024px] h-full shadow-md">
+      <div class="pt-6 mb-6">
+        <div class="flex items-center mx-auto w-fit">
+          <div>
+            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Guess Who</div>
+            <div>
+              Fill In the blanks complete the sentences.
+            </div>
+          </div>
+          <div class="ml-5">
+            <img src="image/2-1/child.jpg">
+          </div>
+        </div>
+        
+      <div class="droppable min-h-5 p-3 border-2 border-dashed border-amber-900 rounded flex my-2 md:mx-10 md:my-6 bg-slate-100" data-is_stock_area="yes">
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="sing">sing</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="pretend">pretend</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="jump">jump</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="fight">fight</div>
+        </div>
+      </div>
+
+
+      <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div>I am a grasshopper.</div>
+        <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="fight"></div> .</div>  
+      </div>
+      
+      <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div>I am a cicada.</div>
+        <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="sing"></div> .</div>  
+      </div>
+
+      <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div>I am a male stag bettle.</div>
+        <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="jump"></div> .</div>  
+      </div>
+
+      <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div>I am a stick insect.</div>
+        <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="pretend"></div> .</div>  
+      </div>
+
+
+
+    </div>
+</body>
+
+
+
+<script>
+        
+    (function($) {
+
+        //初始化問題是否已回答
+        var questionIsAnswered={};
+        $(".question").each(function(){
+          questionIsAnswered[$(this).data('answer')]=false;
+        });
+
+        
+        $.fn.centerOnDrop = function(ui) {
+            ui.draggable.position({
+                my: 'center',
+                at: 'center',
+                of: this,
+                using: function(pos) {
+                    $(this).animate(pos, 200, 'linear');
+                }
+            });
+        };
+
+        $('.draggable-item').draggable({ 
+            opacity: 0.7,      
+            revert: 'invalid',//是否可以隨意托拽
+            cursor: "move"
+        });
+
+        $('.droppable').droppable({
+            accept: function($item) {
+                return $(this).data('answer') === $item.data('value') || $(this).data('is_stock_area')=='yes';
+            },
+            drop: function(event, ui) {
+                if($(this).data('is_stock_area')==='yes'){
+                  questionIsAnswered[$(this).data('answer')]=false;
+                }else{
+                  $(this).centerOnDrop(ui);
+                  questionIsAnswered[$(this).data('answer')]=true;
+                }
+                console.log(checkAnswer())
+            }
+        });
+
+        function checkAnswer(){
+          var result = true;
+          for (var i in questionIsAnswered) {
+            if(questionIsAnswered[i] === false){
+              result = false;
+            }
+            
+          }
+          return result;
+        }
+
+    })(jQuery);
+
+
+
+
+</script>
