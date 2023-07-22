@@ -31,56 +31,38 @@ body::before{
 </style>
 </head>
 <body>
-    <div class="container bg-white md:text-2xl max-w-[1024px] h-full shadow-md">
+    <div class="container bg-[#fffbc7] md:text-2xl max-w-[1024px] h-full shadow-md">
       <div class="pt-6 mb-6">
         <div class="flex items-center mx-auto w-[90%]">
           <div class="w-5/6 relative">
             <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
-            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Guess Who</div>
+            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Getting to Know a Cat</div>
             <div>
-              Fill In the blanks complete the sentences.
+              Match each card to the right part of the cat.
             </div>
-          </div>
-          <div class="ml-5 w-1/6">
-            <img class="w-full" src="image/2-1/child.jpg">
           </div>
         </div>
         
       <div class="droppable min-h-5 p-3 border-2 border-dashed border-amber-900 rounded flex my-2 md:mx-10 md:my-6 bg-slate-100 w-[90%] mx-auto" data-is_stock_area="yes">
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="sing">sing</div>
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="pretend">pretend</div>
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="jump">jump</div>
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="fight">fight</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded z-10" data-value="ear">ear</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded z-10" data-value="eye">eye</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded z-10" data-value="whisker">whisker</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded z-10" data-value="paw">paw</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded z-10" data-value="fur">fur</div>
+          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded z-10" data-value="tail">tail</div>
         </div>
       </div>
 
-
-      <div class="" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;padding: 22px; margin: 0 2.5rem;">
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
-          <div>I am a grasshopper.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="fight"></div> .</div>  
-        </div>
-        
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
-          <div>I am a cicada.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="sing"></div> .</div>  
-        </div>
-  
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
-          <div>I am a male stag bettle.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="jump"></div> .</div>  
-        </div>
-  
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
-          <div>I am a stick insect.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="pretend"></div> .</div>  
-        </div>
+      <div class="relative" style="min-width: 615px;">
+        <img class="mx-auto mt-5" width="500" src="image/2-2/cat.png">
+        <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 16%;top: -3%;" data-answer="ear"></div>
+        <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 36%;top: -3%;" data-answer="eye"></div>
+        <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 24%;top: 84%;" data-answer="whisker"></div>
+        <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 65%;top: -3%;" data-answer="tail"></div>
+        <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 65%;top: 15%;" data-answer="paw"></div>
+        <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 65%;top: 34%;" data-answer="fur"></div>
       </div>
-      
 
-
-
-    </div>
 </body>
 
 
@@ -101,7 +83,7 @@ body::before{
                 my: 'center',
                 at: 'center',
                 of: this,
-                using: function(pos) {
+                ujump: function(pos) {
                     $(this).animate(pos, 200, 'linear');
                 }
             });

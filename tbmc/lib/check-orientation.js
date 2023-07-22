@@ -19,6 +19,6 @@ window.onresize = function (event) {
   
 function applyOrientation() {
     if (window.innerHeight > window.innerWidth) {
-        alert("請將畫面變更為橫式");
+        // alert("請將畫面變更為橫式");
     }
 }
