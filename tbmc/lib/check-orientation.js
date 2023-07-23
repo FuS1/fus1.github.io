@@ -8,8 +8,16 @@ if (
     navigator.userAgent.match(/BlackBerry/i) || 
     navigator.userAgent.match(/Windows Phone/i)
 ) {
-
-    alert('請使用平板或電腦進行遊戲');
+    setTimeout(function(){
+        Swal.fire({
+            title: '請使用平板或電腦操作',
+            showCancelButton: false,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey:false,
+            reverseButtons:true,
+        });
+    }, 100);
 }
 
 
@@ -19,6 +27,19 @@ window.onresize = function (event) {
   
 function applyOrientation() {
     if (window.innerHeight > window.innerWidth) {
-        // alert("請將畫面變更為橫式");
+        Swal.fire({
+            title: '請使用橫式畫面操作',
+            showCancelButton: false,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey:false,
+            reverseButtons:true,
+        });
+    }else{
+        Swal.close();
     }
 }
+
+setTimeout(function(){
+    applyOrientation();
+});

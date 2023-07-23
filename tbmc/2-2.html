@@ -7,6 +7,7 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="lib/check-orientation.js"></script>
   <script src="lib/jquery.ui.touch-punch.min.js"></script>
@@ -106,7 +107,25 @@ body::before{
                   $(this).centerOnDrop(ui);
                   questionIsAnswered[$(this).data('answer')]=true;
                 }
-                console.log(checkAnswer())
+
+                if(checkAnswer()){
+                  Swal.fire({
+                    title: '全部正確!',
+                    showCancelButton: true,
+                    cancelButtonText: '再玩一次',
+                    confirmButtonText: '回上一頁',
+                    allowOutsideClick: false,
+                    allowEscapeKey:false,
+                    reverseButtons:true,
+                  }).then(function(result){
+                    if (result.isConfirmed) {
+                      window.location += "/../";
+                    }else{
+                      window.location.reload();
+                    }
+                  });
+                }
+                
             }
         });
 
