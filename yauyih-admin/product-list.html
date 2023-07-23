@@ -57,17 +57,30 @@
     <script src="lib/app.js"></script>
     <script>
 		$(function() {
+
+
+            const getData = function(){
+                // api/products?brandId=7&limit=10&skip=0&tagIds=1,2,3&keyword=test&brandTagIds=1,2,3
+                exec('../api/products','GET',{
+                    keyword:$('[name=keyword]').val(),
+                    brandId:$('[name=brandId]').val(),
+                },function(data){
+                    table.setData(data['products'])
+                });
+
+            }
+
             var table = initTabulator("#table",{
                 columns: [{
                         title: "產品名稱",
-                        field: "name",
+                        field: "productName",
                         width: '',
                         responsive:false,
                         headerSort: false,
                     },
                     {
                         title: "品牌",
-                        field: "phone",
+                        field: "brandId",
                         width: '',
                         headerSort: false,
                     },
@@ -78,7 +91,7 @@
                     },
                     {
                         title: "熱門度",
-                        field: "date",
+                        field: "hot",
                         headerSort: false,
                     },
                     {
@@ -92,7 +105,7 @@
                         headerSort: false,
                     },
                 ],
-                // ajaxURL: _ENV['API_HOST'] + "admin/tabulator/mainfood",
+                ajaxURL: _ENV['API_HOST'] + "../api/products",
                 ajaxURLGenerator: function(url, config, params) {
                     params.filter = params.filter.map(function(e) {
                         return e;
@@ -105,6 +118,19 @@
                     return url;
                 }
             });
+
+
+            $('.form-reset-btn').on('click',function(){
+                $('input').val('');
+                $('#brandId').val('');
+                $('#is_active').val('');
+                $('.search-btn').click();
+            });
+            $('.search-btn').on('click',function(){
+                getData();
+            });
+
+            getData();
         });
 
     </script>
@@ -152,7 +178,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <select id="brandId" name="brandId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <option value=""></option>
                                     <option value="這裡還沒串">這裡還沒串後端</option>
                                     <option value="明緯">明緯</option>
@@ -183,14 +209,14 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <input type="input" name="keyword" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="py-2.5 px-1 w-full text-right">
-                    <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300">重設</a>	
-                    <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">搜尋</button>	
+                    <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300 form-reset-btn">重設</a>	
+                    <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 search-btn">搜尋</button>	
                 </div>
             </div>
             <div class="w-11/12 mx-auto">
