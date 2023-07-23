@@ -1,0 +1,152 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="lib/check-orientation.js"></script>
+  <script src="lib/jquery.ui.touch-punch.min.js"></script>
+<style>
+
+body {
+  font-family: monospace;
+}
+
+body::before{
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background: url(image/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background-size: cover;
+  position: absolute;
+  opacity: 0.2;
+  z-index: -9999;
+}
+
+</style>
+</head>
+<body>
+    <div class="container bg-white md:text-2xl max-w-[1180px] h-full shadow-md">
+      <div class="pt-6">
+        <div class="flex items-center mx-auto w-[90%]">
+          <div class="w-full relative">
+            <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
+            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Spell and Count </div>
+            <div>
+              Click the right letter to complete each word, then click the number correctly. 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-[75%] mx-auto pt-2 grid grid-cols-2 gap-2">
+        <div class="border">
+          <img class="w-full h-[235px] object-cover" src="image/3-5/butterfly.jpg">
+          <div class="text-4xl flex">
+            <div class="w-3/4 text-center py-2 border">butterfly</div>
+            <div class="w-1/4 text-center py-2 border">
+              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400" data-answer="right">6</q-option><q-option class="px-2 text-slate-400">7</q-option></question>
+            </div>
+          </div>
+        </div>
+        <div class="border">
+          <img class="w-full h-[235px] object-cover" src="image/3-5/chick.jpg">
+          <div class="text-4xl flex">
+            <div class="w-3/4 text-center py-2 border">ck<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400" data-answer="right">i</q-option><q-option class="px-2 text-slate-400">e</q-option></question>ck
+            </div>
+            <div class="w-1/4 text-center py-2 border">
+              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400">4</q-option><q-option class="px-2 text-slate-400" data-answer="right">3</q-option></question>
+            </div>
+          </div>
+        </div>
+        <div class="border">
+          <img class="w-full h-[235px] object-cover" src="image/3-5/puppy.jpg">
+          <div class="text-4xl flex">
+            <div class="w-3/4 text-center py-2 border">p<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400">a</q-option><q-option class="px-2 text-slate-400" data-answer="right">u</q-option></question>ppy
+            </div>
+            <div class="w-1/4 text-center py-2 border">
+              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400" data-answer="right">3</q-option><q-option class="px-2 text-slate-400">2</q-option></question>
+            </div>
+          </div>
+        </div>
+        <div class="border">
+          <img class="w-full h-[235px] object-cover" src="image/3-5/tadpole.jpg">
+          <div class="text-4xl flex">
+            <div class="w-3/4 text-center py-2 border">t<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400" data-answer="right">a</q-option><q-option class="px-2 text-slate-400">o</q-option></question>dp<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400" data-answer="right">o</q-option><q-option class="px-2 text-slate-400">e</q-option></question>le
+            </div>
+            <div class="w-1/4 text-center py-2 border">
+              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400" data-answer="right">8</q-option><q-option class="px-2 text-slate-400">5</q-option></question>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+
+</body>
+
+
+
+<script>
+        
+    (function($) {
+      
+      $('q-option').on('click',function(){
+        if($(this).data('answer')==='right'){
+          $(this).parent().find('q-option').hide();
+          $(this).parent().data('answered',true);
+          $(this).show().addClass('text-emerald-700');
+
+          if( checkAnswer()){
+            Swal.fire({
+              title: '全部正確!',
+              showCancelButton: true,
+              cancelButtonText: '再玩一次',
+              confirmButtonText: '回上一頁',
+              allowOutsideClick: false,
+              allowEscapeKey:false,
+              reverseButtons:true,
+            }).then(function(result){
+              if (result.isConfirmed) {
+                window.location += "/../";
+              }else{
+                window.location.reload();
+              }
+            });
+          }
+
+        }else{
+          var _option = $(this);
+          var nowColor = _option.css('color');
+          console.log(nowColor);
+          _option.animate({
+            color: "#FF0000",
+          }, 300, function() {
+            setTimeout(function() {
+              _option.animate({
+                color: nowColor,
+              }, 800);
+            }, 700);
+          });
+        }
+        
+      });
+
+    })(jQuery);
+
+
+    function checkAnswer(){
+      var result = true;
+      $('question').each(function(){
+        if($(this).data('answered') !== true){
+          result=false;
+        }
+      });
+      return result;
+    }
+</script> 
