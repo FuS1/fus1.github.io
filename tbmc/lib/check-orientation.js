@@ -10,7 +10,10 @@ if (
 ) {
     setTimeout(function(){
         Swal.fire({
-            title: '請使用平板或電腦操作',
+            title: '請使用平板或電腦',
+            width: '90%',
+            imageUrl: 'image/computerOrPad.png',
+            imageWidth:250,
             showCancelButton: false,
             showConfirmButton: false,
             allowOutsideClick: false,
@@ -29,6 +32,9 @@ function applyOrientation() {
     if (window.innerHeight > window.innerWidth) {
         Swal.fire({
             title: '請使用橫式畫面操作',
+            width: '90%',
+            imageUrl: 'image/rotation.png',
+            imageWidth:250,
             showCancelButton: false,
             showConfirmButton: false,
             allowOutsideClick: false,
@@ -43,3 +49,4 @@ function applyOrientation() {
 setTimeout(function(){
     applyOrientation();
 });
+
