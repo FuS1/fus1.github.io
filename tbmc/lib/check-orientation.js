@@ -48,5 +48,5 @@ function applyOrientation() {
 
 setTimeout(function(){
     applyOrientation();
-});
+},100);
 
