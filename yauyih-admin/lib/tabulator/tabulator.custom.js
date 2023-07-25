@@ -8,7 +8,7 @@ const tabulator_config = {
         headerSortTristate:true
     },
     resizable: true,
-    pagination: true,
+    pagination: false,
     paginationSize: 10,
     paginationSizeSelector: [10,20,50,100,true],
     paginationCounter: function(pageSize, currentRow, currentPage, totalRows, totalPages){
