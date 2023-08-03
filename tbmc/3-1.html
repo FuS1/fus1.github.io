@@ -1,0 +1,174 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="lib/jquery-3.7.0.min.js"></script>
+  <script src="lib/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="lib/bootstrap.min.css">
+  <script src="lib/bootstrap.bundle.min.js"></script>
+  <script src="lib/sweetalert2.min.js"></script>
+  <script src="lib/tailwindcss.min.js"></script>
+  <script src="lib/check-orientation.js"></script>
+  <script src="lib/jquery.ui.touch-punch.min.js"></script>
+<style>
+
+body {
+  font-family: monospace;
+}
+
+body::before{
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background: url(image/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background-size: cover;
+  position: absolute;
+  opacity: 0.2;
+  z-index: -9999;
+}
+
+</style>
+</head>
+<body>
+    <div class="container bg-white md:text-2xl max-w-[1180px] h-full shadow-md">
+      <div class="pt-6">
+        <div class="flex items-center mx-auto w-[90%]">
+          <div class="w-full relative">
+            <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
+            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Growing a Seed </div>
+            <div>
+              Do you know how a seed grows ?<br>
+              See the pictures and click the correct answer. 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <back-btn class="absolute top-1/2 left-1 flex items-center py-2 px-3 rounded font-medium select-none border text-gray-900 bg-blue-200 transition-colors hover:border-blue-600 hover:bg-blue-400 hover:text-white hidden">⪻ Back</back-btn>
+      <next-btn class="absolute top-1/2 right-1 flex items-center py-2 px-3 rounded font-medium select-none border text-gray-900 bg-blue-200 transition-colors hover:border-blue-600 hover:bg-blue-400 hover:text-white">Next ⪼</next-btn>
+
+      <page-one>
+        <div class="w-[75%] mx-auto pt-2 grid grid-cols-2 gap-2 text-lg">
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/1.jpg">
+              <div class="w-fulltext-center py-2">1.Plant a<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">seed</q-option><q-option class="px-2 text-slate-400 cursor-pointer">flower</q-option></question>into a hole.
+              </div>
+          </div>
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/2.jpg">
+              <div class="w-fulltext-center py-2">2.Cover the seed with<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer">water</q-option><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">soil</q-option></question>.
+              </div>
+          </div>
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/3.jpg">
+              <div class="w-fulltext-center py-2">3.Sprinkle the seed with a little <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">water</q-option><q-option class="px-2 text-slate-400 cursor-pointer">sand</q-option></question>.
+              </div>
+          </div>
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/4.jpg">
+              <div class="w-fulltext-center py-2">4.Bake the seed in the<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer">snow</q-option><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">sun</q-option></question>.
+              </div>
+          </div>
+        </div>
+      </page-one>
+
+      <page-two class="hidden">
+        <div class="w-[75%] mx-auto pt-2 grid grid-cols-2 gap-2 text-lg">
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/5.jpg">
+              <div class="w-fulltext-center py-2">5.The little seed is ready to <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">grow</q-option><q-option class="px-2 text-slate-400 cursor-pointer">flow</q-option></question>.
+              </div>
+          </div>
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/6.jpg">
+              <div class="w-fulltext-center py-2">6.Little<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">stem</q-option><q-option class="px-2 text-slate-400 cursor-pointer" >flower</q-option></question>grows every day.
+              </div>
+          </div>
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/7.jpg">
+              <div class="w-fulltext-center py-2">7.The stem <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer">jump</q-option><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">climbs</q-option></question>up to pole.
+              </div>
+          </div>
+          <div class="border">
+            <img class="w-full h-[230px] object-cover border" src="image/3-1/8.jpg">
+              <div class="w-fulltext-center py-2">8.The flower bud is ready to<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">open</q-option><q-option class="px-2 text-slate-400 cursor-pointer" >close</q-option></question> up.
+              </div>
+          </div>
+        </div>
+      </page-two>
+
+</body>
+
+
+
+<script>
+        
+    (function($) {
+      
+      $('back-btn').on('click',function(){
+        $('back-btn, page-two').addClass('hidden');
+        $('next-btn, page-one').removeClass('hidden');
+      });
+
+      $('next-btn').on('click',function(){
+        $('next-btn, page-one').addClass('hidden');
+        $('back-btn, page-two').removeClass('hidden');
+      });
+
+      $('q-option').on('click',function(){
+        if($(this).data('answer')==='right'){
+          $(this).parent().find('q-option').hide();
+          $(this).parent().data('answered',true);
+          $(this).show().addClass('text-emerald-700');
+
+          if( checkAnswer()){
+            Swal.fire({
+              title: '全部正確!',
+              showCancelButton: true,
+              cancelButtonText: '再玩一次',
+              confirmButtonText: '回上一頁',
+              allowOutsideClick: false,
+              allowEscapeKey:false,
+              reverseButtons:true,
+            }).then(function(result){
+              if (result.isConfirmed) {
+                window.location += "/../";
+              }else{
+                window.location.reload();
+              }
+            });
+          }
+
+        }else{
+          var _option = $(this);
+          var nowColor = _option.css('color');
+          console.log(nowColor);
+          _option.animate({
+            color: "#FF0000",
+          }, 300, function() {
+            setTimeout(function() {
+              _option.animate({
+                color: nowColor,
+              }, 800);
+            }, 700);
+          });
+        }
+        
+      });
+
+    })(jQuery);
+
+
+    function checkAnswer(){
+      var result = true;
+      $('question').each(function(){
+        if($(this).data('answered') !== true){
+          result=false;
+        }
+      });
+      return result;
+    }
+
+</script> 
