@@ -14427,7 +14427,7 @@ fe.defaultStyle = {
     fill: "black",
     fillGradientType: Qs.LINEAR_VERTICAL,
     fillGradientStops: [],
-    fontFamily: "Arial",
+    fontFamily: "monospace",
     fontSize: 26,
     fontStyle: "normal",
     fontVariant: "normal",
@@ -15883,7 +15883,7 @@ const ti = class extends fe {
     cleanFonts() {
         this._fonts.length > 0 && (this._fonts.forEach(e => {
             URL.revokeObjectURL(e.src), e.refs--, e.refs === 0 && (e.fontFace && document.fonts.delete(e.fontFace), delete ti.availableFonts[e.originalUrl])
-        }), this.fontFamily = "Arial", this._fonts.length = 0, this.styleID++, this.fontsDirty = !0)
+        }), this.fontFamily = "monospace", this._fonts.length = 0, this.styleID++, this.fontsDirty = !0)
     }
     loadFont(e, t = {}) {
         const {
@@ -16024,7 +16024,7 @@ Fi.defaultOptions = {
     dropShadowColor: "black",
     dropShadowDistance: 5,
     fill: "black",
-    fontFamily: "Arial",
+    fontFamily: "monospace",
     fontSize: 26,
     fontStyle: "normal",
     fontVariant: "normal",
@@ -16200,12 +16200,12 @@ class $m extends Et {
         Y(this, "onDragCancel", () => {});
         Y(this, "config", {
             bottom: {
-                caption: 120,
-                circle: 150
+                caption: 130,
+                circle: 170
             },
             top: {
-                caption: -123,
-                circle: -153
+                caption: -130,
+                circle: -165
             }
         });
         const {
@@ -16216,8 +16216,8 @@ class $m extends Et {
             captionPos: a
         } = i;
         this.x = n, this.y = o, this.img = this.addChild(new Xe(O.from(s))), this.img.anchor.set(.5), this.caption = this.addChild(new Ae(r, {
-            fontFamily: "Arial",
-            fontSize: 24,
+            fontFamily: "monospace",
+            fontSize: 40,
             fill: 3355443,
             align: "center"
         })), this.caption.anchor.set(.5), this.caption.y = this.config[a].caption, this.circle = new Ee, this.circle.beginFill(3355443), this.circle.drawCircle(0, 0, 7), this.circle.endFill(), this.circle.position.set(0, this.config[a].circle), this.circle.cursor = "pointer", this.circle.interactive = !0, this.circle.hitArea = new Vs(0, 0, 50), this.circle.on("pointerdown", () => {
@@ -16245,12 +16245,12 @@ class Vm extends Et {
         Y(this, "text");
         Y(this, "onStart", () => {});
         this.position.set(It.APP_WIDTH / 2, It.APP_HEIGHT / 2), this.openingWords = new Ae(i, {
-            fontFamily: "Arial",
+            fontFamily: "monospace",
             fontSize: 72,
             fill: 3355443,
             align: "center"
         }), this.openingWords.anchor.set(.5), this.addChild(this.openingWords), this.text = new Ae("é–‹å§‹", {
-            fontFamily: "Arial",
+            fontFamily: "monospace",
             fontSize: 48,
             fontWeight: "bolder",
             fill: 16711680
@@ -16265,7 +16265,7 @@ class Xm extends Et {
         Y(this, "next");
         Y(this, "onNext", () => {});
         this.next = new Ae(i, {
-            fontFamily: "Arial",
+            fontFamily: "monospace",
             fontSize: 72,
             fill: 3355443,
             align: "center"
@@ -16280,7 +16280,7 @@ class zm extends Et {
         Y(this, "restart");
         Y(this, "onRestart", () => {});
         this.restart = new Ae(i, {
-            fontFamily: "Arial",
+            fontFamily: "monospace",
             fontSize: 72,
             fill: 3355443,
             align: "center"
@@ -16307,7 +16307,7 @@ class Wm {
         Y(this, "currentQuestionIndex", 0);
         Y(this, "currentQuestion", []);
         Y(this, "onResize", () => {
-            window.innerWidth / window.innerHeight > It.APP_WIDTH / It.APP_HEIGHT ? (this.app.view.style.width = $('#app').width(), this.app.view.style.height = $('#app').height(), this.ratio = window.innerHeight / It.APP_HEIGHT, this.app.stage.scale.set(this.ratio)) : (this.app.view.style.width = $('#app').width(), this.app.view.style.height = $('#app').height(), this.ratio = window.innerWidth / It.APP_WIDTH, this.app.stage.scale.set(this.ratio))
+            window.innerWidth / window.innerHeight > It.APP_WIDTH / It.APP_HEIGHT ? (this.app.view.style.width = "177.77vh", this.app.view.style.height = "100vh", this.ratio = window.innerHeight / It.APP_HEIGHT, this.app.stage.scale.set(this.ratio)) : (this.app.view.style.width = "95vw", this.app.view.style.height = "53.43vw", this.ratio = window.innerWidth / It.APP_WIDTH, this.app.stage.scale.set(this.ratio))
         });
         Y(this, "tempLineTo", (t, i) => {
             this.dragging.length !== 0 && (this.tempLine.clear(), this.tempLine.lineStyle(3, 3355443), this.tempLine.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), this.tempLine.lineTo(t / this.ratio, i / this.ratio))
@@ -16359,7 +16359,7 @@ class Wm {
         }));
         this.config = i, this.app = new Un({
             width: It.APP_WIDTH,
-            height: It.APP_WIDTH,
+            height: It.APP_HEIGHT,
             backgroundColor: It.APP_BG_COLOR,
             resolution: window.devicePixelRatio
         });
