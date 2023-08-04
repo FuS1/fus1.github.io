@@ -38,9 +38,9 @@ body::before{
         <div class="flex items-center mx-auto w-[90%]">
           <div class="w-full relative">
             <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
-            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Spell and Count </div>
+            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Mommy and Baby </div>
             <div>
-              Click the right letter to complete each word, then click the number correctly. 
+              Help each baby to find its mommy, and connect them correctly. 
             </div>
           </div>
         </div>
@@ -55,8 +55,6 @@ body::before{
 
 <script>
   var config = {
-    "width": 1000,
-    "height":600,
     "imgPath" : "image/1-5/",
     "prologue": "",
     "questions": [
@@ -70,7 +68,21 @@ body::before{
       ]
     ],
     "onFinish":function(){
-      alert('finish')
+      Swal.fire({
+        title: '全部正確!',
+        showCancelButton: true,
+        cancelButtonText: '再玩一次',
+        confirmButtonText: '回上一頁',
+        allowOutsideClick: false,
+        allowEscapeKey:false,
+        reverseButtons:true,
+      }).then(function(result){
+        if (result.isConfirmed) {
+          window.location += "/../";
+        }else{
+          window.location.reload();
+        }
+      });
     }
   };
 </script> 
