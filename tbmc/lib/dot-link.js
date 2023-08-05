@@ -16208,6 +16208,7 @@ class $m extends Et {
                 circle: -165
             }
         });
+        console.log
         const {
             img: s,
             caption: r,
@@ -16217,10 +16218,10 @@ class $m extends Et {
         } = i;
         this.x = n, this.y = o, this.img = this.addChild(new Xe(O.from(s))), this.img.anchor.set(.5), this.caption = this.addChild(new Ae(r, {
             fontFamily: "monospace",
-            fontSize: 44,
+            fontSize: 40,
             fill: 3355443,
             align: "center"
-        })), this.caption.anchor.set(.5), this.caption.y = this.config[a].caption, this.circle = new Ee, this.circle.beginFill(35442), this.circle.drawCircle(0, 0, 9), this.circle.endFill(), this.circle.position.set(0, this.config[a].circle), this.circle.cursor = "pointer", this.circle.interactive = !0, this.circle.hitArea = new Vs(0, 0, 50), this.circle.on("pointerdown", () => {
+        })), this.caption.anchor.set(.5), this.caption.y = this.config[a].caption , this.circle = new Ee, this.circle.beginFill(35442), this.circle.drawCircle(0, 0, 9), this.circle.endFill(), this.circle.position.set(0, this.config[a].circle), this.circle.cursor = "pointer", this.circle.interactive = !0, this.circle.hitArea = new Vs(0, 0, 50), this.circle.on("pointerdown", () => {
             this.onDragStart(this.circle.getGlobalPosition())
         }), this.circle.on("pointerup", () => {
             this.onDragEnd(this.circle.getGlobalPosition())
