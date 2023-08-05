@@ -33,20 +33,20 @@ body::before{
 </style>
 </head>
 <body>
-    <div class="container bg-white md:text-2xl max-w-[1680px] h-full shadow-md">
+    <div class="container bg-white md:text-2xl max-w-[1180px] h-full shadow-md">
       <div class="pt-6">
         <div class="flex items-center mx-auto w-[90%]">
           <div class="w-full relative">
             <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
-            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Mommy and Baby </div>
+            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Matching Game</div>
             <div>
-              Help each baby to find its mommy, and connect them correctly. 
+              Take a look at the pictures below; then connect to the correct word. 
             </div>
           </div>
         </div>
       </div>
 
-      <div id="app" class="w-full " style="margin-top:-6%;"></div>
+      <div id="app" class="w-full" style="margin-top:-6%;"></div>
         
 
 </body>
@@ -55,17 +55,15 @@ body::before{
 
 <script>
   var config = {
-    "imgPath" : "image/1-5/",
+    "imgPath" : "image/1-1/",
     "prologue": "",
-    "maxRatio":0.85,
+    "maxRatio":0.65,
     "questions": [
       [
-        "puppy.png,puppy,1,dog.png,dog,3",
-        "kitten.png,kitten,2,cat.png,cat,5",
-        "chick.png,chick,3,hen.png,hen,1",
-        "tadpole.png,tadpole,4,frog.png,frog,2",
-        "caterpillar.png,caterpillar,5,butterfly.png,butterfly,6",
-        "baby.png,baby,6,mommy.png,mommy,4"
+        "stick_insect.jpg, ,1,empty.png,stick insect,3",
+        "grasshoppers.jpg, ,2,empty.png,grasshoppers,1",
+        "bee.jpg, ,4,empty.png,bee,4",
+        "cicada.jpg, ,3,empty.png,cicada,2",
       ]
     ],
     "onFinish":function(){

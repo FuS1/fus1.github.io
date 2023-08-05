@@ -16217,10 +16217,10 @@ class $m extends Et {
         } = i;
         this.x = n, this.y = o, this.img = this.addChild(new Xe(O.from(s))), this.img.anchor.set(.5), this.caption = this.addChild(new Ae(r, {
             fontFamily: "monospace",
-            fontSize: 40,
+            fontSize: 44,
             fill: 3355443,
             align: "center"
-        })), this.caption.anchor.set(.5), this.caption.y = this.config[a].caption, this.circle = new Ee, this.circle.beginFill(3355443), this.circle.drawCircle(0, 0, 7), this.circle.endFill(), this.circle.position.set(0, this.config[a].circle), this.circle.cursor = "pointer", this.circle.interactive = !0, this.circle.hitArea = new Vs(0, 0, 50), this.circle.on("pointerdown", () => {
+        })), this.caption.anchor.set(.5), this.caption.y = this.config[a].caption, this.circle = new Ee, this.circle.beginFill(35442), this.circle.drawCircle(0, 0, 9), this.circle.endFill(), this.circle.position.set(0, this.config[a].circle), this.circle.cursor = "pointer", this.circle.interactive = !0, this.circle.hitArea = new Vs(0, 0, 50), this.circle.on("pointerdown", () => {
             this.onDragStart(this.circle.getGlobalPosition())
         }), this.circle.on("pointerup", () => {
             this.onDragEnd(this.circle.getGlobalPosition())
@@ -16235,7 +16235,7 @@ const It = {
     APP_WIDTH: 1920,
     APP_HEIGHT: 1080,
     APP_BG_COLOR: 16777215,
-    BG_COLOR: "#efefef"
+
 };
 
 class Vm extends Et {
@@ -16307,16 +16307,17 @@ class Wm {
         Y(this, "currentQuestionIndex", 0);
         Y(this, "currentQuestion", []);
         Y(this, "onResize", () => {
-            window.innerWidth / window.innerHeight > It.APP_WIDTH / It.APP_HEIGHT ? (this.app.view.style.width = "177.77vh", this.app.view.style.height = "100vh", this.ratio = window.innerHeight / It.APP_HEIGHT, this.app.stage.scale.set(this.ratio)) : (this.app.view.style.width = "95vw", this.app.view.style.height = "53.43vw", this.ratio = window.innerWidth / It.APP_WIDTH, this.app.stage.scale.set(this.ratio))
+            this.app.view.style.width = $("#app").width(), this.ratio = window.innerWidth / It.APP_WIDTH ,this.ratio>this.config.maxRatio ? this.ratio=this.config.maxRatio:this.ratio=this.ratio, this.app.stage.scale.set(this.ratio)
+            // console.log(this.ratio);
         });
         Y(this, "tempLineTo", (t, i) => {
-            this.dragging.length !== 0 && (this.tempLine.clear(), this.tempLine.lineStyle(3, 3355443), this.tempLine.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), this.tempLine.lineTo(t / this.ratio, i / this.ratio))
+            this.dragging.length !== 0 && (this.tempLine.clear(), this.tempLine.lineStyle(5, 0xf97316), this.tempLine.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), this.tempLine.lineTo(t / this.ratio, i / this.ratio))
         });
         Y(this, "initQuestion", () => {
             this.currentQuestion = this.parseQuestion(this.config.questions[this.currentQuestionIndex]);
             const t = It.APP_WIDTH / 2 - this.cellWdith * (this.currentQuestion.length / 2 + .5),
                 i = It.APP_HEIGHT / 2;
-            for (let s = 0; s < this.currentQuestion.length; s++)
+            for (let s = 0; s < this.currentQuestion.length; s++){
                 for (let r = 0; r < this.currentQuestion[s].length; r++) {
                     const {
                         img: n,
@@ -16324,7 +16325,7 @@ class Wm {
                     } = this.currentQuestion[s][r], a = this.questionView.addChild(new $m({
                         img: config.imgPath + n,
                         caption: o,
-                        x: t + this.currentQuestion[s][r].order * this.cellWdith,
+                        x: t + this.currentQuestion[s][r].order * this.cellWdith *0.975,
                         y: r === 0 ? i - this.gapY / 2 : i + this.gapY / 2,
                         captionPos: r === 0 ? "bottom" : "top"
                     }));
@@ -16336,7 +16337,7 @@ class Wm {
                         if (this.dragging.length !== 0) {
                             if (this.dragging[0] === s) {
                                 const l = new Ee;
-                                l.lineStyle(3, 3355443), l.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), l.lineTo(h.x / this.ratio, h.y / this.ratio), this.questionView.addChild(l), this.doneMap.set(s, l), console.log(this.currentQuestion.length, this.doneMap.size), this.currentQuestion.length === this.doneMap.size && (this.currentQuestionIndex === this.config.questions.length - 1 ? /*this.endView.visible = !0*/ config.onFinish() : this.modalView.visible = !0)
+                                l.lineStyle(5, 35442), l.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), l.lineTo(h.x / this.ratio, h.y / this.ratio), this.questionView.addChild(l), this.doneMap.set(s, l), console.log(this.currentQuestion.length, this.doneMap.size), this.currentQuestion.length === this.doneMap.size && (this.currentQuestionIndex === this.config.questions.length - 1 ? /*this.endView.visible = !0*/ config.onFinish() : this.modalView.visible = !0)
                             }
                             this.dragging = [], this.tempLine.clear()
                         }
@@ -16344,6 +16345,8 @@ class Wm {
                         this.dragging = [], this.tempLine.clear()
                     }
                 }
+            }
+
         });
         Y(this, "parseQuestion", t => t.map(i => {
             const s = i.split(",");
