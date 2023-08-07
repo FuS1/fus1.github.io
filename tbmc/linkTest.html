@@ -1,0 +1,649 @@
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <style type="text/css">
+      /* CSS 预设*/
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        text-decoration: none;
+        outline: none;
+      }
+
+      body a {
+        outline: none;
+      }
+
+      img {
+        border: none;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      body {
+        color: #666666;
+        font-size: 14px;
+        font-family: "微软雅黑";
+        background-color: #fff;
+        height: 100%;
+        overflow-y: scroll;
+        overflow-y: inherit;
+      }
+
+      /*html{ height:100%;}*/
+      .clearfix:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        overflow: hidden;
+      }
+
+      .clearfix {
+        zoom: 1;
+      }
+
+      /*clear*/
+      .left {
+        float: left;
+      }
+
+      .right {
+        float: right;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      /*连线题 css*/
+      .show {
+        width: 800px;
+        z-index: 9;
+        position: relative;
+        margin: auto;
+      }
+
+      .canvas {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: -1;
+      }
+
+      .backcanvas {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: -2;
+      }
+
+      .showleft {
+        float: left;
+        width: 300px;
+      }
+
+      .showleft .showleftlist {
+        float: left;
+        width: 300px;
+        height: 80px;
+        margin: 0 0 10px 0;
+      }
+
+      .showleft .showleftlist .showlistl-ti {
+        float: left;
+        width: 218px;
+        border: 1px solid #ccc;
+        height: 78px;
+        border-right: none;
+        border-radius: 6px 0 0 6px;
+        overflow: hidden;
+        position: relative;
+        text-align: center
+      }
+
+      .showleft .showleftlist .showitem {
+        float: left;
+      }
+
+      .showright {
+        float: right;
+        width: 300px;
+      }
+
+      .showright .showrightlist {
+        float: right;
+        width: 300px;
+        height: 80px;
+        margin: 0 0 10px 0;
+      }
+
+      .showright .showrightlist .showlistr-ti {
+        float: right;
+        width: 218px;
+        border: 1px solid #ccc;
+        border-left: none;
+        border-radius: 0 6px 6px 0;
+        height: 78px;
+        overflow: hidden;
+        position: relative;
+        text-align: center;
+        background: #FFF;
+      }
+
+      .showright .showrightlist .showitem {
+        float: right;
+      }
+
+      .showleft .showremove {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #C33;
+        width: 20px;
+        height: 20px;
+      }
+
+      .showright .showremove {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #C33;
+        width: 20px;
+        height: 20px;
+      }
+
+      .show .showitem {
+        width: 78px;
+        height: 80px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .show .showleft .showitem i {
+        display: block;
+        width: 38px;
+        border: 1px solid #ccc;
+        border-left: none;
+        height: 78px;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .show .showleft .showitem em {
+        position: absolute;
+        height: 12px;
+        width: 12px;
+        background: #fff;
+        border: 2px solid #19acd6;
+        border-radius: 12px;
+        z-index: 999999;
+        left: 31px;
+        top: 31px;
+      }
+
+      .show .showright .showitem i {
+        display: block;
+        margin-left: 38px;
+        width: 39px;
+        border: 1px solid #ccc;
+        border-right: none;
+        height: 78px;
+        border-radius: 6px 0 0 6px;
+      }
+
+      .show .showright .showitem em {
+        position: absolute;
+        height: 12px;
+        width: 12px;
+        background: #fff;
+        border: 2px solid #19acd6;
+        border-radius: 12px;
+        z-index: 999999;
+        left: 31px;
+        top: 31px;
+      }
+
+      .show .showitem:hover em {
+        border: 2px solid #f2c200;
+      }
+
+      .show .showitem a {
+        color: #666;
+      }
+
+      .show .showitem img {
+        height: 60px;
+      }
+
+      .show span.showitem.addstyle em {
+        border: 2px solid #f2c200;
+      }
+
+      .canvastools {
+        height: 40px;
+        width: 800px;
+        position: absolute;
+        left: 0px;
+        top: -40px;
+        width: 800px;
+        text-align: right;
+      }
+
+      .canvastools a {
+        display: inline-block;
+        height: 30px;
+        padding: 0 10px;
+        background: #09C;
+        border-radius: 5px;
+        line-height: 30px;
+        color: #fff;
+      }
+
+      .box-append a {
+        display: inline-block;
+        height: 30px;
+        padding: 0 10px;
+        background: #09C;
+        border-radius: 5px;
+        line-height: 30px;
+        color: #fff;
+      }
+    </style>
+    <title>canvas</title>
+  </head>
+  <body>
+    <div class="demo2">
+      <!--canvas-->
+      <div class="show clearfix">
+        <div class="showleft">
+          <!--左侧-->
+          <div class="showleftlist">
+            <div class="showlistl-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+          <div class="showleftlist">
+            <div class="showlistl-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+          <div class="showleftlist">
+            <div class="showlistl-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+          <div class="showleftlist">
+            <div class="showlistl-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+        </div>
+        <div class="showright">
+          <!--右侧-->
+          <div class="showrightlist">
+            <div class="showlistr-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+          <div class="showrightlist">
+            <div class="showlistr-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+          <div class="showrightlist">
+            <div class="showlistr-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+          <div class="showrightlist">
+            <div class="showlistr-ti">45646</div>
+            <span class="showitem">
+              <i></i>
+              <em></em>
+            </span>
+          </div>
+        </div>
+        <canvas class="canvas"></canvas>
+        <!--连线画布-->
+        <canvas class="backcanvas"></canvas>
+        <!--提示线画布-->
+      </div>
+    </div>
+    <!--canvas eee-->
+  </body>
+  <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+  <script src="lib/jquery.ui.touch-punch.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      var demo2 = face($(".demo2"));
+    });
+    /*
+     * oojj
+     * @Author toubidu
+     * @param {arg}      obj             		 顶级对象
+     * @param {function}      oojj.imageurl()    返回图片
+     */
+    function face(obj) { //init fun
+      var oojj = new creatobj(obj);
+      oojj.init();
+      var groupstate = false; //按下事件状态，标记按下后的移动，抬起参考
+      oojj.obj.children(".show").find(".showitem").on("mousedown", function(event) {
+        groupstate = true;
+        if ($(this).attr("check") == 1) {
+          $(this).attr("sel", "1").parent().parent().attr("first", "1");
+          oojj.temp = $(this);
+        } else {
+          $(this).attr("sel", "1").addClass("addstyle").parent().parent().attr("first", "1");
+          oojj.temp = $(this);
+        };
+        oojj.mid_startx = $(this).attr("left");
+        oojj.mid_starty = $(this).attr("top");
+        event.preventDefault();
+      });
+      $(document).mousemove(function(event) { //移动				
+        var $target = $(event.target);
+        if (groupstate) {
+          oojj.mid_endx = event.pageX - oojj.obj.find(".show").offset().left;
+          oojj.mid_endy = event.pageY - oojj.obj.find(".show").offset().top;
+          var targettrue = null;
+          if ($target.is(".showitem") && $target.closest(".show").parent().attr("class") == oojj.obj.attr("class")) {
+            targettrue = $target;
+          } else if ($target.closest(".showitem").is("span") && $target.closest(".show").parent().attr("class") == oojj.obj.attr("class")) {
+            targettrue = $target.closest(".showitem");
+          } else {
+            targettrue = null;
+          };
+          if (targettrue) {
+            if (targettrue.parent().parent().attr("first") == 0) {
+              if (targettrue.attr("check") == 0) {
+                targettrue.addClass("addstyle").attr("sel", "1").parent().siblings().children(".showitem[check=0]").removeClass("addstyle").attr("sel", "0");
+              };
+            } else {
+              if (targettrue.attr("check") == 0) {
+                targettrue.addClass("addstyle").attr("sel", "1").parent().siblings().children(".showitem[check=0]").removeClass("addstyle").attr("sel", "0");
+                oojj.mid_startx = targettrue.attr("left");
+                oojj.mid_starty = targettrue.attr("top");
+              };
+            };
+          } else {
+            if (oojj.obj.find(".showleft").attr("first") == 0) {
+              oojj.obj.find(".showleft").find(".showitem").each(function(index, element) {
+                if ($(this).attr('check') == 0) {
+                  $(this).attr("sel", "0").removeClass("addstyle");
+                };
+              });
+            };
+            if (oojj.obj.find(".showright").attr("first") == 0) {
+              oojj.obj.find(".showright").find(".showitem").each(function(index, element) {
+                if ($(this).attr('check') == 0) {
+                  $(this).attr("sel", "0").removeClass("addstyle");
+                };
+              });
+            };
+          };
+          oojj.backstrockline();
+        };
+        event.preventDefault();
+      });
+      $(document).mouseup(function(event) { //抬起
+        var $target = $(event.target);
+        if (groupstate) {
+          var targettrue;
+          if ($target.is(".showitem") && $target.closest(".show").parent().attr("class") == oojj.obj.attr("class")) {
+            targettrue = $target;
+          } else if ($target.closest(".showitem").is("span") && $target.closest(".show").parent().attr("class") == oojj.obj.attr("class")) {
+            targettrue = $target.closest(".showitem");
+          } else {
+            targettrue = null;
+          };
+          if (targettrue) {
+            if (targettrue.parent().parent().attr("first") == 0) {
+              if (targettrue.attr("check") == 0) {
+                if (oojj.temp.attr('check') == 1) {
+                  oojj.obj.find(".showleft").find(".showitem").each(function(index, element) {
+                    if ($(this).attr('sel') == 1) {
+                      if ($(this).attr('check') == 0) {
+                        $(this).attr("sel", "0").removeClass("addstyle");
+                      } else {
+                        $(this).attr("sel", "0").addClass("addstyle");
+                      };
+                    }
+                  });
+                  oojj.obj.find(".showleft").attr('first', 0);
+                  oojj.obj.find(".showright").find(".showitem").each(function(index, element) {
+                    if ($(this).attr('sel') == 1) {
+                      if ($(this).attr('check') == 0) {
+                        $(this).attr("sel", "0").removeClass("addstyle");
+                      } else {
+                        $(this).attr("sel", "0").addClass("addstyle");
+                      };
+                    }
+                  });
+                  oojj.obj.find(".showright").attr('first', 0);
+                } else {
+                  oojj.obj.find(".showleft").find(".showitem").each(function(index, element) {
+                    if ($(this).attr('sel') == 1) {
+                      oojj.mx.push($(this).attr('left'));
+                      oojj.my.push($(this).attr('top'));
+                      oojj.ms.push(0);
+                      $(this).attr("check", "1");
+                      $(this).attr("sel", "0");
+                      $(this).attr("pair", oojj.pair);
+                      oojj.pairl.push(oojj.pair);
+                    }
+                  });
+                  oojj.obj.find(".showright").find(".showitem").each(function(index, element) {
+                    if ($(this).attr('sel') == 1) {
+                      oojj.mx.push($(this).attr('left'));
+                      oojj.my.push($(this).attr('top'));
+                      oojj.ms.push(1);
+                      $(this).attr("check", "1");
+                      $(this).attr("sel", "0");
+                      $(this).attr("pair", oojj.pair);
+                      oojj.pairr.push(oojj.pair);
+                    }
+                  });
+                  oojj.pair += 1;
+                  oojj.obj.find(".showleft").attr('first', 0);
+                  oojj.obj.find(".showright").attr('first', 0);
+                  oojj.strockline();
+                };
+              } else {
+                oojj.obj.find(".showleft").find(".showitem").each(function(index, element) {
+                  if ($(this).attr('sel') == 1) {
+                    if ($(this).attr('check') == 0) {
+                      $(this).attr("sel", "0").removeClass("addstyle");
+                    } else {
+                      $(this).attr("sel", "0").addClass("addstyle");
+                    };
+                  }
+                });
+                oojj.obj.find(".showleft").attr('first', 0);
+                oojj.obj.find(".showright").find(".showitem").each(function(index, element) {
+                  if ($(this).attr('sel') == 1) {
+                    if ($(this).attr('check') == 0) {
+                      $(this).attr("sel", "0").removeClass("addstyle");
+                    } else {
+                      $(this).attr("sel", "0").addClass("addstyle");
+                    };
+                  }
+                });
+                oojj.obj.find(".showright").attr('first', 0);
+              };
+            } else {
+              oojj.obj.find(".showleft").find(".showitem").each(function(index, element) {
+                if ($(this).attr('check') == 0) {
+                  if ($(this).attr('sel') == 1) {
+                    $(this).attr("sel", "0").removeClass("addstyle");
+                  };
+                } else {
+                  if ($(this).attr('sel') == 1) {
+                    $(this).attr("sel", "0").addClass("addstyle");
+                  };
+                };
+              });
+              oojj.obj.find(".showleft").attr('first', 0);
+              oojj.obj.find(".showright").find(".showitem").each(function(index, element) {
+                if ($(this).attr('check') == 0) {
+                  if ($(this).attr('sel') == 1) {
+                    $(this).attr("sel", "0").removeClass("addstyle");
+                  };
+                } else {
+                  if ($(this).attr('sel') == 1) {
+                    $(this).attr("sel", "0").addClass("addstyle");
+                  };
+                };
+              });
+              oojj.obj.find(".showright").attr('first', 0);
+            };
+          } else {
+            oojj.obj.find(".showleft").find(".showitem").each(function(index, element) {
+              if ($(this).attr('check') == 0) {
+                if ($(this).attr('sel') == 1) {
+                  $(this).attr("sel", "0").removeClass("addstyle");
+                };
+              };
+            });
+            oojj.obj.find(".showleft").attr('first', 0);
+            oojj.obj.find(".showright").find(".showitem").each(function(index, element) {
+              if ($(this).attr('check') == 0) {
+                if ($(this).attr('sel') == 1) {
+                  $(this).attr("sel", "0").removeClass("addstyle");
+                };
+              };
+            });
+            oojj.obj.find(".showright").attr('first', 0);
+          };
+          oojj.clearbackline();
+          groupstate = false;
+        };
+        event.preventDefault();
+      });
+      return oojj;
+    }; //end fun
+    function creatobj(obj) { //class
+      this.obj = obj; //顶级对象
+      this.linewidth = 2; //线宽
+      this.linestyle = "#19acd6"; //线高
+      this.show = function() {
+        alert(this.mx);
+      };
+      this.mx = []; //基本数据
+      this.my = [];
+      this.ms = [];
+      this.temp = null;
+      this.pair = 0;
+      this.pairl = [];
+      this.pairr = [];
+      this.mid_startx = null, this.mid_starty = null, this.mid_endx = null, this.mid_endy = null; //存储虚拟连线起始坐标
+      this.init = function() { //初始化
+        this.creatline();
+      };
+      this.creatline = function() { //处理			
+        //初始化赋值 列表内容
+        this.obj.find(".showleft").find(".showitem").each(function(index, element) {
+          $(this).attr({
+            group: "gpl",
+            left: $(this).position().left + $(this).outerWidth() - 31,
+            top: $(this).position().top + $(this).outerHeight() / 2,
+            sel: "0"
+          });
+          if ($(this).attr('check') == 1) {
+            $(this).attr('check', '1');
+          } else {
+            $(this).attr('check', '0')
+          };
+        });
+        this.obj.find(".showright").find(".showitem").each(function(index, element) {
+          $(this).attr({
+            group: "gpr",
+            left: $(this).position().left + 31,
+            top: $(this).position().top + $(this).outerHeight() / 2,
+            sel: "0"
+          });
+          if ($(this).attr('check') == 1) {
+            $(this).attr('check', '1');
+          } else {
+            $(this).attr('check', '0')
+          };
+        });
+        this.obj.find(".showleft").attr('first', 0); //初始赋值 列表内容容器
+        this.obj.find(".showright").attr('first', 0);
+        //canvas 赋值
+        var canvas = this.obj.find(".canvas")[0]; //获取canvas  实际连线标签
+        canvas.width = this.obj.find(".show").width(); //canvas宽度等于span容器宽度
+        canvas.height = this.obj.find(".show").height();
+        var backcanvas = this.obj.find(".backcanvas")[0]; //获取canvas 模拟连线标签  
+        backcanvas.width = this.obj.find(".show").width();
+        backcanvas.height = this.obj.find(".show").height();
+        //end		
+      };
+      this.strockline = function() {
+        var canvas = this.obj.find(".canvas")[0]; //获取canvas  实际连线标签					
+        var context = canvas.getContext('2d'); //canvas追加2d画图
+        var lastX, lastY; //存放遍历坐标
+        context.clearRect(0, 0, this.obj.find(".show").width(), this.obj.find(".show").height()); //整个画布清除
+        context.save();
+        context.beginPath();
+        context.lineWidth = this.linewidth;
+        for (var i = 0; i < this.ms.length; i++) { //遍历绘制 
+          lastX = this.mx[i];
+          lastY = this.my[i];
+          if (this.ms[i] == 0) {
+            context.moveTo(lastX, lastY);
+          } else {
+            context.lineTo(lastX, lastY);
+          }
+        }
+        context.strokeStyle = this.linestyle;
+        context.stroke();
+        context.restore();
+      };
+      this.backstrockline = function() {
+        var backcanvas = this.obj.find(".backcanvas")[0]; //获取canvas 模拟连线标签  	
+        var backcontext = backcanvas.getContext('2d');
+        backcontext.clearRect(0, 0, this.obj.find(".show").width(), this.obj.find(".show").height());
+        backcontext.save();
+        backcontext.beginPath();
+        backcontext.lineWidth = this.linewidth;
+        backcontext.moveTo(this.mid_startx, this.mid_starty);
+        backcontext.lineTo(this.mid_endx, this.mid_endy);
+        backcontext.strokeStyle = this.linestyle;
+        backcontext.stroke();
+        backcontext.restore();
+      };
+      this.clearbackline = function() {
+        var backcanvas = this.obj.find(".backcanvas")[0]; //获取canvas 模拟连线标签  	
+        var backcontext = backcanvas.getContext('2d');
+        backcontext.clearRect(0, 0, this.obj.find(".show").width(), this.obj.find(".show").height());
+        this.mid_startx = null;
+        this.mid_starty = null;
+        this.mid_endx = null;
+        this.mid_endy = null;
+      };
+    }; //end		 	
+  </script>
+</html>
