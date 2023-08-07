@@ -54,8 +54,8 @@ body::before{
         </div>
       </div>
 
-      <div class="relative" style="min-width: 615px;">
-        <img class="mx-auto" width="750" src="image/2-2/cat.png">
+      <div class="relative w-[950px] mx-auto">
+        <img class="mx-auto" width="670" src="image/2-2/cat.png">
         <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 11%;top: 18%;" data-answer="ear"></div>
         <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 7%;top: 49.5%;" data-answer="eye"></div>
         <div class="droppable question mx-2 border-2 border-gray-500 w-32 h-14 bg-white absolute" style="left: 7%;top: 74%;" data-answer="paw"></div>
@@ -66,83 +66,15 @@ body::before{
 
 </body>
 
-
-
 <script>
-        
-    (function($) {
-
-        //初始化問題是否已回答
-        var questionIsAnswered={};
-        $(".question").each(function(){
-          questionIsAnswered[$(this).data('answer')]=false;
-        });
-
-        
-        $.fn.centerOnDrop = function(ui) {
-            ui.draggable.position({
-                my: 'center',
-                at: 'center',
-                of: this,
-                ujump: function(pos) {
-                    $(this).animate(pos, 200, 'linear');
-                }
-            });
-        };
-
-        $('.draggable-item').draggable({ 
-            opacity: 0.7,      
-            revert: 'invalid',//是否可以隨意托拽
-            cursor: "move"
-        });
-
-        $('.droppable').droppable({
-            accept: function($item) {
-                return $(this).data('answer') === $item.data('value') || $(this).data('is_stock_area')=='yes';
-            },
-            drop: function(event, ui) {
-                if($(this).data('is_stock_area')==='yes'){
-                  questionIsAnswered[$(this).data('answer')]=false;
-                }else{
-                  $(this).centerOnDrop(ui);
-                  questionIsAnswered[$(this).data('answer')]=true;
-                }
-
-                if(checkAnswer()){
-                  Swal.fire({
-                    title: '全部正確!',
-                    showCancelButton: true,
-                    cancelButtonText: '再玩一次',
-                    confirmButtonText: '回上一頁',
-                    allowOutsideClick: false,
-                    allowEscapeKey:false,
-                    reverseButtons:true,
-                  }).then(function(result){
-                    if (result.isConfirmed) {
-                      window.location += "/../";
-                    }else{
-                      window.location.reload();
-                    }
-                  });
-                }
-
-            }
-        });
-
-        function checkAnswer(){
-          var result = true;
-          for (var i in questionIsAnswered) {
-            if(questionIsAnswered[i] === false){
-              result = false;
-            }
-            
-          }
-          return result;
-        }
-
-    })(jQuery);
-
-
-
-
+    /**
+     * 串接系統設定值
+     * backUrl 為遊戲完成時，要跳轉回的路由
+     * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
+     * pleaseRotationImgUrl 為提示使用將平板轉為橫式
+     */
+     var backUrl = "index.html",
+        useComputerOrPadImgUrl = 'image/computerOrPad.png',
+        pleaseRotationImgUrl = 'image/pleaseRotation.png';
 </script>
+<script src="lib/drag.js"></script>

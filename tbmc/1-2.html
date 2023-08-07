@@ -54,16 +54,24 @@ body::before{
 
 
 <script>
+    /**
+     * 串接系統設定值
+     * backUrl 為遊戲完成時，要跳轉回的路由
+     * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
+     * pleaseRotationImgUrl 為提示使用將平板轉為橫式
+     */
+     var backUrl = "index.html",
+        useComputerOrPadImgUrl = 'image/computerOrPad.png',
+        pleaseRotationImgUrl = 'image/pleaseRotation.png';
+
   var config = {
-    "imgPath" : "image/1-2/",
-    "prologue": "",
     "maxRatio":0.65,
     "questions": [
       [
-        "grasshopper.jpg, ,1,empty.png,on the leaf,4",
-        "stag_bettle.jpg, ,2,empty.png,on the ground,3",
-        "bee.jpg, ,3,empty.png,on the flower,2",
-        "stick_insect.jpg, ,4,empty.png,on the tree,1",
+        "image/1-2/grasshopper.jpg , ,1,image/1-2/empty.png,on the leaf  ,4",
+        "image/1-2/stag_bettle.jpg , ,2,image/1-2/empty.png,on the ground,3",
+        "image/1-2/bee.jpg         , ,3,image/1-2/empty.png,on the flower,2",
+        "image/1-2/stick_insect.jpg, ,4,image/1-2/empty.png,on the tree  ,1",
       ]
     ],
     "onFinish":function(){
@@ -77,7 +85,7 @@ body::before{
         reverseButtons:true,
       }).then(function(result){
         if (result.isConfirmed) {
-          window.location += "/../";
+          window.location = backUrl;
         }else{
           window.location.reload();
         }

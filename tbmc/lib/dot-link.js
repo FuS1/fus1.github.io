@@ -16324,8 +16324,8 @@ class Wm {
                         img: n,
                         caption: o
                     } = this.currentQuestion[s][r], a = this.questionView.addChild(new $m({
-                        img: config.imgPath + n,
-                        caption: o,
+                        img: n,
+                        caption: o.trim(),
                         x: t + this.currentQuestion[s][r].order * this.cellWdith *0.975,
                         y: r === 0 ? i - this.gapY / 2 : i + this.gapY / 2,
                         captionPos: r === 0 ? "bottom" : "top"

@@ -53,18 +53,27 @@ body::before{
 
 
 <script>
+    /**
+     * 串接系統設定值
+     * backUrl 為遊戲完成時，要跳轉回的路由
+     * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
+     * pleaseRotationImgUrl 為提示使用將平板轉為橫式
+     */
+     var backUrl = "index.html",
+        useComputerOrPadImgUrl = 'image/computerOrPad.png',
+        pleaseRotationImgUrl = 'image/pleaseRotation.png';
+
   var config = {
-    "imgPath" : "image/1-5/",
     "prologue": "",
     "maxRatio":0.85,
     "questions": [
       [
-        "puppy.png,puppy,1,dog.png,dog,3",
-        "kitten.png,kitten,2,cat.png,cat,5",
-        "chick.png,chick,3,hen.png,hen,1",
-        "tadpole.png,tadpole,4,frog.png,frog,2",
-        "caterpillar.png,caterpillar,5,butterfly.png,butterfly,6",
-        "baby.png,baby,6,mommy.png,mommy,4"
+        "image/1-5/puppy.png       ,puppy      ,1,image/1-5/dog.png       ,dog      ,3",
+        "image/1-5/kitten.png      ,kitten     ,2,image/1-5/cat.png       ,cat      ,5",
+        "image/1-5/chick.png       ,chick      ,3,image/1-5/hen.png       ,hen      ,1",
+        "image/1-5/tadpole.png     ,tadpole    ,4,image/1-5/frog.png      ,frog     ,2",
+        "image/1-5/caterpillar.png ,caterpillar,5,image/1-5/butterfly.png ,butterfly,6",
+        "image/1-5/baby.png        ,baby       ,6,image/1-5/mommy.png     ,mommy    ,4"
       ]
     ],
     "onFinish":function(){
@@ -78,7 +87,7 @@ body::before{
         reverseButtons:true,
       }).then(function(result){
         if (result.isConfirmed) {
-          window.location += "/../";
+          window.location = backUrl;
         }else{
           window.location.reload();
         }
