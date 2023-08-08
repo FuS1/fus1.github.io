@@ -3,14 +3,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="lib/jquery-3.7.0.min.js"></script>
-  <script src="lib/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="lib/bootstrap.min.css">
-  <script src="lib/bootstrap.bundle.min.js"></script>
-  <script src="lib/sweetalert2.min.js"></script>
-  <script src="lib/tailwindcss.min.js"></script>
-  <script src="lib/check-orientation.js"></script>
-  <script src="lib/jquery.ui.touch-punch.min.js"></script>    
+  <script src="public/js/games/jquery-3.7.0.min.js"></script>
+  <script src="public/js/games/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="public/css/games/bootstrap.min.css">
+  <script src="public/js/games/bootstrap.bundle.min.js"></script>
+  <script src="public/js/games/sweetalert2.min.js"></script>
+  <script src="public/js/games/tailwindcss.min.js"></script>
+  <script src="public/js/games/check-orientation.js"></script>
+  <script src="public/js/games/jquery.ui.touch-punch.min.js"></script> 
 <style>
 
 body {
@@ -22,7 +22,7 @@ body::before{
   width: 100%;
   height: 100%;
   content: '';
-  background: url(image/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background: url(public/imgs/games/light_gray_concrete_wall.jpg) repeat 50% 50%;
   background-size: cover;
   position: absolute;
   opacity: 0.2;
@@ -36,7 +36,7 @@ body::before{
       <div class="pt-6">
         <div class="flex items-center mx-auto w-[90%]">
           <div class="w-full relative">
-            <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
+            <img class="absolute left-[-2.5rem] top-1 h-8" src="public/imgs/games/title-fog.png">
             <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Mommy and Baby </div>
             <div>
               Help each baby to find its mommy, and connect them correctly. 
@@ -60,20 +60,20 @@ body::before{
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
      */
      var backUrl = "index.html",
-        useComputerOrPadImgUrl = 'image/computerOrPad.png',
-        pleaseRotationImgUrl = 'image/pleaseRotation.png';
+        useComputerOrPadImgUrl = 'public/imgs/games/computerOrPad.png',
+        pleaseRotationImgUrl = 'public/imgs/games/pleaseRotation.png';
 
   var config = {
     "prologue": "",
     "maxRatio":0.85,
     "questions": [
       [
-        "image/1-5/puppy.png       ,puppy      ,1,image/1-5/dog.png       ,dog      ,3",
-        "image/1-5/kitten.png      ,kitten     ,2,image/1-5/cat.png       ,cat      ,5",
-        "image/1-5/chick.png       ,chick      ,3,image/1-5/hen.png       ,hen      ,1",
-        "image/1-5/tadpole.png     ,tadpole    ,4,image/1-5/frog.png      ,frog     ,2",
-        "image/1-5/caterpillar.png ,caterpillar,5,image/1-5/butterfly.png ,butterfly,6",
-        "image/1-5/baby.png        ,baby       ,6,image/1-5/mommy.png     ,mommy    ,4"
+        "public/imgs/games/1-5/puppy.png       ,puppy      ,1,public/imgs/games/1-5/dog.png       ,dog      ,3",
+        "public/imgs/games/1-5/kitten.png      ,kitten     ,2,public/imgs/games/1-5/cat.png       ,cat      ,5",
+        "public/imgs/games/1-5/chick.png       ,chick      ,3,public/imgs/games/1-5/hen.png       ,hen      ,1",
+        "public/imgs/games/1-5/tadpole.png     ,tadpole    ,4,public/imgs/games/1-5/frog.png      ,frog     ,2",
+        "public/imgs/games/1-5/caterpillar.png ,caterpillar,5,public/imgs/games/1-5/butterfly.png ,butterfly,6",
+        "public/imgs/games/1-5/baby.png        ,baby       ,6,public/imgs/games/1-5/mommy.png     ,mommy    ,4"
       ]
     ],
     "onFinish":function(){
@@ -95,4 +95,4 @@ body::before{
     }
   };
 </script> 
-<script type="module" crossorigin src="lib/dot-link.js"></script>
+<script type="module" crossorigin src="public/js/games/dot-link.js"></script>
