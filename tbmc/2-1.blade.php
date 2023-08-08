@@ -3,14 +3,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="{{ url('public/js/games/jquery-3.7.0.min.js') }}"></script>
-  <script src="{{ url('public/js/games/jquery-ui.min.js') }}"></script>
-  <link rel="stylesheet" href="{{ url('public/css/games/bootstrap.min.css') }}">
-  <script src="{{ url('public/js/games/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url('public/js/games/sweetalert2.min.js') }}"></script>
-  <script src="{{ url('public/js/games/tailwindcss.min.js') }}"></script>
-  <script src="{{ url('public/js/games/check-orientation.js') }}"></script>
-  <script src="{{ url('public/js/games/jquery.ui.touch-punch.min.js') }}"></script>
+  <script src="{{ url('js/games/jquery-3.7.0.min.js') }}"></script>
+  <script src="{{ url('js/games/jquery-ui.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url('css/games/bootstrap.min.css') }}">
+  <script src="{{ url('js/games/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url('js/games/sweetalert2.min.js') }}"></script>
+  <script src="{{ url('js/games/tailwindcss.min.js') }}"></script>
+  <script src="{{ url('js/games/check-orientation.js') }}"></script>
+  <script src="{{ url('js/games/jquery.ui.touch-punch.min.js') }}"></script>
 <style>
 
 body {
@@ -22,7 +22,7 @@ body::before{
   width: 100%;
   height: 100%;
   content: '';
-  background: url({{ url('public/imgs/games/light_gray_concrete_wall.jpg') }}) repeat 50% 50%;
+  background: url({{ url('imgs/games/light_gray_concrete_wall.jpg') }}) repeat 50% 50%;
   background-size: cover;
   position: absolute;
   opacity: 0.2;
@@ -36,14 +36,14 @@ body::before{
       <div class="pt-6 mb-6">
         <div class="flex items-center mx-auto w-[90%]">
           <div class="w-5/6 relative">
-            <img class="absolute left-[-2.5rem] top-1 h-8" src="{{ url('public/imgs/games/title-fog.png') }}">
+            <img class="absolute left-[-2.5rem] top-1 h-8" src="{{ url('imgs/games/title-fog.png') }}">
             <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Guess Who</div>
             <div>
               Fill In the blanks complete the sentences.
             </div>
           </div>
           <div class="ml-5 w-1/6">
-            <img class="w-full" src="{{ url('public/imgs/games/2-1/child.jpg')}}">
+            <img class="w-full" src="{{ url('imgs/games/2-1/child.jpg')}}">
           </div>
         </div>
         
@@ -94,7 +94,7 @@ body::before{
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
      */
      var backUrl = "{{ $games_url }}",
-        useComputerOrPadImgUrl = "{{ url('public/imgs/games/computerOrPad.png') }}",
-        pleaseRotationImgUrl = "{{ url('public/imgs/games/pleaseRotation.png') }}";
+        useComputerOrPadImgUrl = "{{ url('imgs/games/computerOrPad.png') }}",
+        pleaseRotationImgUrl = "{{ url('imgs/games/pleaseRotation.png') }}";
 </script>
-<script src="{{ url('public/js/games/drag.js') }}"></script>
+<script src="{{ url('js/games/drag.js') }}"></script>
