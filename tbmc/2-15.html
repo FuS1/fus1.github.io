@@ -3,14 +3,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="lib/jquery-3.7.0.min.js"></script>
-  <script src="lib/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="lib/bootstrap.min.css">
-  <script src="lib/bootstrap.bundle.min.js"></script>
-  <script src="lib/sweetalert2.min.js"></script>
-  <script src="lib/tailwindcss.min.js"></script>
-  <script src="lib/check-orientation.js"></script>
-  <script src="lib/jquery.ui.touch-punch.min.js"></script>
+  <script src="public/js/games/jquery-3.7.0.min.js"></script>
+  <script src="public/js/games/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="public/css/games/bootstrap.min.css">
+  <script src="public/js/games/bootstrap.bundle.min.js"></script>
+  <script src="public/js/games/sweetalert2.min.js"></script>
+  <script src="public/js/games/tailwindcss.min.js"></script>
+  <script src="public/js/games/check-orientation.js"></script>
+  <script src="public/js/games/jquery.ui.touch-punch.min.js"></script>
 <style>
 
 body {
@@ -22,7 +22,7 @@ body::before{
   width: 100%;
   height: 100%;
   content: '';
-  background: url(image/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background: url(public/imgs/games/light_gray_concrete_wall.jpg) repeat 50% 50%;
   background-size: cover;
   position: absolute;
   opacity: 0.2;
@@ -36,14 +36,14 @@ body::before{
       <div class="pt-6 mb-6">
         <div class="flex items-center mx-auto w-[90%]">
           <div class="w-5/6 relative">
-            <img class="absolute left-[-2.5rem] top-1 h-8" src="image/title-fog.png">
+            <img class="absolute left-[-2.5rem] top-1 h-8" src="public/imgs/games/title-fog.png">
             <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Guess Who</div>
             <div>
               Fill in the blanks and complete the sentences. 
             </div>
           </div>
           <div class="ml-5 w-1/6">
-            <img class="w-full" src="image/2-15/cow.png">
+            <img class="w-full" src="public/imgs/games/2-15/cow.png">
           </div>
         </div>
         
@@ -63,7 +63,7 @@ body::before{
             <div class="flex">it can <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="run"></div> fast.</div>  
           </div>
           <div>
-            <img class="h-[100px]" src="image/2-15/dog.png">
+            <img class="h-[100px]" src="public/imgs/games/2-15/dog.png">
           </div>
         </div>
 
@@ -73,7 +73,7 @@ body::before{
             <div class="flex">it likes to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="scratch"></div> .</div>  
           </div>
           <div>
-            <img class="h-[100px]" src="image/2-15/cat.png">
+            <img class="h-[100px]" src="public/imgs/games/2-15/cat.png">
           </div>
         </div>
   
@@ -83,7 +83,7 @@ body::before{
             <div class="flex">it can <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="jump"></div> .</div>  
           </div>
           <div>
-            <img class="h-[100px]" src="image/2-15/fog.png">
+            <img class="h-[100px]" src="public/imgs/games/2-15/fog.png">
           </div>
         </div>
 
@@ -93,7 +93,7 @@ body::before{
             <div class="flex">it grows a pair of <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="wings"></div> .</div>  
           </div>
           <div>
-            <img class="h-[100px]" src="image/2-15/butterfly.png">
+            <img class="h-[100px]" src="public/imgs/games/2-15/butterfly.png">
           </div>
         </div>
         
@@ -110,7 +110,7 @@ body::before{
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
      */
      var backUrl = "index.html",
-        useComputerOrPadImgUrl = 'image/computerOrPad.png',
-        pleaseRotationImgUrl = 'image/pleaseRotation.png';
+        useComputerOrPadImgUrl = 'public/imgs/games/computerOrPad.png',
+        pleaseRotationImgUrl = 'public/imgs/games/pleaseRotation.png';
 </script>
-<script src="lib/drag.js"></script>
+<script src="public/js/games/drag.js"></script>
