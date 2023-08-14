@@ -117,7 +117,7 @@ var exec = function(url,type,data,successFunction,failFunction){
 
     let haveFile=false;
     for(var i in data){
-        if(i=="file"){
+        if(data[i]['blob'] && data[i]['blob'] instanceof Blob){
             haveFile=true;
         }
     }
@@ -125,8 +125,8 @@ var exec = function(url,type,data,successFunction,failFunction){
     if(haveFile){
         formData = new FormData();
         for(var i in data){
-            if(i=="file"){
-                formData.append(i, data[i], data[i].name);
+            if(data[i]['blob'] && data[i]['blob'] instanceof Blob){
+                formData.append(i, data[i]['blob'], data[i]['name']);
             }else{
                 if(Array.isArray(data[i]) ){
                     formData.append(i+'[]', data[i]);
@@ -156,6 +156,19 @@ function getUrlParam (name,url) {
   var r = (url) ? (url.match (reg) || ['', ''])[1] : decodeURI((window.location.href.match (reg) || ['', ''])[1]);
   return r;
 }
+
+//擷取出Yuotube網址的ID
+function getVideoIdFromYoutubeUrl(url) {
+  const regex = /(?:\/|%3D|v=|vi=)([0-9A-Za-z_-]{11})(?:[%#?&]|$)/;
+  const match = url.match(regex);
+  
+  if (match && match[1]) {
+    return match[1];
+  }
+  
+  return null;
+}
+
 var showErrMsg = function(msg){
 
   if(swal.isVisible()){
@@ -190,7 +203,87 @@ var flattenObject = function(ob) {
   }
   return toReturn;
 }
+function replaceAll(string, search, replace) {
+  return string.split(search).join(replace);
+}
 
+function setFormValue (form,data){
+  for(var i in data){
+    form.find("[name="+replaceAll(i,".","\\.")+"]").each(function( index ) {
+        if($(this).is('input') || $(this).is('select') || $(this).is('textarea') ){
+            $(this).val(data[i]);
+        }else if($(this).is('span') || $(this).is('div') ){
+            $(this).text(data[i]);
+        }else{
+            $(this).attr('value',data[i]);
+        }
+    });
+  }
+}
+
+var loadFileDataURI = function(event,callBackFun) {
+    
+    var reader = new FileReader();
+
+    reader.onload = function(e){
+      callBackFun({
+        dataURI:e.target.result,
+        blob:dataURItoBlob(e.target.result),
+        name:e.target.fileName,
+      });
+    };
+    console.log(event)
+    reader.readAsDataURL(event.target.files[0]);
+    
+};
+
+function dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0) byteString = atob(dataURI.split(',')[1]);else byteString = unescape(dataURI.split(',')[1]); // separate out the mime component
+
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]; // write the bytes of the string to a typed array
+
+    var ia = new Uint8Array(byteString.length);
+
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {
+        type: mimeString
+    });
+}
+
+function initImageFileDom(dom){
+  dom.find('[name=file_btn]').on('click',function(){
+    dom.find('[name=file_input]').click();
+  });
+
+  dom.find('[name=file_input]').on('change',function(e){
+      Swal.fire({
+          title: '上傳中，請稍後...',
+          allowOutsideClick:false,
+          didOpen: function() {
+              Swal.showLoading();
+          }
+      });
+      
+      loadFileDataURI(e,function(file){
+          console.log(file);
+          exec('image/upload','POST',{
+              image:file,
+          },function(data){
+              console.log(data)
+              Swal.close();
+              dom.find('[name=file_img]').attr('src','https://drive.google.com/uc?id='+data['image']);
+              dom.find('[name=file_img]').attr('value',data['image']);
+          },true);
+      });
+
+  });
+
+}
 
 $(function() {
 

@@ -57,7 +57,54 @@
     <script src="lib/app.js"></script>
     <script>
 
-        
+        $(function() {
+            var bannerData;
+            var form = $('#mainfood-form');
+            $('.btn-cancel').on('click',function(){
+                location.assign('banner-list.html');
+            });
+
+            $('.btn-save').on('click',function(){
+                exec('banner/edit','POST',{
+                    bannerId:bannerData['bannerId'],
+                    name:form.find('[name=name]').val(),
+                    link:form.find('[name=link]').val(),
+                    status:form.find('[name=status]').val(),
+                    imageGoogleId:form.find('[name=image_google] > [name=file_img]').attr('value'),
+                    mobileSizeImageGoogleId:form.find('[name=mobile_size_image_google] > [name=file_img]').attr('value'),
+                },function(data){
+                    console.log(data)
+                    location.assign('banner-list.html');
+                });
+            });
+
+            initImageFileDom($('[name=mobile_size_image_google]'));
+            initImageFileDom($('[name=image_google]'));
+            
+
+            exec('banner/list','POST',{
+
+            },function(data){
+
+                data['banner'].forEach(function(banner) {
+                    if( banner['bannerId'] == getUrlParam("banner_id") ){
+                        bannerData = banner;
+                    }
+                });
+                
+                if(!bannerData){
+                    showErrMsg('查無Banner');
+                    form.remove();
+                }
+
+                setFormValue(form,bannerData)
+
+                form.find('[name=mobile_size_image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+bannerData['mobileSizeImageGoogleId']);
+
+                form.find('[name=image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+bannerData['imageGoogleId']);
+
+            });
+        });
 
     </script>
 </head>
@@ -72,7 +119,7 @@
 		<div class="w-full bg-gray-50">
             <div class="py-2.5 px-5 w-full text-right shadow-md mb-5">
                 <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300 btn-cancel">取消</button>	
-                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">儲存</button>	
+                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 btn-save">儲存</button>	
             </div>
             <div class="container mx-auto px-2 md:px-8">
                 <form id="mainfood-form">
@@ -82,7 +129,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
+                            <input type="input" name="name" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
                         </div>
                     </div>
                     <div class="flex my-2">
@@ -91,7 +138,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入網址">
+                            <input type="input" name="link" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入網址">
                         </div>
                     </div>
                     <div class="flex my-2 required-star">
@@ -100,8 +147,8 @@
                         </label>
                         
                         <div class="w-full">
-                            <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
-                                <option value="1" selected>啟用</option>
+                            <select name="status" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="1">啟用</option>
                                 <option value="0">停用</option>
                             </select>
                         </div>
@@ -112,21 +159,25 @@
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">手機版圖片</span>
                         </label>
                         
-                        <div class="w-full">
-							<img class="border-2 object-cover w-72 h-56 md:w-[585px] md:h-[450px] rounded-lg" src="https://picsum.photos/390/300">
-                            <button type="button" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                        <div class="w-full" name="mobile_size_image_google">
+							<img class="border-2 object-cover w-72 h-56 md:w-[585px] md:h-[450px] rounded-lg" name="file_img"><!--src="https://picsum.photos/390/300">-->
+                            <button type="button" name="file_btn" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                            <input name="file_input" class="hidden" type="file" accept="image/png, image/gif, image/jpeg">
                             <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 780x600 px</p>
                         </div>
                     </div>
-
+                    
+                    
+                    
                     <div class="flex my-2">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">電腦版圖片</span>
                         </label>
                         
-                        <div class="w-full">
-							<img class="border-2 object-cover w-72 h-30 md:w-[585px] md:h-[179px] rounded-lg" src="https://picsum.photos/784/240">
-                            <button type="button" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                        <div class="w-full" name="image_google">
+							<img class="border-2 object-cover w-72 h-30 md:w-[585px] md:h-[179px] rounded-lg" name="file_img"><!--src="https://picsum.photos/390/300">-->
+                            <button type="button" name="file_btn" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                            <input name="file_input" class="hidden" type="file" accept="image/png, image/gif, image/jpeg">
                             <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 1960x600 px</p>
                         </div>
                     </div>
