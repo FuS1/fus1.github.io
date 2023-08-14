@@ -117,7 +117,7 @@ var exec = function(url,type,data,successFunction,failFunction){
 
     let haveFile=false;
     for(var i in data){
-        if(data[i]['blob'] && data[i]['blob'] instanceof Blob){
+        if(typeof data[i] === 'object' && data[i] !== null && data[i]['blob'] instanceof Blob){
             haveFile=true;
         }
     }
@@ -125,7 +125,7 @@ var exec = function(url,type,data,successFunction,failFunction){
     if(haveFile){
         formData = new FormData();
         for(var i in data){
-            if(data[i]['blob'] && data[i]['blob'] instanceof Blob){
+            if(typeof data[i] === 'object' && data[i] !== null && data[i]['blob'] instanceof Blob){
                 formData.append(i, data[i]['blob'], data[i]['name']);
             }else{
                 if(Array.isArray(data[i]) ){
@@ -283,6 +283,17 @@ function initImageFileDom(dom){
 
   });
 
+}
+
+function getVideoIdFromYoutubeUrl(url) {
+  const regex = /(?:\/|%3D|v=|vi=)([0-9A-Za-z_-]{11})(?:[%#?&]|$)/;
+  const match = url.match(regex);
+  
+  if (match && match[1]) {
+    return match[1];
+  }
+  
+  return null;
 }
 
 $(function() {

@@ -59,7 +59,7 @@
 
         $(function() {
             var bannerData;
-            var form = $('#mainfood-form');
+            var form = $('#banner-form');
             $('.btn-cancel').on('click',function(){
                 location.assign('banner-list.html');
             });
@@ -78,8 +78,8 @@
                 });
             });
 
-            initImageFileDom($('[name=mobile_size_image_google]'));
-            initImageFileDom($('[name=image_google]'));
+            initImageFileDom(form.find('[name=mobile_size_image_google]'));
+            initImageFileDom(form.find('[name=image_google]'));
             
 
             exec('banner/list','POST',{
@@ -122,7 +122,7 @@
                 <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 btn-save">儲存</button>	
             </div>
             <div class="container mx-auto px-2 md:px-8">
-                <form id="mainfood-form">
+                <form id="banner-form">
 				    <div class="flex my-2 required-star ">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">名稱</span>
@@ -166,8 +166,6 @@
                             <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 780x600 px</p>
                         </div>
                     </div>
-                    
-                    
                     
                     <div class="flex my-2">
                         <label>
