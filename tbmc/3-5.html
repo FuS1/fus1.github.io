@@ -11,6 +11,7 @@
   <script src="public/js/games/tailwindcss.min.js"></script>
   <script src="public/js/games/check-orientation.js"></script>
   <script src="public/js/games/jquery.ui.touch-punch.min.js"></script>
+  <script>tailwind.config = { prefix: 'tw-' }</script>
 <style>
 
 body {
@@ -32,12 +33,12 @@ body::before{
 </style>
 </head>
 <body>
-    <div class="container bg-white md:text-2xl max-w-[1180px] h-full shadow-md">
-      <div class="pt-6">
-        <div class="flex items-center mx-auto w-[90%]">
-          <div class="w-full relative">
-            <img class="absolute left-[-2.5rem] top-1 h-8" src="public/imgs/games/title-fog.png">
-            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Spell and Count </div>
+    <div class="container tw-bg-white md:tw-text-2xl tw-max-w-[1180px] tw-h-full tw-shadow-md">
+      <div class="tw-pt-6">
+        <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
+          <div class="tw-w-full tw-relative">
+            <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="public/imgs/games/title-fog.png">
+            <div class="tw-text-orange-500 tw-text-4xl tw-border-b tw-pb-2 tw-mb-2">Spell and Count </div>
             <div>
               Click the right letter to complete each word, then click the number correctly. 
             </div>
@@ -45,43 +46,43 @@ body::before{
         </div>
       </div>
 
-      <div class="w-[75%] mx-auto pt-2 grid grid-cols-2 gap-2">
-        <div class="border">
-          <img class="w-full h-[235px] object-cover" src="public/imgs/games/3-5/butterfly.jpg">
-          <div class="text-4xl flex">
-            <div class="w-3/4 text-center py-2 border">butterfly</div>
-            <div class="w-1/4 text-center py-2 border">
-              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">6</q-option><q-option class="px-2 text-slate-400 cursor-pointer">7</q-option></question>
+      <div class="tw-w-[75%] tw-mx-auto tw-pt-2 tw-grid tw-grid-cols-2 tw-gap-2">
+        <div class="tw-border">
+          <img class="tw-w-full tw-h-[235px] tw-object-cover" src="public/imgs/games/3-5/butterfly.jpg">
+          <div class="tw-text-4xl tw-flex">
+            <div class="tw-w-3/4 tw-text-center tw-py-2 tw-border">butterfly</div>
+            <div class="tw-w-1/4 tw-text-center tw-py-2 tw-border">
+              <question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">6</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">7</q-option></question>
             </div>
           </div>
         </div>
-        <div class="border">
-          <img class="w-full h-[235px] object-cover" src="public/imgs/games/3-5/chick.jpg">
-          <div class="text-4xl flex">
-            <div class="w-3/4 text-center py-2 border">ck<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">i</q-option><q-option class="px-2 text-slate-400 cursor-pointer">e</q-option></question>ck
+        <div class="tw-border">
+          <img class="tw-w-full tw-h-[235px] tw-object-cover" src="public/imgs/games/3-5/chick.jpg">
+          <div class="tw-text-4xl tw-flex">
+            <div class="tw-w-3/4 tw-text-center tw-py-2 tw-border">ck<question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">i</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">e</q-option></question>ck
             </div>
-            <div class="w-1/4 text-center py-2 border">
-              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer">4</q-option><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">3</q-option></question>
-            </div>
-          </div>
-        </div>
-        <div class="border">
-          <img class="w-full h-[235px] object-cover" src="public/imgs/games/3-5/puppy.jpg">
-          <div class="text-4xl flex">
-            <div class="w-3/4 text-center py-2 border">p<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer">a</q-option><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">u</q-option></question>ppy
-            </div>
-            <div class="w-1/4 text-center py-2 border">
-              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">3</q-option><q-option class="px-2 text-slate-400 cursor-pointer">2</q-option></question>
+            <div class="tw-w-1/4 tw-text-center tw-py-2 tw-border">
+              <question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">4</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">3</q-option></question>
             </div>
           </div>
         </div>
-        <div class="border">
-          <img class="w-full h-[235px] object-cover" src="public/imgs/games/3-5/tadpole.jpg">
-          <div class="text-4xl flex">
-            <div class="w-3/4 text-center py-2 border">t<question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">a</q-option><q-option class="px-2 text-slate-400 cursor-pointer">o</q-option></question>dp<question class="mx-1 border-b-2 border-slate-400 cursor-pointer"><q-option class="px-2 text-slate-400" data-answer="right">o</q-option><q-option class="px-2 text-slate-400 cursor-pointer">e</q-option></question>le
+        <div class="tw-border">
+          <img class="tw-w-full tw-h-[235px] tw-object-cover" src="public/imgs/games/3-5/puppy.jpg">
+          <div class="tw-text-4xl tw-flex">
+            <div class="tw-w-3/4 tw-text-center tw-py-2 tw-border">p<question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">a</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">u</q-option></question>ppy
             </div>
-            <div class="w-1/4 text-center py-2 border">
-              <question class="mx-1 border-b-2 border-slate-400"><q-option class="px-2 text-slate-400 cursor-pointer" data-answer="right">8</q-option><q-option class="px-2 text-slate-400 cursor-pointer">5</q-option></question>
+            <div class="tw-w-1/4 tw-text-center tw-py-2 tw-border">
+              <question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">3</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">2</q-option></question>
+            </div>
+          </div>
+        </div>
+        <div class="tw-border">
+          <img class="tw-w-full tw-h-[235px] tw-object-cover" src="public/imgs/games/3-5/tadpole.jpg">
+          <div class="tw-text-4xl tw-flex">
+            <div class="tw-w-3/4 tw-text-center tw-py-2 tw-border">t<question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">a</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">o</q-option></question>dp<question class="tw-mx-1 tw-border-b-2 tw-border-slate-400 cursor-pointer"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">o</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">e</q-option></question>le
+            </div>
+            <div class="tw-w-1/4 tw-text-center tw-py-2 tw-border">
+              <question class="tw-mx-1 tw-border-b-2 tw-border-slate-400"><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer" data-answer="right">8</q-option><q-option class="tw-px-2 tw-text-slate-400 tw-cursor-pointer">5</q-option></question>
             </div>
           </div>
         </div>

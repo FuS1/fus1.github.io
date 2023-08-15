@@ -4,7 +4,7 @@
     if($(this).data('answer')==='right'){
       $(this).parent().find('q-option').hide();
       $(this).parent().data('answered',true);
-      $(this).show().addClass('text-emerald-700');
+      $(this).show().addClass('tw-text-emerald-700');
 
       if( checkAnswer()){
         Swal.fire({
