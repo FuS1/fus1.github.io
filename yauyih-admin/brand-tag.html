@@ -169,7 +169,7 @@
                     </select>
                 </div>
                 <div class="md:w-1/2">
-                    <button class="float-right px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">新增品牌</button>	
+                    <button class="float-right px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 add-brand">新增品牌</button>	
                 </div>
             </div>
             <div class="container mx-auto px-2 md:px-8">
@@ -298,6 +298,30 @@ $(function() {
         $('#brand-selecter').trigger('change');
     });
 
+    $('.add-brand').on('click',function(){
+        Swal.fire({
+            title: '請輸入新品牌名稱',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonText: '儲存',
+            cancelButtonText: '取消',
+            showLoaderOnConfirm: true,
+            reverseButtons:true,
+            preConfirm: function(input) {
+                exec('/brand-tag/new','POST',{
+                    brandName: input,
+                    note: "just note",
+                    link: "https://google.com"
+                },function(data){
+                    loadTree();
+                });
+            }
+        });
+    });
 
 });
 
