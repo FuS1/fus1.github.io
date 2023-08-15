@@ -1,90 +1,53 @@
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="{{ url('js/games/jquery-3.7.0.min.js') }}"></script>
-  <script src="{{ url('js/games/jquery-ui.min.js') }}"></script>
-  <link rel="stylesheet" href="{{ url('css/games/bootstrap.min.css') }}">
-  <script src="{{ url('js/games/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url('js/games/sweetalert2.min.js') }}"></script>
-  <script src="{{ url('js/games/tailwindcss.min.js') }}"></script>
-  <script src="{{ url('js/games/check-orientation.js') }}"></script>
-  <script src="{{ url('js/games/jquery.ui.touch-punch.min.js') }}"></script>
-<style>
-
-body {
-  font-family: monospace;
-}
-
-body::before{
-  display: block;
-  width: 100%;
-  height: 100%;
-  content: '';
-  background: url({{ url('imgs/games/light_gray_concrete_wall.jpg') }}) repeat 50% 50%;
-  background-size: cover;
-  position: absolute;
-  opacity: 0.2;
-  z-index: -9999;
-}
-
-</style>
-</head>
-<body>
-    <div class="container bg-white md:text-2xl max-w-[1180px] h-full shadow-md">
-      <div class="pt-6 mb-6">
-        <div class="flex items-center mx-auto w-[90%]">
-          <div class="w-5/6 relative">
-            <img class="absolute left-[-2.5rem] top-1 h-8" src="{{ url('imgs/games/title-fog.png') }}">
-            <div class="text-orange-500 text-4xl border-b pb-2 mb-2">Guess Who</div>
+@extends('games.master')
+@section('content')  
+  <div class="container tw-bg-white md:tw-text-2xl tw-max-w-[1180px] tw-h-full tw-shadow-md">
+      <div class="tw-pt-6 tw-mb-6">
+        <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
+          <div class="tw-w-5/6 tw-relative">
+            <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="{{ url('/imgs/games/title-fog.png') }}">
+            <div class="tw-text-orange-500 tw-text-4xl tw-border-b tw-pb-2 tw-mb-2">Guess Who</div>
             <div>
               Fill In the blanks complete the sentences.
             </div>
           </div>
-          <div class="ml-5 w-1/6">
-            <img class="w-full" src="{{ url('imgs/games/2-1/child.jpg')}}">
+          <div class="tw-ml-5 tw-w-1/6">
+            <img class="tw-w-full" src="{{ url('/imgs/games/2-1/child.jpg')}}">
           </div>
         </div>
         
-      <div class="droppable min-h-5 p-3 border-2 border-dashed border-amber-900 rounded flex my-2 md:mx-10 md:my-6 bg-slate-100 w-[90%] mx-auto" data-is_stock_area="yes">
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="sing">sing</div>
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="pretend">pretend</div>
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="jump">jump</div>
-          <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-orange-700 p-2 rounded" data-value="fight">fight</div>
+      <div class="droppable tw-min-h-5 tw-p-3 tw-border-2 tw-border-dashed tw-border-amber-900 tw-rounded tw-flex tw-my-2 md:tw-mx-10 md:tw-my-6 tw-bg-slate-100 tw-w-[90%] tw-mx-auto" data-is_stock_area="yes">
+          <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded" data-value="sing">sing</div>
+          <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded" data-value="pretend">pretend</div>
+          <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded" data-value="jump">jump</div>
+          <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded" data-value="fight">fight</div>
         </div>
       </div>
 
 
       <div class="" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;padding: 22px; margin: 0 2.5rem;">
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
           <div>I am a grasshopper.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="jump"></div> .</div>  
+          <div class="tw-flex">I know how to <div class="droppable question tw-mx-2 tw-border-b tw-border-amber-700 tw-w-28 tw-h-10" data-answer="jump"></div> .</div>  
         </div>
         
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
           <div>I am a cicada.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="sing"></div> .</div>  
+          <div class="tw-flex">I know how to <div class="droppable question tw-mx-2 tw-border-b tw-border-amber-700 tw-w-28 tw-h-10" data-answer="sing"></div> .</div>  
         </div>
   
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
           <div>I am a male stag bettle.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="fight"></div> .</div>  
+          <div class="tw-flex">I know how to <div class="droppable question tw-mx-2 tw-border-b tw-border-amber-700 tw-w-28 tw-h-10" data-answer="fight"></div> .</div>  
         </div>
   
-        <div class="border-l-4 border-orange-300 pl-3 py-1 md:p-3 md:mx-10 my-2 md:my-6 leading-8 md:leading-10">
+        <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
           <div>I am a stick insect.</div>
-          <div class="flex">I know how to <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10" data-answer="pretend"></div> .</div>  
+          <div class="tw-flex">I know how to <div class="droppable question tw-mx-2 tw-border-b tw-border-amber-700 tw-w-28 tw-h-10" data-answer="pretend"></div> .</div>  
         </div>
       </div>
-      
-
-
-
     </div>
-</body>
-
-
+@endsection
 
 <script>
     /**
@@ -94,7 +57,7 @@ body::before{
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
      */
      var backUrl = "{{ $games_url }}",
-        useComputerOrPadImgUrl = "{{ url('imgs/games/computerOrPad.png') }}",
-        pleaseRotationImgUrl = "{{ url('imgs/games/pleaseRotation.png') }}";
+        useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
+        pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
 </script>
-<script src="{{ url('js/games/drag.js') }}"></script>
+<script src="{{ asset('/js/games/drag.js') }}"></script>
