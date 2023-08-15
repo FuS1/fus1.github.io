@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="tw-ml-5 tw-w-1/6">
-        <img class="tw-w-full" src="{{ url('/imgs/games/11-5-29/child.jpg') }}">
+        <img class="tw-w-full" src="{{ url('/imgs/games/11-5/29/child.jpg') }}">
       </div>
     </div>
   </div>

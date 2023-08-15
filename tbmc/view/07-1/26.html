@@ -3,14 +3,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="public/js/games/jquery-3.7.0.min.js"></script>
-  <script src="public/js/games/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="public/css/games/bootstrap.min.css">
-  <script src="public/js/games/bootstrap.bundle.min.js"></script>
-  <script src="public/js/games/sweetalert2.min.js"></script>
-  <script src="public/js/games/tailwindcss.min.js"></script>
-  <script src="public/js/games/check-orientation.js"></script>
-  <script src="public/js/games/jquery.ui.touch-punch.min.js"></script> 
+  <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
+  <script src="../../public/js/games/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
+  <script src="../../public/js/games/bootstrap.bundle.min.js"></script>
+  <script src="../../public/js/games/sweetalert2.min.js"></script>
+  <script src="../../public/js/games/tailwindcss.min.js"></script>
+  <script src="../../public/js/games/check-orientation.js"></script>
+  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script> 
   <script>tailwind.config = { prefix: 'tw-' }</script>
 <style>
 
@@ -23,7 +23,7 @@ body::before{
   width: 100%;
   height: 100%;
   content: '';
-  background: url(public/imgs/games/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background: url(../../public/imgs/games/light_gray_concrete_wall.jpg) repeat 50% 50%;
   background-size: cover;
   position: absolute;
   opacity: 0.2;
@@ -38,7 +38,7 @@ body::before{
     <div class="tw-pt-6">
       <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
         <div class="tw-w-full tw-relative">
-          <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="public/imgs/games/title-fog.png">
+          <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="../../public/imgs/games/title-fog.png">
           <div class="tw-text-orange-500 tw-text-4xl tw-border-b tw-pb-2 tw-mb-2">Mommy and Baby </div>
           <div>
             Help each baby to find its mommy, and connect them correctly. 
@@ -60,20 +60,20 @@ body::before{
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
      */
      var backUrl = "index.html",
-        useComputerOrPadImgUrl = 'public/imgs/games/computerOrPad.png',
-        pleaseRotationImgUrl = 'public/imgs/games/pleaseRotation.png';
+        useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
+        pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
 
   var config = {
     "prologue": "",
     "maxRatio":0.85,
     "questions": [
       [
-        "public/imgs/games/07-1-26/puppy.png       ,puppy      ,1,public/imgs/games/07-1-26/dog.png       ,dog      ,3",
-        "public/imgs/games/07-1-26/kitten.png      ,kitten     ,2,public/imgs/games/07-1-26/cat.png       ,cat      ,5",
-        "public/imgs/games/07-1-26/chick.png       ,chick      ,3,public/imgs/games/07-1-26/hen.png       ,hen      ,1",
-        "public/imgs/games/07-1-26/tadpole.png     ,tadpole    ,4,public/imgs/games/07-1-26/frog.png      ,frog     ,2",
-        "public/imgs/games/07-1-26/caterpillar.png ,caterpillar,5,public/imgs/games/07-1-26/butterfly.png ,butterfly,6",
-        "public/imgs/games/07-1-26/baby.png        ,baby       ,6,public/imgs/games/07-1-26/mommy.png     ,mommy    ,4"
+        "../../public/imgs/games/07-1/26/puppy.png       ,puppy      ,1,../../public/imgs/games/07-1/26/dog.png       ,dog      ,3",
+        "../../public/imgs/games/07-1/26/kitten.png      ,kitten     ,2,../../public/imgs/games/07-1/26/cat.png       ,cat      ,5",
+        "../../public/imgs/games/07-1/26/chick.png       ,chick      ,3,../../public/imgs/games/07-1/26/hen.png       ,hen      ,1",
+        "../../public/imgs/games/07-1/26/tadpole.png     ,tadpole    ,4,../../public/imgs/games/07-1/26/frog.png      ,frog     ,2",
+        "../../public/imgs/games/07-1/26/caterpillar.png ,caterpillar,5,../../public/imgs/games/07-1/26/butterfly.png ,butterfly,6",
+        "../../public/imgs/games/07-1/26/baby.png        ,baby       ,6,../../public/imgs/games/07-1/26/mommy.png     ,mommy    ,4"
       ]
     ],
     "onFinish":function(){
@@ -95,4 +95,4 @@ body::before{
     }
   };
 </script> 
-<script type="module" crossorigin src="public/js/games/dot-link.js"></script>
+<script type="module" crossorigin src="../../public/js/games/dot-link.js"></script>

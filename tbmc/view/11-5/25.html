@@ -1,0 +1,95 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
+  <script src="../../public/js/games/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
+  <script src="../../public/js/games/bootstrap.bundle.min.js"></script>
+  <script src="../../public/js/games/sweetalert2.min.js"></script>
+  <script src="../../public/js/games/tailwindcss.min.js"></script>
+  <script src="../../public/js/games/check-orientation.js"></script>
+  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>    
+  <script>tailwind.config = { prefix: 'tw-' }</script>
+<style>
+
+body {
+  font-family: monospace;
+}
+
+body::before{
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: '';
+  background: url(../../public/imgs/games/light_gray_concrete_wall.jpg) repeat 50% 50%;
+  background-size: cover;
+  position: absolute;
+  opacity: 0.2;
+  z-index: -9999;
+}
+
+</style>
+</head>
+<body>
+  <div class="container tw-bg-white md:tw-text-2xl tw-max-w-[1180px] tw-h-full tw-shadow-md">
+    <div class="tw-pt-6">
+      <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
+        <div class="tw-w-full tw-relative">
+          <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="tw-text-orange-500 tw-text-4xl tw-border-b tw-pb-2 tw-mb-2">Matching Game</div>
+          <div>
+            Take a look at the pictures below; then connect to the correct word. 
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="app" class="tw-w-full" style="margin-top:-6%;"></div>
+  </div>
+
+</body>
+
+
+
+<script>
+    /**
+     * 串接系統設定值
+     * backUrl 為遊戲完成時，要跳轉回的路由
+     * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
+     * pleaseRotationImgUrl 為提示使用將平板轉為橫式
+     */
+    var backUrl = "index.html",
+        useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
+        pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
+
+  var config = {
+    "maxRatio":0.65,
+    "questions": [
+      [
+        "../../public/imgs/games/11-5/25/stick_insect.jpg, ,1,../../public/imgs/games/11-5/25/empty.png,stick insect,3",
+        "../../public/imgs/games/11-5/25/grasshoppers.jpg, ,2,../../public/imgs/games/11-5/25/empty.png,grasshoppers,1",
+        "../../public/imgs/games/11-5/25/cicada.jpg      , ,3,../../public/imgs/games/11-5/25/empty.png,cicada      ,2",
+        "../../public/imgs/games/11-5/25/bee.jpg         , ,4,../../public/imgs/games/11-5/25/empty.png,bee         ,4",
+      ]
+    ],
+    "onFinish":function(){
+      Swal.fire({
+        title: '全部正確!',
+        showCancelButton: true,
+        cancelButtonText: '再玩一次',
+        confirmButtonText: '回上一頁',
+        allowOutsideClick: false,
+        allowEscapeKey:false,
+        reverseButtons:true,
+      }).then(function(result){
+        if (result.isConfirmed) {
+          window.location = backUrl;
+        }else{
+          window.location.reload();
+        }
+      });
+    }
+  };
+</script> 
+<script type="module" crossorigin src="../../public/js/games/dot-link.js"></script>
