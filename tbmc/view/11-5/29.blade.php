@@ -1,12 +1,12 @@
 
 @extends('games.master')
 @section('content')  
-<div class="container tw-bg-white md:tw-text-2xl tw-max-w-[1180px] tw-h-full tw-shadow-md">
-  <div class="tw-pt-6 tw-mb-6">
+<div class="container tw-bg-white lg:tw-text-2xl tw-max-w-[1180px] lg:tw-h-full lg:tw-shadow-md">
+  <div class="tw-pt-1 lg:tw-pt-2 lg:tw-pt-6 tw-mb-1 lg:tw-mb-6">
     <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
       <div class="tw-w-5/6 tw-relative">
         <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="{{ url('/imgs/games/title-fog.png') }}">
-        <div class="tw-text-orange-500 tw-text-4xl tw-border-b tw-pb-2 tw-mb-2">Guess Who</div>
+        <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-1 lg:tw-mb-2">Guess Who</div>
         <div>
           Fill In the blanks complete the sentences.
         </div>
@@ -16,14 +16,14 @@
       </div>
     </div>
   </div>
-  <div class="droppable tw-min-h-5 tw-p-3 tw-border-2 tw-border-dashed tw-border-amber-900 tw-rounded tw-flex tw-my-2 md:tw-mx-10 md:tw-my-6 tw-bg-slate-100 tw-w-[90%] tw-mx-auto ui-droppable" data-is_stock_area="yes">
+  <div class="droppable tw-min-h-5 tw-p-3 tw-border-2 tw-border-dashed tw-border-amber-900 tw-rounded tw-flex tw-my-2 lg:tw-mx-10 lg:tw-my-6 tw-bg-slate-100 tw-w-[90%] tw-mx-auto ui-droppable" data-is_stock_area="yes">
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="sing" style="position: relative;">sing</div>
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="pretend" style="position: relative;">pretend</div>
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="fight" style="position: relative;">fight</div>
   </div>
   <div class="" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;padding: 22px; margin: 0 2.5rem;">
-    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
+    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 lg:tw-p-3 lg:tw-mx-10 tw-my-2 lg:tw-my-6 tw-leading-8 lg:tw-leading-10">
       <div>I am a grasshopper.</div>
       <div class="tw-flex">
         I know how to 
@@ -31,7 +31,7 @@
         .
       </div>
     </div>
-    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
+    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 lg:tw-p-3 lg:tw-mx-10 tw-my-2 lg:tw-my-6 tw-leading-8 lg:tw-leading-10">
       <div>I am a cicada.</div>
       <div class="tw-flex">
         I know how to 
@@ -39,7 +39,7 @@
         .
       </div>
     </div>
-    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
+    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 lg:tw-p-3 lg:tw-mx-10 tw-my-2 lg:tw-my-6 tw-leading-8 lg:tw-leading-10">
       <div>I am a male stag bettle.</div>
       <div class="tw-flex">
         I know how to 
@@ -47,7 +47,7 @@
         .
       </div>
     </div>
-    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 md:tw-p-3 md:tw-mx-10 tw-my-2 md:tw-my-6 tw-leading-8 md:tw-leading-10">
+    <div class="tw-border-l-4 tw-border-orange-300 tw-pl-3 tw-py-1 lg:tw-p-3 lg:tw-mx-10 tw-my-2 lg:tw-my-6 tw-leading-8 lg:tw-leading-10">
       <div>I am a stick insect.</div>
       <div class="tw-flex">
         I know how to 

@@ -33,12 +33,12 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container tw-relative tw-bg-white md:tw-text-2xl tw-max-w-[1180px] tw-h-full tw-shadow-md">
-    <div class="tw-pt-6">
+  <div class="container tw-relative tw-bg-white lg:tw-text-2xl tw-max-w-[1180px] lg:tw-h-full lg:tw-shadow-md">
+    <div class="tw-pt-2 lg:tw-pt-6">
       <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
         <div class="tw-w-full tw-relative">
           <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="tw-text-orange-500 tw-text-4xl tw-border-b tw-pb-2 tw-mb-2">Growing a Seed </div>
+          <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-1 lg:tw-mb-2">Growing a Seed </div>
           <div>
             Do you know how a seed grows ?<br>
             See the pictures and click the correct answer. 
@@ -49,7 +49,7 @@ body::before{
     <back-btn class="tw-absolute tw-top-1/2 tw-left-1  tw-flex tw-items-center tw-py-2 tw-px-3 tw-rounded tw-font-medium tw-select-none tw-border tw-text-gray-900 tw-bg-blue-200 tw-transition-colors hover:tw-border-blue-600 hover:tw-bg-blue-400 hover:tw-text-white tw-hidden">⪻ Back</back-btn>
     <next-btn class="tw-absolute tw-top-1/2 tw-right-1 tw-flex tw-items-center tw-py-2 tw-px-3 tw-rounded tw-font-medium tw-select-none tw-border tw-text-gray-900 tw-bg-blue-200 tw-transition-colors hover:tw-border-blue-600 hover:tw-bg-blue-400 hover:tw-text-white">Next ⪼</next-btn>
     <page-one>
-      <div class="tw-w-[75%] tw-mx-auto tw-pt-2 tw-grid tw-grid-cols-2 tw-gap-2 tw-text-lg">
+      <div class="tw-w-2/3 lg:tw-w-[75%] tw-mx-auto tw-pt-2 tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 lg:tw-gap-2 tw-text-lg">
         <div class="tw-border">
           <img class="tw-w-full tw-h-[230px] tw-object-cover tw-border" src="../../public/imgs/games/07-3/28/1.jpg">
           <div class="tw-w-fulltext-center tw-py-2">
@@ -76,7 +76,7 @@ body::before{
       </div>
     </page-one>
     <page-two class="tw-hidden">
-      <div class="w-[75%] mx-auto pt-2 grid grid-cols-2 gap-2 text-lg">
+      <div class="tw-w-2/3 lg:tw-w-[75%] tw-mx-auto tw-pt-2 tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 lg:tw-gap-2 tw-text-lg">
         <div class="border">
           <img class="tw-w-full tw-h-[230px] tw-object-cover tw-border" src="../../public/imgs/games/07-3/28/5.jpg">
           <div class="tw-w-fulltext-center tw-py-2">
@@ -122,13 +122,13 @@ body::before{
     (function($) {
       
       $('back-btn').on('click',function(){
-        $('back-btn, page-two').addClass('hidden');
-        $('next-btn, page-one').removeClass('hidden');
+        $('back-btn, page-two').addClass('tw-hidden');
+        $('next-btn, page-one').removeClass('tw-hidden');
       });
 
       $('next-btn').on('click',function(){
-        $('next-btn, page-one').addClass('hidden');
-        $('back-btn, page-two').removeClass('hidden');
+        $('next-btn, page-one').addClass('tw-hidden');
+        $('back-btn, page-two').removeClass('tw-hidden');
       });
 
     })(jQuery);

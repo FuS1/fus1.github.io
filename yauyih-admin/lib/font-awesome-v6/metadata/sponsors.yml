@@ -114,7 +114,7 @@ c-panel:
     - cpanel
   label: cPanel
   url: 'http://cpanel.com'
-cab-md:
+cab-lg:
   icons:
     - trillium
   label: CabMD
