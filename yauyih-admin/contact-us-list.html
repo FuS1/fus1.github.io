@@ -58,37 +58,46 @@
     <script>
 		$(function() {
 
-
-
             var page=1;
             var maxPage = 1;
             var pageSize = 10;
             const getData = function(){
-                // api/products?brandId=7&limit=10&skip=0&tagIds=1,2,3&keyword=test&brandTagIds=1,2,3
-                exec('/message/list','POST',{
+                queryData = {
                     skip    : page -1 ,
-                    // productName : $('[name=productName]').val(),
-                    // keyword : $('[name=keyword]').val(),
-                    // brandId : $('[name=brandId]').val(),
-                    // lowerHot : $('[name=lowerHot]').val(),
-                    // upperHot : $('[name=upperHot]').val(),
-                    // status : $('[name=status]').val(),
+                    name : $('[name=name]').val(),
+                    tel : $('[name=tel]').val(),
+                    email : $('[name=email]').val(),
+                    company : $('[name=company]').val(),
+                    startDate : $('[name=startDate]').val(),
+                    endDate : $('[name=endDate]').val(),
+                    status : $('[name=status]').val(),
+                };
+                console.log(queryData)
+                for (var i in queryData) {
+                    if(queryData[i]===""){
+                        delete queryData[i];
+                    }
+                }
+                
+                exec('message/list?'+new URLSearchParams(queryData).toString(),'POST',{
+
                 },function(data){
-                    maxPage = Math.ceil(data['totalCount'] / pageSize);
-                    table.setData(data['products'])
+                    console.log(data);
+                    maxPage = Math.ceil( (data['totalCount'] || data['messages'].length) / pageSize);
+                    table.setData(data['messages'])
                     setPageBtnStatus();
                 });
 
             }
 
             var table = initTabulator("#table",{
-                data:[
-                    {id:1, name:"Billy Bob", from:"行銷", phone:"02-3467-4654#64952",date:"2021-12-01",is_active:1,thumb_url:"https://www.bootdey.com/image/450x280/87CEFA/000000",url:"https://www.youtube.com/"},
-                    {id:2, name:"Mary May", from:"行銷", phone:"+886-964-315-467",date:"2023-06-24",is_active:1,thumb_url:"https://www.bootdey.com/image/100x500/87EFDA/000000",url:"https://www.youtube.com/"},
-                    {id:3, name:"陳愛台灣國慶鮑鮪鮭魚松葉蟹海膽干貝龍蝦和牛肉美福華君品晶華希爾頓凱薩老爺", from:"壽司狼有限公司", date:"2023-06-24",is_active:1,thumb_url:"https://www.bootdey.com/image/120x280/A87FCE/000000",url:"https://www.youtube.com/"},
-                    {id:4, name:"消息4", from:"遠的要命王國超成功股份有限公司 台灣分公司", mail:"thisIsALongLongAddress@farFarAwayCompany.com",date:"2023-06-24",is_active:0,thumb_url:"https://www.bootdey.com/image/500x280/86CAA0/000000",url:"https://www.youtube.com/"},
-                    {id:5, name:"消息5", from:"新聞", phone:"0234674654", date:"2023-06-24",is_active:0,thumb_url:"https://www.bootdey.com/image/250x50/9B3414/000000",url:"https://www.youtube.com/"},
-                ],
+                // data:[
+                //     {id:1, name:"Billy Bob", from:"行銷", phone:"02-3467-4654#64952",date:"2021-12-01",is_active:1,thumb_url:"https://www.bootdey.com/image/450x280/87CEFA/000000",url:"https://www.youtube.com/"},
+                //     {id:2, name:"Mary May", from:"行銷", phone:"+886-964-315-467",date:"2023-06-24",is_active:1,thumb_url:"https://www.bootdey.com/image/100x500/87EFDA/000000",url:"https://www.youtube.com/"},
+                //     {id:3, name:"陳愛台灣國慶鮑鮪鮭魚松葉蟹海膽干貝龍蝦和牛肉美福華君品晶華希爾頓凱薩老爺", from:"壽司狼有限公司", date:"2023-06-24",is_active:1,thumb_url:"https://www.bootdey.com/image/120x280/A87FCE/000000",url:"https://www.youtube.com/"},
+                //     {id:4, name:"消息4", from:"遠的要命王國超成功股份有限公司 台灣分公司", mail:"thisIsALongLongAddress@farFarAwayCompany.com",date:"2023-06-24",is_active:0,thumb_url:"https://www.bootdey.com/image/500x280/86CAA0/000000",url:"https://www.youtube.com/"},
+                //     {id:5, name:"消息5", from:"新聞", phone:"0234674654", date:"2023-06-24",is_active:0,thumb_url:"https://www.bootdey.com/image/250x50/9B3414/000000",url:"https://www.youtube.com/"},
+                // ],
                 columns: [{
                         title: "姓名",
                         field: "name",
@@ -98,40 +107,43 @@
                     },
                     {
                         title: "電話",
-                        field: "phone",
+                        field: "tel",
                         width: '',
                         headerSort: false,
                     },
                     {
                         title: "信箱",
-                        field: "mail",
+                        field: "email",
                         width: '',
                         headerSort: false,
                     },
                     {
                         title: "留言日期",
-                        field: "date",
+                        field: "createdTime",
                         headerSort: false,
                         width: 100,
+                        formatter:function(cell, formatterParams) {
+                            return cell.getValue().split('T')[0];
+                        }
                     },
                     {
                         title: "服務單位",
-                        field: "from",
+                        field: "company",
                         headerSort: false,
                         width: '',
                     },
                     {
                         title: "動作",
-                        field: "is_active",
+                        field: "status",
                         headerSort: false,
                         vertAlign:'middle',
                         responsive:false,
                         width: 105,
                         formatter:function(cell, formatterParams) {
-                            var is_active = cell.getRow().getData()['is_active'] ;
-                            return `<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
-                                <option value="1" `+( is_active?'selected':'')+`>未處理</option>
-                                <option value="0" `+(!is_active?'selected':'')+`>已處理</option>
+                            var status = cell.getRow().getData()['status'] ;
+                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['messageId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                                <option value="0" `+(!status?'selected':'')+`>未處理</option>
+                                <option value="1" `+( status?'selected':'')+`>已處理</option>
                             </select>`;
                         }
                     },
@@ -167,6 +179,7 @@
 
             $('.form-reset-btn').on('click',function(){
                 $('input').val('');
+                $("[name=status]").val($("[name=status] option:first").val());
                 $('.search-btn').click();
             });
             $('.search-btn').on('click',function(){
@@ -185,22 +198,33 @@
             });
             getData();
 
+            $(document).on('change', '[name=status_selector]', function() {
+               
+               exec('message/edit','POST',{
+                   messageId: $(this).attr('rowDataId'),
+                   status:$(this).val(),
+               },function(data){
+
+               });
+           });
+
+           function setPageBtnStatus(){
+                if(maxPage > page){
+                    $('.next-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
+                }else{
+                    $('.next-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
+                }
+
+                if(page>1){
+                    $('.prev-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
+                }else{
+                    $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
+                }
+            }
+            
         });
 
-        function setPageBtnStatus(){
-            if(maxPage > page){
-                $('.next-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
-            }else{
-                $('.next-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
-            }
 
-            if(page>1){
-                $('.prev-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
-            }else{
-                $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
-            }
-        }
-        
     </script>
 </head>
 <body>
@@ -220,7 +244,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <input type="input" name="name" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </div>
                     </div>
@@ -232,9 +256,9 @@
                             
                             <div class="w-full">
                                 <div class="lg:flex">
-                                    <input type="date" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
+                                    <input type="date" name="startDate" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
                                     <span class="p-0.5 hidden lg:block"></span>
-                                    <input type="date" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
+                                    <input type="date" name="endDate"   class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
                                 </div>
                             </div>
                         </div>
@@ -246,7 +270,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <input type="input" name="tel" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </div>
                     </div>
@@ -257,7 +281,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <input type="input" name="company" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </div>
                     </div>
@@ -268,7 +292,21 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <input type="input" name="email" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="justify-center">
+                        <div class="flex items-center">
+                            <label>
+                                <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">狀態</span>
+                            </label>
+                            <div class="w-full">
+                                <select id="status" name="status" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="0,1"></option>
+                                    <option value="1">已處理</option>
+                                    <option value="0">未處理</option>
+                                </select>
                             </div>
                         </div>
                     </div>

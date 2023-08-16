@@ -100,8 +100,11 @@
                     },
                     {
                         title: "分類",
-                        field: "class",
+                        field: "tags",
                         headerSort: false,
+                        formatter:function(cell, formatterParams) {
+                            return _.pluck( cell.getValue() , 'tagName').join(',');
+                        }
                     },
                     {
                         title: "熱門度",
@@ -143,8 +146,9 @@
 
 
             $('.form-reset-btn').on('click',function(){
-                $('input').val('');
+                $('.query-form input').val('');
                 $('#brandId').val('');
+                $("[name=status]").val($("[name=status] option:first").val());
                 $('.search-btn').click();
             });
             $('.search-btn').on('click',function(){
@@ -196,7 +200,7 @@
 		</div>
 		<div class="w-11/12 bg-gray-50">
             <div class="p-5 mx-auto w-11/12 text-right shadow-md mb-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 py-1 mb-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 py-1 mb-2 query-form">
                     <div class="justify-center">
                         <div class="flex items-center">
                             <label>
@@ -244,7 +248,7 @@
                             
                             <div class="w-full">
                                 <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value=""></option>
+                                    <option value="0,1"></option>
                                     <option value="1">啟用</option>
                                     <option value="0">停用</option>
                                 </select>

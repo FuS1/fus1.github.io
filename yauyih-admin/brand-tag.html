@@ -312,12 +312,10 @@ $(function() {
             showLoaderOnConfirm: true,
             reverseButtons:true,
             preConfirm: function(input) {
-                exec('/brand-tag/new','POST',{
+                exec('/brand/new','POST',{
                     brandName: input,
-                    note: "just note",
-                    link: "https://google.com"
                 },function(data){
-                    loadTree();
+                    window.location.reload();
                 });
             }
         });

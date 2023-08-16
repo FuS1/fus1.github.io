@@ -19,7 +19,9 @@
 .required-star {
     position: relative;
 }
-
+.select2-container{
+    height:100% !important;
+}
 .select2-container--default .select2-selection--single .select2-selection__arrow{
     height:100% !important;
 }

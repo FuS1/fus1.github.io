@@ -117,16 +117,16 @@
                     },
                     {
                         title: "動作",
-                        field: "show",
+                        field: "status",
                         headerSort: false,
                         vertAlign:'middle',
                         responsive:false,
                         width: 100,
                         formatter:function(cell, formatterParams) {
-                            var show = cell.getRow().getData()['show'] ;
+                            var status = cell.getRow().getData()['status'] ;
                             return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['videoId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
-                                <option value="1" `+( show?'selected':'')+`>啟用</option>
-                                <option value="0" `+(!show?'selected':'')+`>停用</option>
+                                <option value="1" `+( status?'selected':'')+`>啟用</option>
+                                <option value="0" `+(!status?'selected':'')+`>停用</option>
                             </select>`;
                         }
                     },
@@ -164,7 +164,7 @@
                
                 exec('video/edit','POST',{
                     videoId: $(this).attr('rowDataId'),
-                    show:$(this).val(),
+                    status:$(this).val(),
                 },function(data){
 
                 });
