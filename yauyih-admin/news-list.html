@@ -57,6 +57,29 @@
     <script src="lib/app.js"></script>
     <script>
 		$(function() {
+
+            var page=1;
+            var maxPage = 1;
+            var pageSize = 10;
+            const getData = function(){
+                // api/products?brandId=7&limit=10&skip=0&tagIds=1,2,3&keyword=test&brandTagIds=1,2,3
+                exec('/news/list','POST',{
+                    skip    : page -1 ,
+                    // productName : $('[name=productName]').val(),
+                    // keyword : $('[name=keyword]').val(),
+                    // brandId : $('[name=brandId]').val(),
+                    // lowerHot : $('[name=lowerHot]').val(),
+                    // upperHot : $('[name=upperHot]').val(),
+                    // status : $('[name=status]').val(),
+                },function(data){
+                    maxPage = Math.ceil(data['totalCount'] / pageSize);
+                    table.setData(data['news'])
+                    setPageBtnStatus();
+                });
+
+            }
+
+
             var table = initTabulator("#table",{
                 data:[
                     {id:1, name:"Billy Bob", type:"行銷", date:"2021-12-01",is_active:1},
@@ -137,7 +160,41 @@
                     return url;
                 }
             });
+
+            $('.form-reset-btn').on('click',function(){
+                $('input').val('');
+                $('.search-btn').click();
+            });
+            $('.search-btn').on('click',function(){
+                page=1;
+                getData();
+            });
+
+            $('.prev-page-btn').on('click',function(){
+                page = Math.max(1,page-1);
+                getData();
+            });
+
+            $('.next-page-btn').on('click',function(){
+                page = Math.min(maxPage,page+1);
+                getData();
+            });
+            getData();
         });
+
+        function setPageBtnStatus(){
+            if(maxPage > page){
+                $('.next-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
+            }else{
+                $('.next-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
+            }
+
+            if(page>1){
+                $('.prev-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
+            }else{
+                $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
+            }
+        }
 
     </script>
 </head>
@@ -230,6 +287,22 @@
             </div>
             <div class="w-11/12 mx-auto">
                 <div class="table-responsive" id="table"></div>
+
+                <div class="flex my-2 mx-auto w-fit">
+                    <!-- Buttons -->
+                    <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white rounded-l prev-page-btn">
+                        <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                        </svg>
+                        上一頁
+                    </button>
+                    <button class="flex items-center justify-center px-4 h-10 text-base font-medium text-white border-0 border-l border-gray-700 rounded-r next-page-btn">
+                        下一頁
+                        <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
 		</div>
 	</section>

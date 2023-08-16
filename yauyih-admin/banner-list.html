@@ -121,7 +121,7 @@
                         width: 100,
                         formatter:function(cell, formatterParams) {
                             var status = cell.getRow().getData()['status'] ;
-                            return `<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['bannerId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
                                 <option value="1" `+( status?'selected':'')+`>啟用</option>
                                 <option value="0" `+(!status?'selected':'')+`>停用</option>
                             </select>`;
@@ -156,6 +156,18 @@
                     return url;
                 }
             });
+
+
+            $(document).on('change', '[name=status_selector]', function() {
+               exec('banner/edit','POST',{
+                    bannerId: $(this).attr('rowDataId'),
+                    status:$(this).val(),
+               },function(data){
+
+               });
+           });
+
+
         });
 
     </script>

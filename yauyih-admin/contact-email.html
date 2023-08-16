@@ -55,6 +55,61 @@
     <script src="lib/select2/select2.full.min.js"></script>
     <!-- Custom Script -->
     <script src="lib/app.js"></script>
+    <script>
+        $(function() {
+
+            var oriAddress=[];
+
+            exec('mail/list','POST',{
+        
+            },function(data){
+                console.log(data)
+                oriAddress = data['mails'];
+                $('[name=address]').val(oriAddress.join(','));
+            });
+
+            $('.btn-save').on('click',function(){
+
+                Swal.fire({
+                    title: '更新中請稍後',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: function() {
+                        Swal.showLoading()
+                    }
+                })
+
+                var newAddress = $('[name=address]').val().split(',');
+
+                oriAddress.forEach(function(address){
+                    exec('mail/remove','POST',{
+                        address:address
+                    },function(data){
+
+                    });
+                });
+
+                setTimeout(function() {
+                    newAddress.forEach(function(address,key){
+                        setTimeout(() => {
+                            exec('mail/new','POST',{
+                                address:address.trim()
+                            },function(data){
+                                
+                            });    
+                        }, key * 200);
+                    });    
+                }, 1500);
+                
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+
+            });
+
+        });
+
+    </script>
 </head>
 <body>
     
@@ -65,12 +120,11 @@
 		</div>
 		<div class="w-full bg-gray-50">
             <div class="py-2.5 px-5 w-full text-right shadow-md mb-5">
-                <button class="px-6 py-2.5 w-22 md:w-28 min-w-fit text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300" onclick="history.back()">返回</a>	
-                <button class="px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">儲存</button>	
+                <button class="px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 btn-save">儲存</button>	
             </div>
             <div class="container mx-auto px-2 md:px-8">
                 <form id="mainfood-form">
-				    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-1 mb-2">
+				    <div class="grid grid-cols-1 md:grid-cols-1 gap-6 py-1 mb-2">
                         <div class="justify-center">
                             <div class="flex items-center required-star">
                                 <label>
@@ -78,7 +132,7 @@
                                 </label>
                                 
                                 <div class="w-full">
-                                    <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入通知email" required>
+                                    <input type="input" name="address" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入通知email" required>
                                     <p class="mt-1 text-xs text-input-hint ">請使用半形符號「 , 」做為分隔，（如：yy@service.com , sales@service.com）</p>
                                 </div>
                             </div>
