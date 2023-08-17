@@ -40,7 +40,7 @@ body::before{
       <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
         <div class="tw-w-full tw-relative">
           <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-4 lg:tw-mb-6">Mommy and Baby </div>
+          <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-4 lg:tw-mb-2">Mommy and Baby </div>
           <div>
             Help each baby to find its mommy, and connect them correctly. 
           </div>
@@ -114,18 +114,15 @@ body::before{
     ],
     "onFinish":function(){
       Swal.fire({
-        title: '全部正確!',
-        showCancelButton: true,
-        cancelButtonText: '再玩一次',
-        confirmButtonText: '回上一頁',
-        allowOutsideClick: false,
+        title: '好棒唷！全部答對～',
+        showCancelButton: false,
+        confirmButtonText: '再玩一次',
+        allowOutsideClick: true,
         allowEscapeKey:false,
         reverseButtons:true,
       }).then(function(result){
         if (result.isConfirmed) {
           window.location = backUrl;
-        }else{
-          window.location.reload();
         }
       });
     }

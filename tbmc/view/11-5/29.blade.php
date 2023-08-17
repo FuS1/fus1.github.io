@@ -6,7 +6,7 @@
     <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
       <div class="tw-w-5/6 tw-relative">
         <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="{{ url('/imgs/games/title-fog.png') }}">
-        <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-4 lg:tw-mb-6">Guess Who</div>
+        <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-4 lg:tw-mb-2">Guess Who</div>
         <div>
           Fill In the blanks complete the sentences.
         </div>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div class="droppable tw-min-h-5 tw-p-3 tw-border-2 tw-border-dashed tw-border-amber-900 tw-rounded tw-flex tw-my-2 lg:tw-mx-10 lg:tw-my-6 tw-bg-slate-100 tw-w-[90%] tw-mx-auto ui-droppable" data-is_stock_area="yes">
+  <div class="droppable tw-min-h-5 tw-p-3 tw-border-2 tw-border-dashed tw-border-amber-900 tw-rounded tw-flex tw-my-2  lg:tw-my-6 tw-bg-slate-100 tw-w-[90%] tw-mx-auto ui-droppable" data-is_stock_area="yes">
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="sing" style="position: relative;">sing</div>
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="pretend" style="position: relative;">pretend</div>
     <div id="draggable-1" class="draggable-item tw-m-2 tw-cursor-grab tw-bg-white tw-border tw-border-orange-700 tw-p-2 tw-rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>

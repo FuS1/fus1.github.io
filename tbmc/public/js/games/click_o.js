@@ -8,19 +8,16 @@
 
       if( checkAnswer()){
         Swal.fire({
-          title: '全部正確!',
-          showCancelButton: true,
-          cancelButtonText: '再玩一次',
-          confirmButtonText: '回上一頁',
-          allowOutsideClick: false,
+          title: '好棒唷！全部答對～',
+          showCancelButton: false,
+          confirmButtonText: '再玩一次',
+          allowOutsideClick: true,
           allowEscapeKey:false,
           reverseButtons:true,
         }).then(function(result){
-          if (result.isConfirmed) {
-            window.location = backUrl;
-          }else{
-            window.location.reload();
-          }
+            if (result.isConfirmed) {
+              window.location = backUrl;
+            }
         });
       }
 
