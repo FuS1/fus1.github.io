@@ -16,6 +16,7 @@
 
 body {
   font-family: monospace;
+  overflow-y: hidden;
 }
 
 body::before{
@@ -34,7 +35,7 @@ body::before{
 </head>
 <body>
   <div class="container tw-bg-white lg:tw-text-2xl tw-max-w-[1180px] lg:tw-min-h-full lg:tw-shadow-md">
-    <div class="tw-pt-2 lg:tw-pt-6">
+    <div id="title-warp" class="tw-pt-2 lg:tw-pt-6">
       <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
         <div class="tw-w-full tw-relative">
           <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="../../public/imgs/games/title-fog.png">
@@ -46,7 +47,7 @@ body::before{
         </div>
       </div>
     </div>
-    <div id="app" class="tw-w-full"></div>
+    <div id="app" class="tw-w-full tw-mt-[-25px]"></div>
   </div>
 </body>
 
@@ -59,7 +60,7 @@ body::before{
      * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
      */
-     var backUrl = "index.html",
+     var backUrl = "../../index.html",
         useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
         pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
 
@@ -91,8 +92,5 @@ body::before{
       });
     }
   };
-  $(function(){
-    $('#app > canvas').attr('height',800);
-  });
 </script> 
 <script type="module" crossorigin src="../../public/js/games/dot-link.js"></script>
