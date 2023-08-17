@@ -29,14 +29,14 @@ function applyDeviceCheck() {
                 }
             });
         }, 100);
-    }else if (window.innerHeight > window.innerWidth) {
+    }else if (window.innerHeight > window.innerWidth && !haveGetUseRurnNotice) {
         Swal.fire({
             title: '請使用橫式畫面操作',
             width: '90%',
             imageUrl: pleaseRotationImgUrl,
             imageWidth:250,
             showCancelButton: false,
-            showConfirmButton: false,
+            showConfirmButton: true,
             allowOutsideClick: false,
             allowEscapeKey:false,
             reverseButtons:true,
