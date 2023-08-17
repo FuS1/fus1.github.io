@@ -46,7 +46,7 @@
                     reverseButtons:true,
                 }).then(function(result){
                     if (result.isConfirmed) {
-                        window.location = backUrl;
+                        window.location.reload()
                     }
                 });
             }
@@ -57,10 +57,9 @@
     function checkAnswer(){
         var result = true;
         for (var i in questionIsAnswered) {
-        if(i!=='undefined' && questionIsAnswered[i] === false){
-            result = false;
-        }
-        
+            if(i!=='undefined' && questionIsAnswered[i] === false){
+                result = false;
+            }
         }
         return result;
     }

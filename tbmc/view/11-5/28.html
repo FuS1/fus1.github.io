@@ -11,7 +11,7 @@
   <script src="../../public/js/games/tailwindcss.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
   <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script> 
-  <script>tailwind.config = { prefix: 'tw-' }</script>
+  <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
 body {
@@ -34,12 +34,12 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container tw-bg-white lg:tw-text-2xl tw-max-w-[1180px] lg:tw-min-h-full lg:tw-shadow-md">
-    <div id="title-warp" class="tw-pt-2 lg:tw-pt-6">
-      <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
-        <div class="tw-w-full tw-relative">
-          <img class="tw-absolute tw-left-[-2.5rem] tw-top-1 tw-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="tw-text-orange-500 tw-text-2xl lg:tw-text-4xl tw-border-b lg:tw-pb-4 lg:tw-mb-2">Where is the Insect ?</div>
+  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
+    <div id="title-warp" class="injwang-pt-2 lg:injwang-pt-6">
+      <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
+        <div class="injwang-w-full injwang-relative">
+          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Where is the Insect ?</div>
           <div>
             Insects are everywhere. Do you know where they are ?<br>
             Look at the pictures below; then connect it to the correct word.
@@ -47,7 +47,7 @@ body::before{
         </div>
       </div>
     </div>
-    <div id="app" class="tw-w-full tw-mt-[-25px]"></div>
+    <div id="app" class="injwang-w-full injwang-mt-[-25px]"></div>
   </div>
 </body>
 
@@ -84,7 +84,7 @@ body::before{
         reverseButtons:true,
       }).then(function(result){
         if (result.isConfirmed) {
-          window.location = backUrl;
+          window.location.reload()
         }
       });
     }

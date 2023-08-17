@@ -4,7 +4,7 @@
     if($(this).data('answer')==='right'){
       $(this).parent().find('q-option').hide();
       $(this).parent().data('answered',true);
-      $(this).show().addClass('tw-text-emerald-700');
+      $(this).show().addClass('injwang-text-emerald-700');
 
       if( checkAnswer()){
         Swal.fire({
@@ -16,7 +16,7 @@
           reverseButtons:true,
         }).then(function(result){
             if (result.isConfirmed) {
-              window.location = backUrl;
+              window.location.reload()
             }
         });
       }
