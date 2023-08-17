@@ -1,7 +1,7 @@
 
 @extends('games.master')
 @section('content')  
-<div class="container tw-bg-white lg:tw-text-2xl tw-max-w-[1180px] lg:tw-h-full lg:tw-shadow-md">
+<div class="container tw-bg-white lg:tw-text-2xl tw-max-w-[1180px] lg:tw-min-h-full lg:tw-shadow-md">
   <div class="tw-pt-1 lg:tw-pt-2 lg:tw-pt-6 tw-mb-1 lg:tw-mb-6">
     <div class="tw-flex tw-items-center tw-mx-auto tw-w-[90%]">
       <div class="tw-w-5/6 tw-relative">
