@@ -1,4 +1,5 @@
 var haveGetUsePadNotice = false;
+var haveGetUseRurnNotice = false;
 function applyDeviceCheck() {
 
     if (
@@ -39,6 +40,11 @@ function applyDeviceCheck() {
             allowOutsideClick: false,
             allowEscapeKey:false,
             reverseButtons:true,
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                haveGetUseRurnNotice=true;
+                applyDeviceCheck();
+            }
         });
     }else{
         Swal.close();
