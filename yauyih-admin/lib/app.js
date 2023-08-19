@@ -82,7 +82,10 @@ var exec = function(url,type,data,successFunction,failFunction){
 
             },
             401: function(xhr) {
-                window.location.assign('/login.php');
+                window.location.assign('login.html');
+            },
+            403: function(xhr) {
+                window.location.assign('login.html');
             },
             429: function(xhr) {
                 if(typeof failFunction == "function"){
@@ -96,8 +99,7 @@ var exec = function(url,type,data,successFunction,failFunction){
                     failFunction(xhr) 
                     return;
                 }
-
-                showErrMsg(xhr.responseJSON.message + ' at ' + xhr.responseJSON.file + ' line ' +  xhr.responseJSON.line);
+                showErrMsg('伺服器錯誤');
             },
             503:function(xhr){
                 if(typeof failFunction == "function"){
