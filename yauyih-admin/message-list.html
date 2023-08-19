@@ -62,24 +62,7 @@
             var maxPage = 1;
             var pageSize = 10;
             const getData = function(){
-                queryData = {
-                    skip    : page -1 ,
-                    name : $('[name=name]').val(),
-                    tel : $('[name=tel]').val(),
-                    email : $('[name=email]').val(),
-                    company : $('[name=company]').val(),
-                    startDate : $('[name=startDate]').val(),
-                    endDate : $('[name=endDate]').val(),
-                    status : $('[name=status]').val(),
-                };
-                console.log(queryData)
-                for (var i in queryData) {
-                    if(queryData[i]===""){
-                        delete queryData[i];
-                    }
-                }
-                
-                exec('message/list?'+new URLSearchParams(queryData).toString(),'POST',{
+                exec('message/list?'+getQueryDataUrl(),'POST',{
 
                 },function(data){
                     console.log(data);
@@ -187,6 +170,22 @@
                 getData();
             });
 
+            $('.download-btn').on('click', async () => {
+                const response = await fetch(_ENV['API_HOST']+'message/download?'+getQueryDataUrl(true), {
+                    method: 'POST', 
+                });
+
+                if (response.ok) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(await response.blob());
+                    link.download = moment().format('MMDD_HHMMSS')+'.xlsx'; // Set the desired filename
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                } else {
+                    showErrMsg('無法正確取得資訊');
+                }
+            });
+
             $('.prev-page-btn').on('click',function(){
                 page = Math.max(1,page-1);
                 getData();
@@ -221,9 +220,34 @@
                     $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
                 }
             }
-            
-        });
 
+            function getQueryDataUrl(download=false){
+                let queryData = {
+                    name : $('[name=name]').val(),
+                    tel : $('[name=tel]').val(),
+                    email : $('[name=email]').val(),
+                    company : $('[name=company]').val(),
+                    startDate : $('[name=startDate]').val(),
+                    endDate : $('[name=endDate]').val(),
+                    status : $('[name=status]').val(),
+                };
+
+                if(download){
+                    queryData['limit'] = 9999999;
+                }else{
+                    queryData['skip'] = page -1;
+                }
+
+                for (var i in queryData) {
+                    if(queryData[i]===""){
+                        delete queryData[i];
+                    }
+                }
+                console.log(queryData)
+                return new URLSearchParams(queryData).toString();
+            }
+
+        });
 
     </script>
 </head>
@@ -314,7 +338,7 @@
                 <div class="py-2.5 px-1 w-full text-right">
                     <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300 form-reset-btn">重設</a>	
                     <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 search-btn">搜尋</button>	
-                    <a class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900" target="_blank" href="https://yy-dev-api-v2.yauyih.com.tw/admin/message/download">下載</a>	
+                    <button class="px-6 py-2.5 w-1/4 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 download-btn">下載</button>	
                 </div>
             </div>
             <div class="w-11/12 mx-auto">
