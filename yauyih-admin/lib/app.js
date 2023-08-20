@@ -54,9 +54,8 @@ var exec = function(url,type,data,successFunction,failFunction){
         type: type,
         dataType: 'json',
         url: _ENV['API_HOST']+url,
-        dataType:'json',
         headers: {
-            // Authorization: "Bearer "+(adminData && adminData['token'] ? adminData['token']['plainTextToken'] : '')
+            Authorization: "Bearer "+(getLocalStorage('BearerToken') || '')
         },
         statusCode: {
             200: function(xhr){
@@ -82,7 +81,13 @@ var exec = function(url,type,data,successFunction,failFunction){
 
             },
             401: function(xhr) {
-                window.location.assign('login.html');
+              if( typeof failFunction == "function" ){
+                  failFunction(xhr.responseJSON) 
+                  return;
+              }
+              window.location.assign('login.html');
+              
+                
             },
             403: function(xhr) {
                 window.location.assign('login.html');

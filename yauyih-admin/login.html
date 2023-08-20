@@ -36,6 +36,8 @@
     <!-- Custom Theme Style -->
     <link href="lib/app.css" rel="stylesheet">
 
+    <!-- select2-->
+    <script src="lib/crypto-js.js"></script>
     <!-- jQuery -->
     <script src="lib/jquery/jquery.min.js"></script>
     <!-- TailWind -->
@@ -57,23 +59,49 @@
     <script src="lib/app.js"></script>
     <script>
 
+        var loginToken = '';
+
         $(function(){
-            $('.login-btn').on('click',function(){
-                
-                if(!document.querySelector('form').checkValidity()){
-                    document.querySelector('form').reportValidity();
+            $('.login-step-1-btn').on('click',function(){
+                let account = $(".setp-1 [name=account]").val();
+                if(account==""){
+                    showErrMsg('請輸入帳號');
+                    return;
+                }
+
+                exec('user/requireLogin','POST',{
+                   account  : account,
+                },function(data){
+                    loginToken=data['token'];
+                    $(".setp-1").addClass('hidden');
+                    $(".setp-2").removeClass('hidden');
+                    $(".setp-2 [name=account]" ).val(account)
+
+                },function(data){
+                    showErrMsg('查無帳號');
+                });
+            });
+
+            $('.login-step-2-btn').on('click',function(){
+                let account = $(".setp-2 [name=account]").val();
+                let password = $(".setp-2 [name=password]").val();
+                if(account=="" || password==""){
+                    showErrMsg('請輸入帳號與密碼');
                     return;
                 }
 
                 exec('user/login','POST',{
-                   account  : $("[name=account]").val(),
-                   password : $("[name=password]").val(),
+                   account  : account,
+                   token  : CryptoJS.SHA512(CryptoJS.SHA512(password)+loginToken).toString() ,
                 },function(data){
-                    setLocalStorage('BearerToken','123');
-                    window.location="product-list.html";
                     console.log(data);
+                    setLocalStorage('BearerToken',data['bearerToken']);
+                    window.location.assign('product-list.html')
+                },function(data){
+                    showErrMsg(data['message']);
                 });
             });
+
         })
 
     </script>
@@ -87,18 +115,39 @@
         </div>
         <div class="flex justify-center items-center min-h-screen">
             
-            <div class="bg-white shadow-md rounded-md pb-8 mb-4 w-full max-w-md">
+            <div class="bg-white shadow-md rounded-md pb-8 mb-4 w-full max-w-md setp-1" >
                 <div class="w-fill p-4 bg-yy-blue shadow-md rounded-t-md">
                     <img class="h-6 md:h-12 mx-auto" src="images/logo.png">
                 </div>
 
-                <form class="px-8 py-8">
+                <div class="px-8 py-8">
                     <div class="mb-7">
                         <label for="account" class="block text-gray-700 text-sm font-bold mb-2">
                             <i class="fa-solid fa-user mr-2"></i>帳號
                         </label>
                         <div>
-                            <input id="account" type="input" class="shadow border border-zinc-400 appearance-none rounded-md w-full py-3 px-4 text-bg-yy-blue leading-tight focus:outline-none focus:shadow-outline" placeholder="account" required>
+                            <input name="account" type="input" class="shadow border border-zinc-400 appearance-none rounded-md w-full py-3 px-4 text-bg-yy-blue leading-tight focus:outline-none focus:shadow-outline" placeholder="account">
+                        </div>
+                    </div>
+                </div>
+                <div class="px-8 pb-6 flex items-center justify-center">
+                    <button type="button" class="login-step-1-btn bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">
+                    登入
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white shadow-md rounded-md pb-8 mb-4 w-full max-w-md setp-2 hidden" >
+                <div class="w-fill p-4 bg-yy-blue shadow-md rounded-t-md">
+                    <img class="h-6 md:h-12 mx-auto" src="images/logo.png">
+                </div>
+
+                <div class="px-8 py-8">
+                    <div class="mb-7">
+                        <label for="account" class="block text-gray-700 text-sm font-bold mb-2">
+                            <i class="fa-solid fa-user mr-2"></i>帳號
+                        </label>
+                        <div>
+                            <input name="account" type="input" class="appearance-none rounded-md w-full py-3 px-4 text-bg-yy-blue leading-tight focus:outline-none focus:shadow-outline" placeholder="account" readonly disabled>
                         </div>
                     </div>
                     <div class="mb-6">
@@ -106,12 +155,12 @@
                             <i class="fas fa-lock mr-2"></i>密碼
                         </label>
                         <div>
-                            <input id="password" type="password" class="shadow border border-zinc-400 appearance-none rounded-md w-full py-3 px-4 text-bg-yy-blue leading-tight focus:outline-none focus:shadow-outline" placeholder="password" required>
+                            <input name="password" type="password" class="shadow border border-zinc-400 appearance-none rounded-md w-full py-3 px-4 text-bg-yy-blue leading-tight focus:outline-none focus:shadow-outline" placeholder="password">
                         </div>
                     </div>
-                </form>
+                </div>
                 <div class="px-8 pb-6 flex items-center justify-center">
-                    <button  class="login-btn bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">
+                    <button type="button" class="login-step-2-btn bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:shadow-outline w-full">
                     登入
                     </button>
                 </div>
