@@ -36,6 +36,8 @@
     <!-- Custom Theme Style -->
     <link href="lib/app.css" rel="stylesheet">
 
+    <!-- crypto-->
+    <script src="lib/crypto-js.js"></script>
     <!-- jQuery -->
     <script src="lib/jquery/jquery.min.js"></script>
     <!-- TailWind -->
@@ -164,12 +166,12 @@
 		<div class="w-full bg-gray-50">
             <div class="py-2.5 px-5 w-full text-right shadow-md mb-5 inline-block md:flex">
                 <div class="lg:w-1/2">
-                    <select id="brand-selecter" class="max-w-md m-3 md:m-0 px-6 py-2.5 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block">
+                    <select id="tag-selecter" class="max-w-md m-3 md:m-0 px-6 py-2.5 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block">
                         <!-- <option value="6">Panasonic</option> -->
                     </select>
                 </div>
                 <div class="lg:w-1/2">
-                    <button class="float-right px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 add-brand">新增品牌</button>	
+                    <button class="float-right px-6 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 add-tag">新增分類</button>	
                 </div>
             </div>
             <div class="container mx-auto px-2 md:px-8">
@@ -214,7 +216,7 @@
 
 $(function() {
 
-    $('#brand-selecter').on('change',function(){
+    $('#tag-selecter').on('change',function(){
         loadTree();
     });
 
@@ -233,10 +235,10 @@ $(function() {
             showLoaderOnConfirm: true,
             reverseButtons:true,
             preConfirm: function(input) {
-                exec('brand-tag/new','POST',{
+                exec('tag/new','POST',{
                     name: input, 
-                    parent: _tree_content.attr('data-brand-tag-id'), 
-                    brandId: $('#brand-selecter').val(),
+                    parent: _tree_content.attr('data-tag-id'), 
+                    tagId: $('#tag-selecter').val(),
                 },function(data){
                     loadTree();
                 });
@@ -256,8 +258,8 @@ $(function() {
             reverseButtons: true
         }).then(function(result) {
             if (result.isConfirmed) {
-                exec('brand-tag/delete','POST',{
-                    brandTagId: _tree_content.attr('data-brand-tag-id'), 
+                exec('tag/delete','POST',{
+                    tagId: _tree_content.attr('data-tag-id'), 
                 },function(data){
                     loadTree();
                 });
@@ -280,9 +282,9 @@ $(function() {
             showLoaderOnConfirm: true,
             reverseButtons:true,
             preConfirm: function(input) {
-                exec('brand-tag/edit','POST',{
+                exec('tag/edit','POST',{
                     name: input, 
-                    brandTagId: _tree_content.attr('data-brand-tag-id'), 
+                    tagId: _tree_content.attr('data-tag-id'), 
                 },function(data){
                     loadTree();
                 });
@@ -290,17 +292,17 @@ $(function() {
         });
     });
     
-    exec('brand/list','POST',{},function(brands){
-        brands.forEach(function(brand) {
-            $('#brand-selecter').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
+    exec('tag/list','POST',{},function(tags){
+        tags.forEach(function(tag) {
+            $('#tag-selecter').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
         });
-        $('#brand-selecter').val(7)
-        $('#brand-selecter').trigger('change');
+        $('#tag-selecter').val(1)
+        $('#tag-selecter').trigger('change');
     });
 
-    $('.add-brand').on('click',function(){
+    $('.add-tag').on('click',function(){
         Swal.fire({
-            title: '請輸入新品牌名稱',
+            title: '請輸入新分類名稱',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
@@ -312,8 +314,8 @@ $(function() {
             showLoaderOnConfirm: true,
             reverseButtons:true,
             preConfirm: function(input) {
-                exec('brand/new','POST',{
-                    brandName: input,
+                exec('tag/new','POST',{
+                    tagName: input,
                 },function(data){
                     window.location.reload();
                 });
@@ -326,8 +328,8 @@ $(function() {
 
 function loadTree(){
     $(".tree > ul").empty();
-    exec('brand-tag/list','POST',{
-        brandId : $('#brand-selecter').val(),
+    exec('tag/list','POST',{
+        tagId : $('#tag-selecter').val(),
     },function(data){
         console.log(data);
         refractNodeInfo(data);
@@ -360,9 +362,9 @@ function refractNodeInfo(nodes){
     }) });
 
     nodes.push({
-        name:$('#brand-selecter option[value='+$('#brand-selecter').val()+']').text(),
+        name:$('#tag-selecter option[value='+$('#tag-selecter').val()+']').text(),
         parent:-1,
-        brandTagId:-1,
+        tagId:-1,
         childs:[],
         level:0
     });
@@ -385,11 +387,11 @@ function moveNodeToParent(nodes){
     }
 
     var index = _.findIndex(nodes, {
-        brandTagId: node.parent || -1 //若為第一層節點，則將其掛至品牌主節點下
+        tagId: node.parent || -1 //若為第一層節點，則將其掛至分類主節點下
     });
     
     if(index=== -1){
-        showErrMsg('該節點異常，請聯繫管理員協助修正。節點編號: '+node['brandTagId']);
+        showErrMsg('該節點異常，請聯繫管理員協助修正。節點編號: '+node['tagId']);
         return;
     }
 
@@ -400,10 +402,11 @@ function moveNodeToParent(nodes){
 
 }
 
+
 function renderTreeNode(target,node,level){
     var _nodeDom = $("node-template").clone().first();
     _nodeDom.find('.tree_content').attr('data-level',level)
-    _nodeDom.find('.tree_content').attr('data-brand-tag-id',node['brandTagId']);
+    _nodeDom.find('.tree_content').attr('data-tag-id',node['tagId']);
 
     if(level >= 2){
         _nodeDom.find('.level-add').addClass("invisible");
@@ -422,7 +425,7 @@ function renderTreeNode(target,node,level){
 
     target.append(_nodeDom.html());
     node['childs'].forEach(function(childNode) {
-        renderTreeNode($("[data-brand-tag-id="+node['brandTagId']+"] ").closest("li").find('> ul'),childNode,level+1);
+        renderTreeNode($("[data-tag-id="+node['tagId']+"] ").closest("li").find('> ul'),childNode,level+1);
     });
 
 }

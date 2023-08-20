@@ -36,7 +36,7 @@
     <!-- Custom Theme Style -->
     <link href="lib/app.css" rel="stylesheet">
 
-    <!-- select2-->
+    <!-- crypto-->
     <script src="lib/crypto-js.js"></script>
     <!-- jQuery -->
     <script src="lib/jquery/jquery.min.js"></script>
@@ -58,26 +58,136 @@
     <!-- Custom Script -->
     <script src="lib/app.js"></script>
     <script>
-
+        var productData = null;
+        var brandTagList = [];
+        
 		$(function() {
+            
+            exec('brand/list','POST',{},function(brands){
+                brands.forEach(function(brand) {
+                    $('[name=brandId]').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
+                });
+                $('[name=brandId]').trigger('change')
+            });
+
             $('.btn-cancel').on('click',function(){
                 location.assign('product-list.html');
             });
 
-            $('#input-group-search').on('change',function(){
-                // setAttributeItem($(this).val());
-            });
-            
-            
             $(".add-attribute-btn").on('click',function(){
                 addAttributeSelector()
             });
 
-            initAttribute();
-        });
-        
+            $('[name=brandId]').select2({
+                width: '100%',
+                height: '200px',
+                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                placeholder: "第一層",
+            })
+            
+            $('.btn-save').on('click',function(){
 
-        
+                data = {
+                    productName : $('[name=productName]').val(),
+                    brandId     : $('[name=brandId]').val(),
+                    hot         : $('[name=hot]').val(),
+                    status      : $('[name=status]').val(),
+                    introduction: $('[name=introduction]').val(),
+                    // preview: "產品封面的googleID",
+                    tagId       : 5, 
+                    brandTagId  : $('[name=brandTag-level-2]').val()
+                };
+
+                if(data['brandTagId']==""){
+                    data['brandTagId'] = $('[name=brandTag-level-1]').val()
+                }
+
+                url = 'product/';
+                if(!productData){
+                    url = url+'edit';
+                    data['productId'] = productData['productId'];
+                }else{
+                    url = url+'new';
+                }
+
+                exec(url,'POST',data,function(data){
+                    console.log(data);
+                });
+            });
+
+            //當品牌階層變更時，重新渲染下一層選擇器
+            $('[name=brandId]').on('change',function(){
+                
+                $('[name=brandTag-level-1]').empty('')
+                $('[name=brandTag-level-1]').append('<option value=""></option>');
+                exec('brand-tag/list','POST',{
+                    brandId : $(this).val(),
+                },function(data){
+                    console.log(data);
+                    brandTagList=data;
+                    brandTagList.filter(function(node){
+                        return node['parent']===0;
+                    }).forEach(function(node) {
+                        console.log(node);
+
+                        $('[name=brandTag-level-1]').append('<option value="'+node['brandTagId']+'">'+node['name']+'</option>');
+                    });
+                    
+                    $('[name=brandTag-level-1]').select2({
+                        width: '100%',
+                        height: '200px',
+                        containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                        placeholder: "第二層",
+                    })
+                    
+                    $('[name=brandTag-level-1]').trigger('change');
+                    
+                });
+            });
+
+            $('[name=brandTag-level-1]').on('change',function(){
+                let brabdTagLevel1Value = $(this).val();
+
+                $('[name=brandTag-level-2]').empty('')
+                $('[name=brandTag-level-2]').append('<option value=""></option>');
+
+                if(brabdTagLevel1Value!==''){
+                    brandTagList.filter(function(node){
+                        return node['parent']==brabdTagLevel1Value;
+                    }).forEach(function(node) {
+                        console.log(node);
+
+                        $('[name=brandTag-level-2]').append('<option value="'+node['brandTagId']+'">'+node['name']+'</option>');
+                    });
+                }
+                $('[name=brandTag-level-2]').select2({
+                    width: '100%',
+                    height: '200px',
+                    containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                    placeholder: "第三層",
+                })
+            });
+
+            if(getUrlParam("product_id")!=''){
+                exec('product/'+getUrlParam("product_id"),'POST',{
+
+                },function(data){
+                    productData=data['product'];
+                    console.log(productData)
+                    setFormValue($('form'),productData)
+                    initAttribute(productData['attributes']);
+                    $('[name=brandId]').val(productData['brandId']).trigger('change');
+                    setTimeout(function() {
+                        $('[name=brandTag-level-1]').val( _.findWhere(productData['brandTags'], {parent: 0})['tagId'] ).trigger('change');    
+                        setTimeout(function() {
+                            $('[name=brandTag-level-2]').val(productData['brandTag']).trigger('change');
+                        }, 300);
+                    }, 300);
+                });
+            }else{
+                initAttribute();
+            }
+        });
 
         function initAttribute(attributes){
             if(!attributes){attributes=[{}];}
@@ -175,14 +285,14 @@
                 <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 btn-save">儲存</button>	
             </div>
             <div class="container mx-auto px-2 md:px-8">
-                <form id="mainfood-form">
+                <form id="form">
 				    <div class="flex my-2 required-star ">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">產品名稱</span>
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
+                            <input type="input" name="productName" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
                         </div>
                     </div>
                     <div class="flex my-2 required-star ">
@@ -191,8 +301,8 @@
                         </label>
                         
                         <div class="w-full grid grid-cols-1 gap-2 md:grid-cols-3">
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">尺寸</option>
+                            <select class="js-example-basic-multiple" name="brandId" level="0">
+                                <!-- <option value="AL">尺寸</option>
                                 <option value="WY">顏色</option>
                                 <option value="AL">規格</option>
                                 <option value="WY">種類</option>
@@ -202,15 +312,40 @@
                                 <option value="WY">流明</option>
                                 <option value="AL">馬力</option>
                                 <option value="WY">安培</option>
-                                <option value="WY">伏特</option>
+                                <option value="WY">伏特</option> -->
                             </select>
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
+                            <select class="js-example-basic-multiple" name="brandTag-level-1" level="1">
+                                <option value=""></option>
                             </select>
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
+                            <select class="js-example-basic-multiple" name="brandTag-level-2" level="2">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex my-2 required-star ">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">項目階層</span>
+                        </label>
+                        
+                        <div class="w-full grid grid-cols-1 gap-2 md:grid-cols-3">
+                            <select class="js-example-basic-multiple" name="tagId" level="0">
+                                <!-- <option value="AL">尺寸</option>
+                                <option value="WY">顏色</option>
+                                <option value="AL">規格</option>
+                                <option value="WY">種類</option>
+                                <option value="AL">孔徑</option>
+                                <option value="WY">螺旋數</option>
+                                <option value="AL">通量</option>
+                                <option value="WY">流明</option>
+                                <option value="AL">馬力</option>
+                                <option value="WY">安培</option>
+                                <option value="WY">伏特</option> -->
+                            </select>
+                            <select class="js-example-basic-multiple" name="tag-level-1" level="1">
+                                <option value=""></option>
+                            </select>
+                            <select class="js-example-basic-multiple" name="tag-level-2" level="2">
+                                <option value=""></option>
                             </select>
                         </div>
                     </div>
@@ -220,7 +355,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <textarea class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4" ></textarea>
+                            <textarea name="introduction" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4" ></textarea>
                         </div>
                     </div>
                     <div class="flex my-2">
@@ -229,7 +364,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="number" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="0">
+                            <input name="hot" type="number" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="0">
                         </div>
                     </div>
                     <div class="flex my-2">
@@ -238,7 +373,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
+                            <select id="is_active" name="status" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
                                 <option value="1">啟用</option>
                                 <option value="0">停用</option>
                             </select>
@@ -250,7 +385,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
+                            <input type="input" name="tags" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
                             <p class="mt-1 text-xs text-input-hint">請使用半形符號「 , 」做為分隔，（如：伺服器,馬達）</p>
                         </div>
                     </div>
