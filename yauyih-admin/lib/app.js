@@ -231,7 +231,7 @@ function setFormValue (form,data){
 var loadFileDataURI = function(event,callBackFun) {
     
     var reader = new FileReader();
-
+    reader.fileName = event.target.files[0].name; 
     reader.onload = function(e){
       callBackFun({
         dataURI:e.target.result,
@@ -239,7 +239,6 @@ var loadFileDataURI = function(event,callBackFun) {
         name:e.target.fileName,
       });
     };
-    console.log(event)
     reader.readAsDataURL(event.target.files[0]);
     
 };
@@ -275,9 +274,7 @@ function initImageFileDom(dom){
               Swal.showLoading();
           }
       });
-      
       loadFileDataURI(e,function(file){
-          console.log(file);
           exec('image/upload','POST',{
               image:file,
           },function(data){
