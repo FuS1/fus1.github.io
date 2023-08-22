@@ -62,9 +62,9 @@
         var brandTagList = [];
         
 
-        const fileTpl = `<tr>
+        const fileTpl = `<tr class="file-item">
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 text-center text-blueGray-700">
-                                <input type="radio" name="cover" value="1">
+                                <input type="radio" name="cover" value="">
                                 <label class="pl-2" name="file-idx">1</label>
                             </td>
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0">
@@ -72,7 +72,7 @@
                                     <option value="zh" selected>繁體中文</option>
                                     <option value="ch">簡體中文</option>
                                     <option value="en">英文</option>
-                                    <option value="jp">日文</option>
+                                    <option value="ja">日文</option>
                                 </select>
                             </td>
                             <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
@@ -100,77 +100,23 @@
                 location.assign('product-list.html');
             });
 
-            $(".add-attribute-btn").on('click',function(){
-                addAttributeSelector()
-            });
-            
-            //檔案的新增按鈕
-            $(document).on('click', '.add-file-btn', function() {
-                let table = $(this).closest('section').find('table');
-
-                let dom = $(fileTpl).clone();
-
-                dom.find('input[type=file]').click();
-                
-                dom.find('input[type=file]').on('change',function(e){
-                    Swal.fire({
-                        title: '上傳中，請稍後...',
-                        allowOutsideClick:false,
-                        didOpen: function() {
-                            Swal.showLoading();
-                        }
-                    });
-                    
-                    loadFileDataURI(e,function(file){
-                        console.log(file);
-                        exec('pdf/upload','POST',{
-                            pdf:file,
-                        },function(data){
-                            console.log(data)
-                            Swal.close();
-                            dom.find('[name=cover]').attr('value',data['previewId']);
-                            dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
-                            dom.find('a').text(data['pdfFileName']);
-                            table.find('tbody').append(dom);
-                            resetFilesIdx(table);
-                        },true);
-                    });
-                });
-
-            });
-
-            //檔案的刪除按鈕
-            $(document).on('click', 'tr .fa-trash-can', function() {
-                let table = $(this).closest('section').find('table');
-                $(this).closest('tr').remove();
-                resetFilesIdx(table);
-            });
-
-            $('[name=brandId]').select2({
-                width: '100%',
-                height: '200px',
-                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
-                placeholder: "第一層",
-            })
-            
             $('.btn-save').on('click',function(){
-
-                data = {
-                    productName : $('[name=productName]').val(),
-                    brandId     : $('[name=brandId]').val(),
-                    hot         : $('[name=hot]').val(),
-                    status      : $('[name=status]').val(),
-                    introduction: $('[name=introduction]').val(),
-                    // preview: "產品封面的googleID",
-                    tagId       : 5, 
-                    brandTagId  : $('[name=brandTag-level-2]').val()
-                };
-
-                if(data['brandTagId']==""){
-                    data['brandTagId'] = $('[name=brandTag-level-1]').val()
+                let data = {
+                    productName:$('[name=productName]').val(),
+                    brandId:$('[name=brandId]').val(),
+                    brandTagId: $('[name=brandTag-level-2]').val()!=="" ? $('[name=brandTag-level-2]').val() : $('[name=brandTag-level-1]').val(),
+                    tag:'4',
+                    introduction:$('[name=introduction]').val(),
+                    hot:$('[name=hot]').val(),
+                    status:$('[name=status]').val(),
+                    keywords:$('[name=keywords]').val().split(','),
+                    preview:$("[name=cover]:checked").val(),
+                    attributes:getAttribute(),
+                    pdfs:getFile()
                 }
 
                 url = 'product/';
+
                 if(productData){
                     url = url+'edit';
                     data['productId'] = productData['productId'];
@@ -181,7 +127,15 @@
                 exec(url,'POST',data,function(data){
                     console.log(data);
                 });
+                
             });
+            
+            $('[name=brandId]').select2({
+                width: '100%',
+                height: '200px',
+                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                placeholder: "第一層",
+            })
 
             //當品牌階層變更時，重新渲染下一層選擇器
             $('[name=brandId]').on('change',function(){
@@ -231,6 +185,51 @@
                 })
             });
 
+            //檔案的新增按鈕
+            $(document).on('click', '.add-file-btn', function() {
+                let table = $(this).closest('section').find('table');
+
+                let dom = $(fileTpl).clone();
+
+                dom.find('input[type=file]').click();
+                
+                dom.find('input[type=file]').on('change',function(e){
+                    Swal.fire({
+                        title: '上傳中，請稍後...',
+                        allowOutsideClick:false,
+                        didOpen: function() {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    loadFileDataURI(e,function(file){
+                        console.log(file);
+                        exec('pdf/upload','POST',{
+                            pdf:file,
+                        },function(data){
+                            console.log(data)
+                            Swal.close();
+                            dom.find('[name=cover]').attr('value',data['previewId']);
+                            dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
+                            dom.find('a').text(data['pdfFileName']);
+                            table.find('tbody').append(dom);
+                            resetFilesIdx(table);
+                        },true);
+                    });
+                });
+            });
+
+            //檔案的刪除按鈕
+            $(document).on('click', 'tr .fa-trash-can', function() {
+                let table = $(this).closest('section').find('table');
+                $(this).closest('tr').remove();
+                resetFilesIdx(table);
+            });
+                
+            $(".add-attribute-btn").on('click',function(){
+                addAttributeSelector()
+            });
+
             if(getUrlParam("product_id")!=''){
                 exec('product/'+getUrlParam("product_id"),'POST',{
 
@@ -240,6 +239,7 @@
                     setFormValue($('form'),productData);
                     initFiles(productData['pdfs']);
                     initAttribute(productData['attributes']);
+                    $('[name=keywords]').val(productData['keywords'].join(','))
                     $('[name=brandId]').val(productData['brandId']).trigger('change');
                     setTimeout(function() {
                         $('[name=brandTag-level-1]').val( _.findWhere(productData['brandTags'], {parent: 0})['tagId'] ).trigger('change');    
@@ -266,6 +266,12 @@
             for(var type in files){
                 files[type].forEach(function(file) {
                     let _fileTpl = $(fileTpl).clone();
+                    _fileTpl.find('[name=language]').val(file['language']);
+                    _fileTpl.find('[name=name]').val(file['name']);
+                    _fileTpl.find('[name=cover]').val(file['link']);
+                    if(productData && productData['preview'] == file['link']){
+                        _fileTpl.find('[name=cover]').attr('checked','checked');
+                    }
                     $('[name='+type+'] tbody').append(_fileTpl);
                 });
 
@@ -285,7 +291,7 @@
                table.find('[name=cover]').remove();
             }
 
-            if(table.find('tbody > tr [name=cover]:checked').length>1){
+            if(table.find('tbody > tr [name=cover]:checked').length>=1){
                 haveSelectedCover=true
             }
             
@@ -317,18 +323,20 @@
         function addAttributeSelector(attribute){
             let _dom = $(  `<div class="flex my-1 attribute-item">
                                 <div class="w-64 h-10">
-                                    <select class="selector-with-filter" name="attribute[]">
+                                    <select class="selector-with-filter" name="attribute">
                                         <option value="">　</option>
                                         `+_dom_attrs+`
                                     </select>
                                 </div>
                                 <div>
-                                    <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入屬性內容">
+                                    <input type="input" name="attribute-value" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入屬性內容">
                                 </div>
                                 <span class="btn hover:text-red-900 cursor-pointer level-remove ml-2 pt-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
                             </div>`
                         );
-
+            if(attribute){
+                _dom.find('[name=attribute-value]').val(attribute['value']);
+            }
             $('attributes').append(_dom)
             _dom.find('.fa-trash-can').on('click',function(){
                 $(this).closest('.attribute-item').remove();
@@ -377,6 +385,30 @@
             
         }
 
+        //取得目前的Attribute設定
+        function getAttribute(){
+            return $(".attribute-item").map(function(){
+                return {
+                    attributeId: $(this).find('[name=attribute]').val(),
+                    value: $(this).find('[name=attribute-value]').val()
+                }
+            })
+            .toArray()
+            .filter(function(item){
+                return item['attributeId'] !== '';
+            });
+        }
+
+        function getFile(){
+            return $(".file-item").map(function(){
+                return {
+                    label:$(this).closest('section').attr('name'),
+                    link:$(this).find('[name=cover]').val(),
+                    language: $(this).find('[name=language]').val()
+                }
+            })
+            .toArray();
+        }
     </script>
 </head>
 
@@ -493,7 +525,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" name="tags" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
+                            <input type="input" name="keywords" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
                             <p class="mt-1 text-xs text-input-hint">請使用半形符號「 , 」做為分隔，（如：伺服器,馬達）</p>
                         </div>
                     </div>
@@ -549,13 +581,13 @@
                         <thead class="bg-yy-blue text-white">
                             <tr>
                                 <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-center w-28"></th>
-                                <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left">語系</th>
+                                <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left   w-1/4">語系</th>
                                 <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left">檔名</th>
                                 <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-center w-20"></th>
                             </tr>
                         </thead>
                         <tbody>
-                          <tr>
+                          <!-- <tr>
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 text-center text-blueGray-700 ">
                                 <label for="doc-2-1">1</label><br>
                             </td>
@@ -576,29 +608,7 @@
                                 <span class="btn hover:text-yy-green cursor-pointer level-rename" title="更名"><i class="fa-solid fa-pen"></i></span>
                                 <span class="btn hover:text-red-900 cursor-pointer level-remove ml-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
                             </td>
-                          </tr>
-                          <tr>
-                            <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 text-center text-blueGray-700 ">
-                                <label for="doc-2-2">2</label><br>
-                            </td>
-                            <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0">
-                                <select name="language" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value="繁體中文">繁體中文</option>
-                                    <option value="簡體中文">簡體中文</option>
-                                    <option value="英文" selected>英文</option>
-                                    <option value="日文">日文</option>
-                                </select>
-                            </td>
-                            <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
-                                <div class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md hover:border-blue-500 hover:text-blue-500 block w-full p-2.5">
-                                    <a href="https://supr.link/9Q4Dc" target="_blank">2023-06-24 英文.pdf</a>
-                                </div>
-                            </td>
-                            <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 whitespace-nowrap">
-                                <span class="btn hover:text-yy-green cursor-pointer level-rename" title="更名"><i class="fa-solid fa-pen"></i></span>
-                                <span class="btn hover:text-red-900 cursor-pointer level-remove ml-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
-                            </td>
-                          </tr>
+                          </tr> -->
                         </tbody>
                     </table>
                     <div class="text-center mt-2">
@@ -612,7 +622,7 @@
                         <thead class="bg-yy-blue text-white">
                             <tr>
                                 <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-center w-28"></th>
-                                <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left">語系</th>
+                                <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left   w-1/4">語系</th>
                                 <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left">檔名</th>
                                 <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-center w-20"></th>
                             </tr>
