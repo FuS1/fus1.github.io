@@ -101,18 +101,34 @@
             });
 
             $('.btn-save').on('click',function(){
+                let brandTagId = Number($('[name=brandTag-level-2]').val()!=="" ? $('[name=brandTag-level-2]').val() : $('[name=brandTag-level-1]').val());
                 let data = {
                     productName:$('[name=productName]').val(),
-                    brandId:$('[name=brandId]').val(),
-                    brandTagId: $('[name=brandTag-level-2]').val()!=="" ? $('[name=brandTag-level-2]').val() : $('[name=brandTag-level-1]').val(),
-                    tag:'4',
+                    brandId:Number($('[name=brandId]').val()),
+                    brandTagId: brandTagId===0 ? null : brandTagId,
+                    tag:Number('4'),
                     introduction:$('[name=introduction]').val(),
-                    hot:$('[name=hot]').val(),
-                    status:$('[name=status]').val(),
+                    hot:Number($('[name=hot]').val()),
+                    status:Number($('[name=status]').val()),
                     keywords:$('[name=keywords]').val().split(','),
                     preview:$("[name=cover]:checked").val(),
                     attributes:getAttribute(),
                     pdfs:getFile()
+                }
+
+                let errorMsg = [];
+                if(data['productName']==''){
+                    errorMsg.push('請輸入產品名稱');
+                }
+                if(data['brandTagId']==null){
+                    errorMsg.push('品牌階層請選擇至少兩層');
+                }
+                if( ! _.findWhere(data['pdfs'], {lable:'產品型錄'}) ){
+                    errorMsg.push('請上傳產品型錄');
+                }
+                if(errorMsg.length>0){
+                    showErrMsg(errorMsg.join("<br>"));
+                    return;
                 }
 
                 url = 'product/';
@@ -157,6 +173,7 @@
                         height: '200px',
                         containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
                         placeholder: "第二層",
+                        allowClear: true,
                     })
                     
                     $('[name=brandTag-level-1]').trigger('change');
@@ -182,6 +199,7 @@
                     height: '200px',
                     containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
                     placeholder: "第三層",
+                    allowClear: true,
                 })
             });
 
@@ -190,7 +208,7 @@
                 let table = $(this).closest('section').find('table');
 
                 let dom = $(fileTpl).clone();
-
+                dom.attr("is-new","true");
                 dom.find('input[type=file]').click();
                 
                 dom.find('input[type=file]').on('change',function(e){
@@ -222,7 +240,13 @@
             //檔案的刪除按鈕
             $(document).on('click', 'tr .fa-trash-can', function() {
                 let table = $(this).closest('section').find('table');
-                $(this).closest('tr').remove();
+
+                //若為本次新增的，非DB原有的，則直接刪除
+                if($(this).closest('tr').attr("is-new")=="true" ){
+                    $(this).closest('tr').remove();
+                }else{
+                    $(this).closest('tr').addClass('hidden').attr('remove',true);
+                }
                 resetFilesIdx(table);
             });
                 
@@ -266,6 +290,7 @@
             for(var type in files){
                 files[type].forEach(function(file) {
                     let _fileTpl = $(fileTpl).clone();
+                    _fileTpl.attr("is-new","false");
                     _fileTpl.find('[name=language]').val(file['language']);
                     _fileTpl.find('[name=name]').val(file['name']);
                     _fileTpl.find('[name=cover]').val(file['link']);
@@ -295,7 +320,7 @@
                 haveSelectedCover=true
             }
             
-            table.find('tbody > tr').each(function(){
+            table.find('tbody > tr:not([remove=true])').each(function(){
                 $(this).find('[name=file-idx]').text(idx);
                 if(haveSelectedCover===false && idx===1){
                     $(this).find('[name=cover]').attr('checked','checked');
@@ -304,8 +329,7 @@
             });
         }
 
-        function initAttribute(attributes){
-            if(!attributes){attributes=[{}];}
+        function initAttribute(attributes=[]){
             
             exec('attribute/list','GET',{
 
@@ -335,11 +359,21 @@
                             </div>`
                         );
             if(attribute){
+                _dom.attr("is-new","false");
                 _dom.find('[name=attribute-value]').val(attribute['value']);
+            }else{
+                _dom.attr("is-new","true");
             }
             $('attributes').append(_dom)
             _dom.find('.fa-trash-can').on('click',function(){
-                $(this).closest('.attribute-item').remove();
+
+                //若為本次新增的，非DB原有的，則直接刪除
+                if($(this).closest('.attribute-item').attr("is-new")=="true" ){
+                    $(this).closest('.attribute-item').remove();
+                }else{
+                    $(this).closest('.attribute-item').addClass('hidden').attr('remove',true);
+                }
+
             });
             _dom.find('.selector-with-filter').select2({
                 width: '100%',
@@ -381,21 +415,20 @@
             if(attribute){
                 _dom.find('.selector-with-filter').val(attribute['attributeId']).trigger('change');
             }
-            
-            
         }
 
         //取得目前的Attribute設定
         function getAttribute(){
             return $(".attribute-item").map(function(){
                 return {
-                    attributeId: $(this).find('[name=attribute]').val(),
-                    value: $(this).find('[name=attribute-value]').val()
+                    attributeId: Number($(this).find('[name=attribute]').val()),
+                    value: $(this).find('[name=attribute-value]').val(),
+                    del: $(this).attr('remove') == "true" ? true:false
                 }
             })
             .toArray()
             .filter(function(item){
-                return item['attributeId'] !== '';
+                return item['attributeId'] !== 0;
             });
         }
 
@@ -404,10 +437,14 @@
                 return {
                     label:$(this).closest('section').attr('name'),
                     link:$(this).find('[name=cover]').val(),
-                    language: $(this).find('[name=language]').val()
+                    language: $(this).find('[name=language]').val(),
+                    del: $(this).attr('remove') == "true" ? true:false
                 }
             })
-            .toArray();
+            .toArray()
+            .filter(function(item){
+                return item['link'] !== "";
+            });
         }
     </script>
 </head>
