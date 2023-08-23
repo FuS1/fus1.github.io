@@ -72,6 +72,25 @@
 
             $('.btn-save').on('click',function(){
 
+                var newAddress = $('[name=address]').val().split(',');
+
+                let errorMsg = [];
+
+                if(newAddress.length<=0){
+                    errorMsg.push('請至少輸入一個Email');
+                }else{
+                    newAddress.forEach(function(email) {
+                        if(validateEmail(email) == null){
+                            showErrMsg('Email格式不正確');
+                        }
+                    });
+                }
+
+                if(errorMsg.length>0){
+                    showErrMsg(_.uniq(errorMsg).join("<br>"));
+                    return;
+                }
+                
                 Swal.fire({
                     title: '更新中請稍後',
                     timer: 3000,
@@ -80,8 +99,6 @@
                         Swal.showLoading()
                     }
                 })
-
-                var newAddress = $('[name=address]').val().split(',');
 
                 oriAddress.forEach(function(address){
                     exec('mail/remove','POST',{

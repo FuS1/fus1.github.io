@@ -67,7 +67,8 @@
             });
 
             $('.btn-save').on('click',function(){
-                exec('video/edit','POST',{
+
+                let data = {
                     videoId:videoData['videoId'],
                     title:form.find('[name=title]').val(),
                     youtubeId:getVideoIdFromYoutubeUrl(form.find('[name=youtubeId]').val()),
@@ -75,7 +76,20 @@
                     show:form.find('[name=show]').val(),
                     tags:form.find('[name=tags]').val().split(','),
                     imageGoogleId:form.find('[name=image_google] > [name=file_img]').attr('value'),
-                },function(data){
+                }
+                let errorMsg = []
+                if(data['title']==''){
+                    errorMsg.push('請輸入影片標題')
+                }
+                if(data['youtubeId']==null){
+                    errorMsg.push('請輸入影片連結')
+                }
+                if(errorMsg.length>0){
+                    showErrMsg(errorMsg.join("<br>"));
+                    return;
+                }
+
+                exec('video/edit','POST',data,function(data){
                     console.log(data)
                     location.assign('video-list.html');
                 });
@@ -101,7 +115,7 @@
 
                 setFormValue(form,videoData)
                 form.find('[name=youtubeId]').val('https://www.youtube.com/watch?v='+videoData['youtubeId']);
-                form.find('[name=image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+videoData['imageGoogleId']);
+                form.find('[name=image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+videoData['coverGoogleId']);
 
             });
         });

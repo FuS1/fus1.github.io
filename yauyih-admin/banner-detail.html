@@ -67,14 +67,25 @@
             });
 
             $('.btn-save').on('click',function(){
-                exec('banner/edit','POST',{
+
+                let data = {
                     bannerId:bannerData['bannerId'],
                     name:form.find('[name=name]').val(),
                     link:form.find('[name=link]').val(),
                     status:form.find('[name=status]').val(),
                     imageGoogleId:form.find('[name=image_google] > [name=file_img]').attr('value'),
                     mobileSizeImageGoogleId:form.find('[name=mobile_size_image_google] > [name=file_img]').attr('value'),
-                },function(data){
+                }
+                let errorMsg = []
+                if(data['name']==''){
+                    errorMsg.push('請輸入名稱')
+                }
+                if(errorMsg.length>0){
+                    showErrMsg(errorMsg.join("<br>"));
+                    return;
+                }
+
+                exec('banner/edit','POST',data,function(data){
                     console.log(data)
                     location.assign('banner-list.html');
                 });

@@ -243,6 +243,12 @@ var loadFileDataURI = function(event,callBackFun) {
     
 };
 
+function validateEmail(email) {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+};
+
 function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
     var byteString;
@@ -290,6 +296,9 @@ function initImageFileDom(dom){
 }
 
 function getVideoIdFromYoutubeUrl(url) {
+  if(!url || url==""){
+    return null;
+  }
   const regex = /(?:\/|%3D|v=|vi=)([0-9A-Za-z_-]{11})(?:[%#?&]|$)/;
   const match = url.match(regex);
   
