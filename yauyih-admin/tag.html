@@ -292,7 +292,7 @@ $(function() {
         });
     });
     
-    exec('tag/list','POST',{},function(tags){
+    exec('tag/list-root','POST',{},function(tags){
         tags.forEach(function(tag) {
             $('#tag-selecter').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
         });
@@ -328,8 +328,8 @@ $(function() {
 
 function loadTree(){
     $(".tree > ul").empty();
-    exec('tag/list','POST',{
-        tagId : $('#tag-selecter').val(),
+    exec('tag/offspring','POST',{
+        root : $('#tag-selecter').val(),
     },function(data){
         console.log(data);
         refractNodeInfo(data);
@@ -374,6 +374,12 @@ function refractNodeInfo(nodes){
     nodes = moveNodeToParent(nodes);
 
     console.log(nodes);
+
+    try {
+        nodes[0]['childs'] = nodes[0]['childs'][0]['childs']; //因項目階層邏輯較特別，故直接往上挪動一層
+    } catch (error) {
+        console.log(error)
+    }
 
     renderTreeNode($(".tree > ul"),nodes[0],0);
 }
