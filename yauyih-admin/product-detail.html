@@ -144,7 +144,12 @@
 
                 exec(url,'POST',data,function(data){
                     console.log(data);
-                    window.location.reload();
+                    try{
+                        window.location.assign(window.location.pathname+'?product_id='+data['product']['productId']);
+                    }catch(e){
+                        window.location.assign('product-list.html');
+                    }
+
                 });
                 
             });
