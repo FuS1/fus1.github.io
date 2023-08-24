@@ -44,7 +44,7 @@ body::before{
       breadcrumbs
     </div>
     <div id="game-container" class="container injwang-mx-auto injwang-bg-white injwang-max-w-[1180px] lg:injwang-shadow-md">
-      <iframe src="29-content.html" width="1152" height="720"> 
+      <iframe src="29-content.html" width="666" height="720"> 
 
       </iframe>
     </div>
@@ -105,10 +105,10 @@ body::before{
         var gameContainerWidth  = $('#game-container').width();
         var gameContainerHeight = $('#game-container').height();
 
-        var isLimitByWidth = (gameContainerWidth / 1152) < (gameContainerHeight / 440);
+        var isLimitByWidth = (gameContainerWidth / 666) < (gameContainerHeight / 440);
 
-        var scale = Math.min(gameContainerWidth / 1152 , gameContainerHeight / 440 )
-        console.log(scale,gameContainerWidth / 1152 , gameContainerHeight / 440);
+        var scale = Math.min(gameContainerWidth / 666 , gameContainerHeight / 440 )
+        console.log(scale,gameContainerWidth / 666 , gameContainerHeight / 440);
 
         $('#game-container > iframe').css('transform', 'scale('+scale+')')
         $('#game-container > iframe').css('transform-origin', (isLimitByWidth ? 'left':'50%')+' top')
