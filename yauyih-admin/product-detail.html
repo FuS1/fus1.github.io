@@ -164,11 +164,12 @@
             //當品牌階層變更時，重新渲染下一層選擇器
             $('[name=brandId]').on('change',function(){
                 
-                $('[name=brandTag-level-1]').empty('')
-                $('[name=brandTag-level-1]').append('<option value=""></option>');
+
                 exec('brand-tag/list','POST',{
                     brandId : $(this).val(),
                 },function(data){
+                    $('[name=brandTag-level-1]').empty('')
+                    $('[name=brandTag-level-1]').append('<option value=""></option>');
                     brandTagList=data;
                     brandTagList.filter(function(node){
                         return node['parent']===0;
@@ -181,7 +182,6 @@
                         height: '200px',
                         containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
                         placeholder: "第二層",
-                        allowClear: true,
                     })
                     
                     $('[name=brandTag-level-1]').trigger('change');
@@ -336,109 +336,6 @@
                     $(this).find('[name=cover]').attr('checked','checked');
                 }
                 idx++;
-            });
-        }
-
-        function initAttribute(attributes=[]){
-            
-            exec('attribute/list','GET',{
-
-            },function(data){
-                _dom_attrs = data['attribute'].map(function(attr){
-                    return '<option value="'+attr['attributeId']+'">'+attr['name']+'</option>';
-                }).join('');
-
-                attributes.forEach(function(attribute) {
-                    addAttributeSelector(attribute);
-                }); 
-            });
-        }
-
-        function addAttributeSelector(attribute){
-            let _dom = $(  `<div class="flex my-1 attribute-item">
-                                <div class="w-64 h-10">
-                                    <select class="selector-with-filter" name="attribute">
-                                        <option value="">　</option>
-                                        `+_dom_attrs+`
-                                    </select>
-                                </div>
-                                <div>
-                                    <input type="input" name="attribute-value" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入屬性內容">
-                                </div>
-                                <span class="btn hover:text-red-900 cursor-pointer level-remove ml-2 pt-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
-                            </div>`
-                        );
-            if(attribute){
-                _dom.attr("is-new","false");
-                _dom.find('[name=attribute-value]').val(attribute['value']);
-            }else{
-                _dom.attr("is-new","true");
-            }
-            $('attributes').append(_dom)
-            _dom.find('.fa-trash-can').on('click',function(){
-
-                //若為本次新增的，非DB原有的，則直接刪除
-                if($(this).closest('.attribute-item').attr("is-new")=="true" ){
-                    $(this).closest('.attribute-item').remove();
-                }else{
-                    $(this).closest('.attribute-item').addClass('hidden').attr('remove',true);
-                }
-
-            });
-            _dom.find('.selector-with-filter').select2({
-                width: '100%',
-                height: '200px',
-                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
-                placeholder: "請選擇屬性",
-                value:10
-            }).on('select2:open', function () {
-                let a = $(this).data('select2');
-
-                let _dom_result = a.$results.parents('.select2-results');
-                if(_dom_result.find('.create-new-attribute-button').length <= 0){
-                    _dom_result.append('<div href="#" class="p-3 text-sm text-center font-medium text-yy-blue border-t border-gray-200 rounded-b-lg bg-gray-50 hover:bg-gray-100 cursor-pointer create-new-attribute-button"><i class="fa-solid fa-circle-plus"></i>　增加自訂屬性</div>')
-                    .on('click', function (b) {
-                        Swal.fire({
-                            title: '請輸入新屬性名稱',
-                            input: 'text',
-                            inputAttributes: {
-                                autocapitalize: 'off'
-                            },
-                            allowOutsideClick: false,
-                            showCancelButton: true,
-                            confirmButtonText: '儲存',
-                            cancelButtonText: '取消',
-                            showLoaderOnConfirm: true,
-                            reverseButtons:true,
-                            preConfirm: function(input) {
-                                exec('attribute/new','POST',{
-                                    name: input,
-                                },function(data){
-                                    $("attributes .selector-with-filter").append('<option value="'+data['attribute']['attributeId']+'">'+data['attribute']['name']+'</option>').trigger('change');
-                                });
-                            }
-                        });
-                    });
-                }
-            });
-
-            if(attribute){
-                _dom.find('.selector-with-filter').val(attribute['attributeId']).trigger('change');
-            }
-        }
-
-        //取得目前的Attribute設定
-        function getAttribute(){
-            return $(".attribute-item").map(function(){
-                return {
-                    attributeId: Number($(this).find('[name=attribute]').val()),
-                    value: $(this).find('[name=attribute-value]').val(),
-                    del: $(this).attr('remove') == "true" ? true:false
-                }
-            })
-            .toArray()
-            .filter(function(item){
-                return item['attributeId'] !== 0;
             });
         }
 

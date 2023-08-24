@@ -58,35 +58,237 @@
     <!-- Custom Script -->
     <script src="lib/app.js"></script>
     <script>
+        var productData = null;
+        var brandTagList = [];
+        
+
+        const fileTpl = `<tr class="file-item">
+                            <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 text-center text-blueGray-700">
+                                <input type="radio" name="cover" value="">
+                                <label class="pl-2" name="file-idx">1</label>
+                            </td>
+                            <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0">
+                                <select name="language" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="zh" selected>繁體中文</option>
+                                    <option value="ch">簡體中文</option>
+                                    <option value="en">英文</option>
+                                    <option value="ja">日文</option>
+                                </select>
+                            </td>
+                            <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
+                                <div class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md hover:border-blue-500 hover:text-blue-500 block w-full h-10 p-2.5">
+                                    <a href="https://supr.link/9Q4Dc" target="_blank"></a>
+                                    <input type="file" class="hidden">
+                                </div>
+                            </td>
+                            <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 whitespace-nowrap">
+                                <span class="btn hover:text-yy-green cursor-pointer level-rename" title="更名"><i class="fa-solid fa-pen"></i></span>
+                                <span class="btn hover:text-red-900 cursor-pointer level-remove ml-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
+                            </td>
+                        </tr>`;
 
 		$(function() {
+            exec('brand/list','POST',{},function(brands){
+                brands.forEach(function(brand) {
+                    if(brand['brandName']=='明緯'){
+                        $('[name=brandId]').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
+                    }
+                });
+                $('[name=brandId]').trigger('change')
+            });
+
             $('.btn-cancel').on('click',function(){
                 location.assign('product-list.html');
             });
 
-            $('#input-group-search').on('change',function(){
-                setAttributeItem($(this).val());
-            });
-            
-            $('.js-example-basic-multiple').select2({
-                width: '100%',
-                height: '200px',
-                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent"
-            }).on('select2:open', function () {
-                let a = $(this).data('select2');
-
-                let _dom_result = a.$results.parents('.select2-results');
-                if(_dom_result.find('.create-new-attribute-button').length <= 0){
-                    _dom_result.append('<div href="#" class="p-3 text-sm text-center font-medium text-yy-blue border-t border-gray-200 rounded-b-lg bg-gray-50 hover:bg-gray-100 cursor-pointer create-new-attribute-button"><i class="fa-solid fa-circle-plus"></i>　增加自訂屬性</div>')
-                    .on('click', function (b) {
-                        
-                    });
+            $('.btn-save').on('click',function(){
+                let brandTagId = Number($('[name=brandTag-level-2]').val()!=="" ? $('[name=brandTag-level-2]').val() : $('[name=brandTag-level-1]').val());
+                let data = {
+                    productName:$('[name=productName]').val(),
+                    brandId:Number($('[name=brandId]').val()),
+                    brandTagId: brandTagId===0 ? null : brandTagId,
+                    tagId:Number('4'),
+                    introduction:$('[name=introduction]').val(),
+                    hot:Number($('[name=hot]').val()),
+                    status:Number($('[name=status]').val()),
+                    keywords:$('[name=keywords]').val().split(','),
+                    preview:$('[name=cover] > [name=file_img]').attr('value'),
+                    attributes:getAttribute(),
+                    // pdfs:getFile()
                 }
 
+                let errorMsg = [];
+                if(data['productName']==''){
+                    errorMsg.push('請輸入產品名稱');
+                }
+                if(data['brandTagId']==null){
+                    errorMsg.push('品牌階層請選擇至少兩層');
+                }
+                if( data['preview']=='' ){
+                    errorMsg.push('請上傳型錄封面');
+                }
+                if(errorMsg.length>0){
+                    showErrMsg(errorMsg.join("<br>"));
+                    return;
+                }
+
+                url = 'product/';
+
+                if(productData){
+                    url = url+'edit';
+                    data['productId'] = productData['productId'];
+                }else{
+                    url = url+'new';
+                }
+
+                exec(url,'POST',data,function(data){
+                    console.log(data);
+                    try{
+                        window.location.assign(window.location.pathname+'?product_id='+data['product']['productId']);
+                    }catch(e){
+                        window.location.assign('product-list.html');
+                    }
+
+                });
+                
+            });
+            
+            $('[name=brandId]').select2({
+                width: '100%',
+                height: '200px',
+                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                placeholder: "第一層",
+                disabled:true, //明緯僅有一項可選
+            })
+            
+            //當品牌階層變更時，重新渲染下一層選擇器
+            $('[name=brandId]').on('change',function(){
+                
+
+                exec('brand-tag/list','POST',{
+                    brandId : $(this).val(),
+                },function(data){
+                    $('[name=brandTag-level-1]').empty('')
+                    $('[name=brandTag-level-1]').append('<option value=""></option>');
+                    brandTagList=data;
+                    brandTagList.filter(function(node){
+                        return node['parent']===0;
+                    }).forEach(function(node) {
+                        $('[name=brandTag-level-1]').append('<option value="'+node['brandTagId']+'">'+node['name']+'</option>');
+                    });
+                    
+                    $('[name=brandTag-level-1]').select2({
+                        width: '100%',
+                        height: '200px',
+                        containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                        placeholder: "第二層",
+                    })
+                    
+                    $('[name=brandTag-level-1]').trigger('change');
+                    
+                });
             });
 
+            $('[name=brandTag-level-1]').on('change',function(){
+                let brabdTagLevel1Value = $(this).val();
+
+                $('[name=brandTag-level-2]').empty('')
+                $('[name=brandTag-level-2]').append('<option value=""></option>');
+
+                if(brabdTagLevel1Value!==''){
+                    brandTagList.filter(function(node){
+                        return node['parent']==brabdTagLevel1Value;
+                    }).forEach(function(node) {
+                        $('[name=brandTag-level-2]').append('<option value="'+node['brandTagId']+'">'+node['name']+'</option>');
+                    });
+                }
+                $('[name=brandTag-level-2]').select2({
+                    width: '100%',
+                    height: '200px',
+                    containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                    placeholder: "第三層",
+                    allowClear: true,
+                })
+            });
+
+            $(".add-attribute-btn").on('click',function(){
+                addAttributeSelector()
+            });
+
+            initImageFileDom($('[name=cover]'));
+
+            if(getUrlParam("product_id")!=''){
+                exec('product/'+getUrlParam("product_id"),'POST',{
+
+                },function(data){
+                    productData=data['product'];
+                    console.log(productData)
+                    setFormValue($('form'),productData);
+                    initFiles(productData['pdfs']);
+                    initAttribute(productData['attributes']);
+                    $('[name=keywords]').val(productData['keywords'].join(','))
+                    $('[name=brandId]').val(productData['brandId']).trigger('change');
+                    $('[name=cover] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+productData['preview']);
+                    setTimeout(function() {
+                        $('[name=brandTag-level-1]').val( _.findWhere(productData['brandTags'], {parent: 0})['tagId'] ).trigger('change');    
+                        setTimeout(function() {
+                            $('[name=brandTag-level-2]').val(productData['brandTag']).trigger('change');
+                        }, 300);
+                    }, 300);
+                });
+            }else{
+
+                initFiles();
+                initAttribute();
+            }
+
         });
-        
+        function initFiles(files=[]){
+            //將檔案種類分組
+            files = files.reduce(function(group, file) {
+                group[file.label] = group[file.label] ?? [];
+                group[file.label].push(file);
+                return group;
+            }, {});
+
+            for(var type in files){
+                files[type].forEach(function(file) {
+                    let dom = $(fileTpl).clone();
+                    dom.attr("productDocId",file['productDocId']);
+                    dom.find('[name=language]').val(file['language']);
+                    dom.find('[name=name]').val(file['name']);
+                    dom.find('[name=cover]').val(file['link']);
+                    dom.find('a').attr('href','https://drive.google.com/file/d/'+file['link']+'/preview');
+                    dom.find('a').text(file['pdfFileName']||'這裡還沒串');
+                    if(productData && productData['preview'] == file['link']){
+                        dom.find('[name=cover]').attr('checked','checked');
+                    }
+                    $('[name='+type+'] tbody').append(dom);
+                });
+
+                // resetFilesIdx($('section[name='+type+'] table'));
+            }
+        }
+        function getFile(){
+            return $(".file-item").map(function(){
+                let data = {
+                    label:$(this).closest('section').attr('name'),
+                    link:$(this).find('[name=cover]').val(),
+                    language: $(this).find('[name=language]').val(),
+                }
+                if($(this).attr('productDocId') !== ""){
+                    data['productDocId'] = $(this).attr('productDocId')
+                }
+                if($(this).attr('remove') == "true"){
+                    data['del'] = true;
+                }
+                return data;
+            })
+            .toArray()
+            .filter(function(item){
+                return item['link'] !== "";
+            });
+        }
     </script>
 </head>
 
@@ -103,14 +305,14 @@
                 <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 btn-save">儲存</button>	
             </div>
             <div class="container mx-auto px-2 md:px-8">
-                <form id="mainfood-form">
+                <form id="form">
 				    <div class="flex my-2 required-star ">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">產品名稱</span>
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
+                            <input type="input" name="productName" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入名稱" required>
                         </div>
                     </div>
                     <div class="flex my-2 required-star ">
@@ -119,8 +321,8 @@
                         </label>
                         
                         <div class="w-full grid grid-cols-1 gap-2 md:grid-cols-3">
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">尺寸</option>
+                            <select class="js-example-basic-multiple" name="brandId" level="0">
+                                <!-- <option value="AL">尺寸</option>
                                 <option value="WY">顏色</option>
                                 <option value="AL">規格</option>
                                 <option value="WY">種類</option>
@@ -130,25 +332,50 @@
                                 <option value="WY">流明</option>
                                 <option value="AL">馬力</option>
                                 <option value="WY">安培</option>
-                                <option value="WY">伏特</option>
+                                <option value="WY">伏特</option> -->
                             </select>
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
+                            <select class="js-example-basic-multiple" name="brandTag-level-1" level="1">
+                                <option value=""></option>
                             </select>
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
+                            <select class="js-example-basic-multiple" name="brandTag-level-2" level="2">
+                                <option value=""></option>
                             </select>
                         </div>
                     </div>
-                    <div class="flex my-2 required-star">
+                    <div class="flex my-2 required-star ">
+                        <label>
+                            <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">項目階層</span>
+                        </label>
+                        
+                        <div class="w-full grid grid-cols-1 gap-2 md:grid-cols-3">
+                            <select class="js-example-basic-multiple" name="tagId" level="0">
+                                <!-- <option value="AL">尺寸</option>
+                                <option value="WY">顏色</option>
+                                <option value="AL">規格</option>
+                                <option value="WY">種類</option>
+                                <option value="AL">孔徑</option>
+                                <option value="WY">螺旋數</option>
+                                <option value="AL">通量</option>
+                                <option value="WY">流明</option>
+                                <option value="AL">馬力</option>
+                                <option value="WY">安培</option>
+                                <option value="WY">伏特</option> -->
+                            </select>
+                            <select class="js-example-basic-multiple" name="tag-level-1" level="1">
+                                <option value=""></option>
+                            </select>
+                            <select class="js-example-basic-multiple" name="tag-level-2" level="2">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex my-2">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">內容描述</span>
                         </label>
                         
                         <div class="w-full">
-                            <textarea class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4" ></textarea>
+                            <textarea name="introduction" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4" ></textarea>
                         </div>
                     </div>
                     <div class="flex my-2">
@@ -157,7 +384,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="number" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="0">
+                            <input name="hot" type="number" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="0">
                         </div>
                     </div>
                     <div class="flex my-2">
@@ -166,7 +393,7 @@
                         </label>
                         
                         <div class="w-full">
-                            <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
+                            <select id="is_active" name="status" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
                                 <option value="1">啟用</option>
                                 <option value="0">停用</option>
                             </select>
@@ -178,20 +405,22 @@
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
+                            <input type="input" name="keywords" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" >
                             <p class="mt-1 text-xs text-input-hint">請使用半形符號「 , 」做為分隔，（如：伺服器,馬達）</p>
                         </div>
                     </div>
                 </form>
                 <hr class="my-6">
-                <div class="flex my-2 required-star ">
+
+                <div class="flex my-2 required-star">
                     <label>
                         <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">型錄封面</span>
                     </label>
                     
-                    <div class="w-full">
-                        <img class="border-2 object-cover w-72 h-56 md:w-[585px] md:h-[450px] rounded-lg" src="https://picsum.photos/390/300">
-                        <button type="button" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                    <div class="w-full" name="cover">
+                        <img class="border-2 object-cover w-72 h-56 md:w-[585px] md:h-[450px] rounded-lg" name="file_img"><!--src="https://picsum.photos/390/300">-->
+                        <button type="button" name="file_btn" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                        <input name="file_input" class="hidden" type="file" accept="image/png, image/gif, image/jpeg">
                         <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 ____ x ____ px</p>
                     </div>
                 </div>
@@ -204,28 +433,31 @@
                 <hr class="my-6">
                 <section>
                     <div class="py-2 mb-2">自訂屬性</div>
-                    <div class="flex">
-                        <div class="w-64">
-                            <select class="js-example-basic-multiple" name="states[]">
-                                <option value="AL">尺寸</option>
-                                <option value="WY">顏色</option>
-                                <option value="AL">規格</option>
-                                <option value="WY">種類</option>
-                                <option value="AL">孔徑</option>
-                                <option value="WY">螺旋數</option>
-                                <option value="AL">通量</option>
-                                <option value="WY">流明</option>
-                                <option value="AL">馬力</option>
-                                <option value="WY">安培</option>
-                                <option value="WY">伏特</option>
-                            </select>
-                        </div>
-                        <div>
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入屬性內容">
-                        </div>
-                    </div>
+                        <attributes>
+                            <!-- <div class="flex">
+                                <div class="w-64">
+                                    <select class="js-example-basic-multiple" name="states[]">
+                                        <option value="AL">尺寸</option>
+                                        <option value="WY">顏色</option>
+                                        <option value="AL">規格</option>
+                                        <option value="WY">種類</option>
+                                        <option value="AL">孔徑</option>
+                                        <option value="WY">螺旋數</option>
+                                        <option value="AL">通量</option>
+                                        <option value="WY">流明</option>
+                                        <option value="AL">馬力</option>
+                                        <option value="WY">安培</option>
+                                        <option value="WY">伏特</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入屬性內容">
+                                </div>
+                            </div> -->
+                        </attributes>
+                    
                     <div class="text-center mt-2">
-                        <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900"><i class="fa-solid fa-circle-plus"></i> 增加屬性</button>	
+                        <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 add-attribute-btn"><i class="fa-solid fa-circle-plus"></i> 增加屬性</button>	
                     </div>
                 </section>
                 <hr class="my-6">
