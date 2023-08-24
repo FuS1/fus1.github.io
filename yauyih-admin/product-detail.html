@@ -91,7 +91,9 @@
             
             exec('brand/list','POST',{},function(brands){
                 brands.forEach(function(brand) {
-                    $('[name=brandId]').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
+                    if(brand['brandName']!='明緯'){
+                        $('[name=brandId]').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
+                    }
                 });
                 $('[name=brandId]').trigger('change')
             });
@@ -106,7 +108,7 @@
                     productName:$('[name=productName]').val(),
                     brandId:Number($('[name=brandId]').val()),
                     brandTagId: brandTagId===0 ? null : brandTagId,
-                    tag:Number('4'),
+                    tagId:Number('4'),
                     introduction:$('[name=introduction]').val(),
                     hot:Number($('[name=hot]').val()),
                     status:Number($('[name=status]').val()),
@@ -123,7 +125,7 @@
                 if(data['brandTagId']==null){
                     errorMsg.push('品牌階層請選擇至少兩層');
                 }
-                if( ! _.findWhere(data['pdfs'], {lable:'產品型錄'}) ){
+                if( ! _.findWhere(data['pdfs'], {label:'產品型錄'}) ){
                     errorMsg.push('請上傳產品型錄');
                 }
                 if(errorMsg.length>0){
@@ -142,6 +144,7 @@
 
                 exec(url,'POST',data,function(data){
                     console.log(data);
+                    window.location.reload();
                 });
                 
             });
@@ -208,7 +211,7 @@
                 let table = $(this).closest('section').find('table');
 
                 let dom = $(fileTpl).clone();
-                dom.attr("is-new","true");
+                dom.attr("productDocId","");
                 dom.find('input[type=file]').click();
                 
                 dom.find('input[type=file]').on('change',function(e){
@@ -242,7 +245,7 @@
                 let table = $(this).closest('section').find('table');
 
                 //若為本次新增的，非DB原有的，則直接刪除
-                if($(this).closest('tr').attr("is-new")=="true" ){
+                if($(this).closest('tr').attr("productDocId")!=="" ){
                     $(this).closest('tr').remove();
                 }else{
                     $(this).closest('tr').addClass('hidden').attr('remove',true);
@@ -289,15 +292,17 @@
             
             for(var type in files){
                 files[type].forEach(function(file) {
-                    let _fileTpl = $(fileTpl).clone();
-                    _fileTpl.attr("is-new","false");
-                    _fileTpl.find('[name=language]').val(file['language']);
-                    _fileTpl.find('[name=name]').val(file['name']);
-                    _fileTpl.find('[name=cover]').val(file['link']);
+                    let dom = $(fileTpl).clone();
+                    dom.attr("productDocId",file['productDocId']);
+                    dom.find('[name=language]').val(file['language']);
+                    dom.find('[name=name]').val(file['name']);
+                    dom.find('[name=cover]').val(file['link']);
+                    dom.find('a').attr('href','https://drive.google.com/file/d/'+file['link']+'/preview');
+                    dom.find('a').text(file['pdfFileName']||'這裡還沒串');
                     if(productData && productData['preview'] == file['link']){
-                        _fileTpl.find('[name=cover]').attr('checked','checked');
+                        dom.find('[name=cover]').attr('checked','checked');
                     }
-                    $('[name='+type+'] tbody').append(_fileTpl);
+                    $('[name='+type+'] tbody').append(dom);
                 });
 
                 resetFilesIdx($('section[name='+type+'] table'));
@@ -434,12 +439,18 @@
 
         function getFile(){
             return $(".file-item").map(function(){
-                return {
+                let data = {
                     label:$(this).closest('section').attr('name'),
                     link:$(this).find('[name=cover]').val(),
                     language: $(this).find('[name=language]').val(),
-                    del: $(this).attr('remove') == "true" ? true:false
                 }
+                if($(this).attr('productDocId') !== ""){
+                    data['productDocId'] = $(this).attr('productDocId')
+                }
+                if($(this).attr('remove') == "true"){
+                    data['del'] = true;
+                }
+                return data;
             })
             .toArray()
             .filter(function(item){
