@@ -16,6 +16,7 @@
 
 body {
   font-family: monospace;
+  overflow: hidden;
 }
 
 body::before{
@@ -33,75 +34,94 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
-    <div class="injwang-pt-1 lg:injwang-pt-2 lg:injwang-pt-6 injwang-mb-1 lg:injwang-mb-6">
-      <div class="injwang-flex injwang-items-center injwang-ml-20 injwang-w-[90%]">
-        <div class="injwang-w-5/6 injwang-relative">
-          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Guess Who</div>
-          <div>
-            Fill In the blanks complete the sentences.
+  <header id="header" class="header injwang-bg-cyan-950 injwang-text-white injwang-h-20" data-scrollto-offset="0">
+    <div class="container d-flex align-items-center justify-content-between">
+        Header
+    </div>
+  </header>
+  <main id="main" class="game">
+    <div class="breadcrumbs injwang-bg-cyan-950">
+      breadcrumbs
+    </div>
+    <div id="game-container" class="container injwang-mx-auto injwang-bg-white injwang-max-w-[1180px] lg:injwang-shadow-md">
+      <iframe src="29-content.html" width="1152" height="720"> 
+
+      </iframe>
+    </div>
+  </main>
+  <footer id="footer" class="footer injwang-bg-cyan-950 injwang-text-white">
+    <div class="footer-legal text-center">
+        <div class="container d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center">
+
+            <div class="d-flex flex-column align-items-center align-items-lg-start">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>漢珍數位圖書</span></strong>. All Rights Reserved
+                </div>
+
+            </div>
+        </div>
+    </div>
+  </footer>
+  <div class="modal" id="login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">登入</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="input-group mb-3">
+                      <span class="input-group-text" id="username"><i class="bi bi-person-circle"></i></span>
+                      <input type="text" class="form-control" placeholder="帳號" aria-label="Username"
+                          aria-describedby="username">
+                  </div>
+                  <div class="input-group mb-3">
+                      <span class="input-group-text" id="password"><i class="bi bi-key"></i></span>
+                      <input type="text" class="form-control" placeholder="密碼" aria-label="Password"
+                          aria-describedby="password">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn" data-bs-dismiss="modal">LOGIN</button>
+              </div>
           </div>
-        </div>
-        <div class="injwang-ml-10 injwang-w-1/8">
-          <img class="injwang-w-full" src="../../public/imgs/games/11-5/29/child.jpg">
-        </div>
       </div>
-    </div>
-    <div class="droppable injwang-min-h-5 injwang-p-3 injwang-border-2 injwang-border-dashed injwang-border-amber-900 injwang-rounded injwang-flex injwang-my-2  lg:injwang-my-6 injwang-bg-slate-100 injwang-w-[90%] injwang-mx-auto ui-droppable" data-is_stock_area="yes">
-      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="sing" style="position: relative;">sing</div>
-      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="pretend" style="position: relative;">pretend</div>
-      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
-      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="fight" style="position: relative;">fight</div>
-    </div>
-    <div class="injwang-mx-0 injwang-my-0 lg:injwang-mx-[2.5rem] injwang-p-2 lg:injwang-p-[22px] injwang-grid injwang-grid-cols-2 injwang-gap-2" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;">
-      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
-        <div>I am a grasshopper.</div>
-        <div class="injwang-flex">
-          I know how to 
-          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="jump"></div>
-          .
-        </div>
-      </div>
-      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
-        <div>I am a cicada.</div>
-        <div class="injwang-flex">
-          I know how to 
-          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="sing"></div>
-          .
-        </div>
-      </div>
-      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
-        <div>I am a male stag bettle.</div>
-        <div class="injwang-flex">
-          I know how to 
-          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="fight"></div>
-          .
-        </div>
-      </div>
-      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
-        <div>I am a stick insect.</div>
-        <div class="injwang-flex">
-          I know how to 
-          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="pretend"></div>
-          .
-        </div>
-      </div>
-    </div>
   </div>
 </body>
-
-
-
 <script>
-    /**
-     * 串接系統設定值
-     * backUrl 為遊戲完成時，要跳轉回的路由
-     * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
-     * pleaseRotationImgUrl 為提示使用將平板轉為橫式
-     */
-     var backUrl = "../../index.html",
-        useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
-        pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
+
+
+  var useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
+      pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
+
+  $(function(){
+
+
+    var resize = function(){
+        $('#game-container').height(window.outerHeight - $('#header').height() - $('.breadcrumbs').height() - $('#footer').height())
+        var gameIframeWidth  = $('#game-container > iframe').width();
+        var gameIframeHeight = $('#game-container > iframe').height();
+        var gameContainerWidth  = $('#game-container').width();
+        var gameContainerHeight = $('#game-container').height();
+
+        var isLimitByWidth = (gameContainerWidth / 1152) < (gameContainerHeight / 440);
+
+        var scale = Math.min(gameContainerWidth / 1152 , gameContainerHeight / 440 )
+        console.log(scale,gameContainerWidth / 1152 , gameContainerHeight / 440);
+
+        $('#game-container > iframe').css('transform', 'scale('+scale+')')
+        $('#game-container > iframe').css('transform-origin', (isLimitByWidth ? 'left':'50%')+' top')
+    }
+    resize();
+    $( window ).on( "resize", resize);
+    $( window ).on("orientationchange",function(){
+      window.location.reload();
+    })
+  });
+
+
 </script>
-<script src="../../public/js/games/drag.js"></script>
+
+
+

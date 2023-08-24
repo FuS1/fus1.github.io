@@ -1,0 +1,74 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
+  <script src="../../public/js/games/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
+  <script src="../../public/js/games/bootstrap.bundle.min.js"></script>
+  <script src="../../public/js/games/sweetalert2.min.js"></script>
+  <script src="../../public/js/games/tailwindcss.min.js"></script>
+  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>
+  <script>tailwind.config = { prefix: 'injwang-' }</script>
+</head>
+<body class="overflow-hidden injwang-bg-transparent w-[1152px] h-[720px]">
+<game-content class="injwang-mx-auto">
+    <div class="injwang-pt-1 injwang-mb-1 ">
+        <div class="injwang-flex injwang-items-center injwang-ml-20 injwang-w-[95%]">
+          <div class="injwang-w-5/6 injwang-relative">
+            <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+            <div class="injwang-text-orange-500 injwang-text-2xl injwang-border-b">Guess Who</div>
+            <div>
+              Fill In the blanks complete the sentences.
+            </div>
+          </div>
+          <div class="injwang-ml-10 injwang-w-1/8">
+            <img class="injwang-w-full" src="../../public/imgs/games/11-5/29/child.jpg">
+          </div>
+        </div>
+      </div>
+      <div class="droppable injwang-min-h-5 injwang-p-3 injwang-border-2 injwang-border-dashed injwang-border-amber-900 injwang-rounded injwang-flex injwang-my-2 injwang-bg-slate-100 injwang-w-[95%] injwang-mx-auto ui-droppable" data-is_stock_area="yes">
+        <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="sing" style="position: relative;">sing</div>
+        <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="pretend" style="position: relative;">pretend</div>
+        <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
+        <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-orange-700 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="fight" style="position: relative;">fight</div>
+      </div>
+      <div class="injwang-mx-0 injwang-my-0 injwang-p-2 injwang-grid injwang-grid-cols-2 injwang-gap-2 injwang-mx-auto injwang-w-[95%]" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;">
+        <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 injwang-my-2 injwang-leading-8 ">
+          <div>I am a grasshopper.</div>
+          <div class="injwang-flex">
+            I know how to 
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="jump"></div>
+            .
+          </div>
+        </div>
+        <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 injwang-my-2 injwang-leading-8 ">
+          <div>I am a cicada.</div>
+          <div class="injwang-flex">
+            I know how to 
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="sing"></div>
+            .
+          </div>
+        </div>
+        <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 injwang-my-2 injwang-leading-8 ">
+          <div>I am a male stag bettle.</div>
+          <div class="injwang-flex">
+            I know how to 
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="fight"></div>
+            .
+          </div>
+        </div>
+        <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 injwang-my-2 injwang-leading-8 ">
+          <div>I am a stick insect.</div>
+          <div class="injwang-flex">
+            I know how to 
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="pretend"></div>
+            .
+          </div>
+        </div>
+    </div>
+</game-content>
+
+</body>
+<script src="../../public/js/games/drag.js"></script>
