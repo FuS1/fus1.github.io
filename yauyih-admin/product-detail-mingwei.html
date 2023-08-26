@@ -87,7 +87,7 @@
                                 </div>
                             </file-group>`;
 
-        const fileTpl = `<tr productDocId="">
+        const fileTpl = `<tr class="file-item" productDocId="">
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0">
                                 <select name="language" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <option value="zh" selected>繁體中文</option>
@@ -97,7 +97,7 @@
                                 </select>
                             </td>
                             <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
-                                <input type="input" name="groupName" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入型錄網址">
+                                <input type="input" name="link" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入型錄網址">
                             </td>
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 whitespace-nowrap">
                                 <span class="btn hover:text-red-800 cursor-pointer level-remove ml-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
@@ -139,7 +139,7 @@
                     keywords:$('[name=keywords]').val().split(','),
                     preview:$('[name=cover] > [name=file_img]').attr('value'),
                     attributes:getAttribute(),
-                    // pdfs:getFile()
+                    pdfs:getFile()
                 }
 
                 let errorMsg = [];
@@ -376,18 +376,17 @@
 
             for(var type in files){
                 files[type].forEach(function(file) {
+
+            for(var type in fileGroup){
+                let groupDom = $(fileGroupTpl).clone();
+                fileGroup[type].forEach(function(file) {
                     let dom = $(fileTpl).clone();
                     dom.attr("productDocId",file['productDocId']);
                     dom.find('[name=language]').val(file['language']);
-                    dom.find('[name=name]').val(file['name']);
-                    dom.find('[name=cover]').val(file['link']);
-                    dom.find('a').attr('href','https://drive.google.com/file/d/'+file['link']+'/preview');
-                    dom.find('a').text(file['pdfFileName']||'這裡還沒串');
-                    if(productData && productData['preview'] == file['link']){
-                        dom.find('[name=cover]').attr('checked','checked');
-                    }
-                    $('[name='+type+'] tbody').append(dom);
+                    dom.find('[name=link]').val(file['link']);
+                    fileGroup.find('tbody').append(dom);
                 });
+                $('file-group-warp').append(groupDom)
             }
         }
 
@@ -400,8 +399,8 @@
         function getFile(){
             return $(".file-item").map(function(){
                 let data = {
-                    label:$(this).closest('section').attr('name'),
-                    link:$(this).find('[name=cover]').val(),
+                    label:$(this).closest('file-group').find('[name=groupName]').val(),
+                    link:$(this).find('[name=link]').val(),
                     language: $(this).find('[name=language]').val(),
                 }
                 if($(this).attr('productDocId') !== ""){
