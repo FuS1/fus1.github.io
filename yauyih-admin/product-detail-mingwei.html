@@ -368,14 +368,13 @@
         });
         function initFiles(files=[]){
             //將檔案種類分組
-            files = files.reduce(function(group, file) {
+            fileGroup = files.reduce(function(group, file) {
                 group[file.label] = group[file.label] ?? [];
                 group[file.label].push(file);
                 return group;
             }, {});
 
-            for(var type in files){
-                files[type].forEach(function(file) {
+            console.log(fileGroup);
 
             for(var type in fileGroup){
                 let groupDom = $(fileGroupTpl).clone();
