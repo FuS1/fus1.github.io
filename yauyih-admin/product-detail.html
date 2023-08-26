@@ -98,17 +98,25 @@
                 $('[name=brandId]').trigger('change')
             });
 
+            exec('tag/list-root','POST',{},function(tags){
+                tags.forEach(function(tag) {
+                    $('[name=tagId]').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
+                });
+                $('[name=tagId]').trigger('change')
+            });
+
             $('.btn-cancel').on('click',function(){
                 location.assign('product-list.html');
             });
 
             $('.btn-save').on('click',function(){
-                let brandTagId = Number($('[name=brandTag-level-2]').val()!=="" ? $('[name=brandTag-level-2]').val() : $('[name=brandTag-level-1]').val());
+                let brandTagId = Number(isEmpty($('[name=brandTag-level-2]').val()) ? $('[name=brandTag-level-1]').val() : $('[name=brandTag-level-2]').val());
+                let tagId = Number(isEmpty($('[name=tag-level-2]').val()) ? $('[name=tag-level-1]').val() : $('[name=tag-level-2]').val());
                 let data = {
                     productName:$('[name=productName]').val(),
                     brandId:Number($('[name=brandId]').val()),
                     brandTagId: brandTagId===0 ? null : brandTagId,
-                    tagId:Number('4'),
+                    tagId:tagId===0 ? null : tagId,
                     introduction:$('[name=introduction]').val(),
                     hot:Number($('[name=hot]').val()),
                     status:Number($('[name=status]').val()),
@@ -211,6 +219,64 @@
                 })
             });
 
+            $('[name=tagId]').select2({
+                width: '100%',
+                height: '200px',
+                containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                placeholder: "第一層",
+            })
+
+            //當品牌階層變更時，重新渲染下一層選擇器
+            $('[name=tagId]').on('change',function(){
+                let selected_tagId = $(this).val();
+
+                exec('tag/offspring','POST',{
+                    root :selected_tagId,
+                },function(data){
+                    $('[name=tag-level-1]').empty('')
+                    $('[name=tag-level-1]').append('<option value=""></option>');
+                    tagList=data;
+                    console.log(tagList);
+                    tagList.filter(function(node){
+                        return node['parent']==selected_tagId;
+                    }).forEach(function(node) {
+                        $('[name=tag-level-1]').append('<option value="'+node['tagId']+'">'+node['name']+'</option>');
+                    });
+                    
+                    $('[name=tag-level-1]').select2({
+                        width: '100%',
+                        height: '200px',
+                        containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                        placeholder: "第二層",
+                    })
+                    
+                    $('[name=tag-level-1]').trigger('change');
+                    
+                });
+            });
+
+            $('[name=tag-level-1]').on('change',function(){
+                let brabdTagLevel1Value = $(this).val();
+
+                $('[name=tag-level-2]').empty('')
+                $('[name=tag-level-2]').append('<option value=""></option>');
+
+                if(brabdTagLevel1Value!==''){
+                    tagList.filter(function(node){
+                        return node['parent']==brabdTagLevel1Value;
+                    }).forEach(function(node) {
+                        $('[name=tag-level-2]').append('<option value="'+node['tagId']+'">'+node['name']+'</option>');
+                    });
+                }
+                $('[name=tag-level-2]').select2({
+                    width: '100%',
+                    height: '200px',
+                    containerCssClass : "bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 !h-full !bg-transparent",
+                    placeholder: "第三層",
+                    allowClear: true,
+                })
+            });
+
             //檔案的新增按鈕
             $(document).on('click', '.add-file-btn', function() {
                 let table = $(this).closest('section').find('table');
@@ -271,14 +337,19 @@
                     setFormValue($('form'),productData);
                     initFiles(productData['pdfs']);
                     initAttribute(productData['attributes']);
+                    productData['brandTags'] = _.sortBy(productData['brandTags'], 'brandTagId');
+                    productData['tags'] = _.sortBy(productData['tags'], 'tagId');
                     $('[name=keywords]').val(productData['keywords'].join(','))
                     $('[name=brandId]').val(productData['brandId']).trigger('change');
+                    $('[name=tagId]').val(productData['tags'][0]['tagId']).trigger('change'); //因項目階層資料結構不同，故從Tags中取第一筆
                     setTimeout(function() {
-                        $('[name=brandTag-level-1]').val( _.findWhere(productData['brandTags'], {parent: 0})['tagId'] ).trigger('change');    
+                        $('[name=brandTag-level-1]').val( (_.first(productData['brandTags'])||{})['brandTagId'] ).trigger('change');    
+                        $('[name=tag-level-1]').val( (productData['tags'][1]||{})['tagId'] ).trigger('change');    //因項目階層資料結構不同，故從Tags中取第二筆
                         setTimeout(function() {
-                            $('[name=brandTag-level-2]').val(productData['brandTag']).trigger('change');
+                            $('[name=brandTag-level-2]').val(productData['brandTagId']).trigger('change');
+                            $('[name=tag-level-2]').val(productData['tagId']).trigger('change');
                         }, 300);
-                    }, 300);
+                    }, 1000);
                 });
             }else{
                 initFiles();
@@ -303,7 +374,7 @@
                     dom.find('[name=name]').val(file['name']);
                     dom.find('[name=cover]').val(file['link']);
                     dom.find('a').attr('href','https://drive.google.com/file/d/'+file['link']+'/preview');
-                    dom.find('a').text(file['pdfFileName']||'這裡還沒串');
+                    dom.find('a').text(file['docOriginName']);
                     if(productData && productData['preview'] == file['link']){
                         dom.find('[name=cover]').attr('checked','checked');
                     }

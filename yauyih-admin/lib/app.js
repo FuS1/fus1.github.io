@@ -412,6 +412,9 @@ function getAttribute(){
   });
 }
 
+function isEmpty(v){
+    return v==="" ? true : !v;
+}
 
 $(function() {
 
