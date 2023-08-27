@@ -301,13 +301,7 @@
             $(document).on('click', '.remove-file-group-btn', function() {
                 let fileGroup = $(this).closest('file-group');
                 //若為本次新增的，非DB原有的，則直接刪除
-                fileGroup.find('tr').each(function(){
-                    if($(this).attr("productDocId")!=="" ){
-                        $(this).remove();
-                    }else{
-                        $(this).addClass('hidden').attr('remove',true);
-                    }
-                });
+                fileGroup.find('tr .fa-trash-can').click();
                 fileGroup.addClass('hidden');
             });
 
@@ -324,9 +318,9 @@
 
                 //若為本次新增的，非DB原有的，則直接刪除
                 if($(this).closest('tr').attr("productDocId")!=="" ){
-                    $(this).closest('tr').remove();
-                }else{
                     $(this).closest('tr').addClass('hidden').attr('remove',true);
+                }else{
+                    $(this).closest('tr').remove();
                 }
             });
 
@@ -378,12 +372,13 @@
 
             for(var type in fileGroup){
                 let groupDom = $(fileGroupTpl).clone();
+                groupDom.find('[name=groupName]').val(type)
                 fileGroup[type].forEach(function(file) {
                     let dom = $(fileTpl).clone();
                     dom.attr("productDocId",file['productDocId']);
                     dom.find('[name=language]').val(file['language']);
                     dom.find('[name=link]').val(file['link']);
-                    fileGroup.find('tbody').append(dom);
+                    groupDom.find('tbody').append(dom);
                 });
                 $('file-group-warp').append(groupDom)
             }
