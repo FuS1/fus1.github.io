@@ -59,6 +59,72 @@
     <script src="lib/app.js"></script>
     <script>
 
+
+        $(function() {
+            var newsData;
+            var form = $('#news-form');
+            $('.btn-cancel').on('click',function(){
+                location.assign('news-list.html');
+            });
+
+            $('.btn-save').on('click',function(){
+                let data = {
+                    newsId          : newsData['newsId'],
+                    title           : form.find('[name=title]').val(),
+                    tag             : form.find('[name=tag]').val(),
+                    publicDatetime  : form.find('[name=publicDatetime]').val(),
+                    text            : form.find('[name=text]').val(),
+                    isTop           : form.find('[name=isTop]').val(),
+                    status          : form.find('[name=status]').val(),
+                    previewGoogleId : form.find('[name=image_google] > [name=file_img]').attr('value'),
+                }
+
+                console.log(data);
+                let errorMsg = []
+                if(data['title']==''){
+                    errorMsg.push('請輸入標題')
+                }
+                if(data['tag']==''){
+                    errorMsg.push('請輸入類別')
+                }
+                if(data['publicDatetime']==''){
+                    errorMsg.push('請輸入上稿日期')
+                }
+                if(errorMsg.length>0){
+                    showErrMsg(errorMsg.join("<br>"));
+                    return;
+                }
+
+                exec('news/edit','POST',data,function(data){
+                    console.log(data)
+                    window.location.reload();
+                });
+            });
+
+            initImageFileDom(form.find('[name=image_google]'));
+            
+            exec('news/list','POST',{
+                'status':'all'
+            },function(data){
+
+                data['news'].forEach(function(news) {
+                    if( news['newsId'] == getUrlParam("news_id") ){
+                        newsData = news;
+                    }
+                });
+                
+                if(!newsData){
+                    showErrMsg('查無news');
+                    form.remove();
+                }
+                console.log(newsData);
+                setFormValue(form,newsData)
+
+                form.find('[name=publicDatetime]').val(moment(newsData['publicDatetime']).format('YYYY-MM-DD')) 
+                form.find('[name=image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+newsData['previewGoogleId']);
+
+            });
+        });
         
 
     </script>
@@ -73,19 +139,18 @@
 		</div>
 		<div class="w-full bg-gray-50">
             <div class="py-2.5 px-5 w-full text-right shadow-md mb-5">
-                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit text-red-700 font-medium rounded-lg text-sm no-underline hover:bg-red-300 btn-delete">刪除</button>	
                 <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300 btn-cancel">取消</button>	
-                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">儲存</button>	
+                <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 btn-save">儲存</button>	
             </div>
             <div class="container mx-auto px-2 md:px-8">
-                <form id="mainfood-form">
+                <form id="news-form">
 				    <div class="flex my-2 required-star ">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">標題</span>
                         </label>
                         
                         <div class="w-full">
-                            <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入標題" required>
+                            <input type="input" name="title" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入標題" required>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 gap-1 md:gap-6 md:grid-cols-2">
@@ -95,11 +160,9 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="行銷">
-                                    <option value="行銷" selected>行銷</option>
-                                    <option value="新聞">新聞</option>
-                                    <option value="活動">活動</option>
-                                </select>
+                                <div class="w-full">
+                                    <input type="input" name="tag" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-1">
+                                </div>
                             </div>
                         </div>
                         <div class="flex my-2 required-star">
@@ -108,7 +171,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
+                                <select id="status" name="status" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
                                     <option value="1" selected>啟用</option>
                                     <option value="0">停用</option>
                                 </select>
@@ -122,7 +185,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="date" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-1">
+                                <input type="date" name="publicDatetime" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-1">
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -132,8 +195,8 @@
                             
                             <div class="w-full">
                                 <select id="is_top" name="is_top" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" value="1">
-                                    <option value="1" selected>是</option>
-                                    <option value="0">否</option>
+                                    <option value="0" selected>否</option>
+                                    <option value="1">是</option>
                                 </select>
                                 <p class="mt-1 text-xs text-input-hint">置頂優先顯示首頁，其餘排序依據最新上稿日期優先顯示</p>
                             </div>
@@ -147,21 +210,22 @@
                         </label>
                         
                         <div class="w-full">
-                            <textarea class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4" ></textarea>
+                            <textarea name="text" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4" ></textarea>
                         </div>
                     </div>
+
                     <div class="flex my-2">
                         <label>
                             <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">封面圖片</span>
                         </label>
                         
-                        <div class="w-full">
-							<img class="border-2 object-cover w-72 h-56 md:w-[585px] md:h-[450px] rounded-lg" src="https://picsum.photos/390/300">
-                            <button type="button" min="0" max="1000" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
-                            <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 780x600 px</p>
+                        <div class="w-full" name="image_google">
+							<img class="border-2 object-cover w-48 h-48 md:w-[390px] md:h-[400px] rounded-lg" name="file_img"><!--src="https://picsum.photos/390/300">-->
+                            <button type="button" name="file_btn" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-72 md:w-[585px] p-2.5 mt-2">上傳 / 變更圖片</button>
+                            <input name="file_input" class="hidden" type="file" accept="image/png, image/gif, image/jpeg">
+                            <p class="mt-1 text-xs text-input-hint">建議尺寸 寬高 780x800 px</p>
                         </div>
                     </div>
-                    
                     
                 </form>
 

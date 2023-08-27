@@ -65,39 +65,47 @@
             var pageSize = 10;
             const getData = function(){
                 // api/products?brandId=7&limit=10&skip=0&tagIds=1,2,3&keyword=test&brandTagIds=1,2,3
-                exec('news/list','POST',{
+                let data = {
                     skip    : page -1 ,
-                    // productName : $('[name=productName]').val(),
-                    // keyword : $('[name=keyword]').val(),
-                    // brandId : $('[name=brandId]').val(),
-                    // lowerHot : $('[name=lowerHot]').val(),
-                    // upperHot : $('[name=upperHot]').val(),
-                    // status : $('[name=status]').val(),
-                },function(data){
+                    limit   : 10,
+                    title   : $('[name=title]').val(),
+                    tag     : $('[name=tag]').val(),
+                    startPublicDate : $('[name=startPublicDate]').val(),
+                    endPublicDate   : $('[name=endPublicDate]').val(),
+                    isTop   : $('[name=isTop]').val(),
+                    status  : $('[name=status]').val(),
+                };
+
+                for(let i in data){
+                    if(isEmpty(data[i])){
+                        delete data[i];
+                    }
+                }
+                exec('news/list','POST',data,function(data){
                     maxPage = Math.ceil(data['totalCount'] / pageSize);
+                    console.log(data);
                     table.setData(data['news'])
                     setPageBtnStatus();
                 });
 
             }
 
-
             var table = initTabulator("#table",{
-                data:[
-                    {id:1, name:"Billy Bob", type:"行銷", date:"2021-12-01",is_active:1},
-                    {id:2, name:"Mary May", type:"行銷", date:"2023-06-24",is_active:1},
-                    {id:3, name:"美福華君品爺", type:"活動", date:"2023-06-24",is_active:1},
-                    {id:4, name:"消息4", type:"活動", date:"2023-06-24",is_active:0},
-                    {id:5, name:"消息5", type:"新聞", date:"2023-06-24",is_active:0},
-                    {id:6, name:"B Bob", type:"行銷", date:"2021-12-01",is_active:1},
-                    {id:7, name:"Maray", type:"行銷", date:"2023-06-24",is_active:1},
-                    {id:8, name:"凱薩老爺", type:"活動", date:"2023-06-24",is_active:1},
-                    {id:9, name:"消息8736", type:"活動", date:"2023-06-24",is_active:0},
-                    {id:10, name:"這裡要串了後端，才會有分頁功能", type:"新聞", date:"2023-06-24",is_active:0},
-                ],
+                // data:[
+                //     {id:1, name:"Billy Bob", type:"行銷", date:"2021-12-01",is_active:1},
+                //     {id:2, name:"Mary May", type:"行銷", date:"2023-06-24",is_active:1},
+                //     {id:3, name:"美福華君品爺", type:"活動", date:"2023-06-24",is_active:1},
+                //     {id:4, name:"消息4", type:"活動", date:"2023-06-24",is_active:0},
+                //     {id:5, name:"消息5", type:"新聞", date:"2023-06-24",is_active:0},
+                //     {id:6, name:"B Bob", type:"行銷", date:"2021-12-01",is_active:1},
+                //     {id:7, name:"Maray", type:"行銷", date:"2023-06-24",is_active:1},
+                //     {id:8, name:"凱薩老爺", type:"活動", date:"2023-06-24",is_active:1},
+                //     {id:9, name:"消息8736", type:"活動", date:"2023-06-24",is_active:0},
+                //     {id:10, name:"這裡要串了後端，才會有分頁功能", type:"新聞", date:"2023-06-24",is_active:0},
+                // ],
                 columns: [{
                         title: "標題",
-                        field: "name",
+                        field: "title",
                         width: '',
                         responsive:false,
                         headerSort: false,
@@ -105,7 +113,7 @@
                     },
                     {
                         title: "類別",
-                        field: "type",
+                        field: "tag",
                         minWidth:50,
                         width: 50,
                         headerSort: false,
@@ -113,23 +121,26 @@
                     },
                     {
                         title: "上稿日期",
-                        field: "date",
+                        field: "publicDatetime",
                         width: 100,
                         headerSort: false,
                         vertAlign:'middle',
+                        formatter:function(cell,formatterParams){
+                            return moment(cell.getValue()).format('YYYY-MM-DD')
+                        }
                     },
                     {
                         title: "動作",
-                        field: "is_active",
+                        field: "status",
                         headerSort: false,
                         vertAlign:'middle',
                         responsive:false,
                         width: 100,
                         formatter:function(cell, formatterParams) {
-                            var is_active = cell.getRow().getData()['is_active'] ;
-                            return `<select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
-                                <option value="1" `+( is_active?'selected':'')+`>啟用</option>
-                                <option value="0" `+(!is_active?'selected':'')+`>停用</option>
+                            var status = cell.getRow().getData()['status'] ;
+                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['newsId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                                <option value="1" `+( status?'selected':'')+`>啟用</option>
+                                <option value="0" `+(!status?'selected':'')+`>停用</option>
                             </select>`;
                         }
                     },
@@ -142,7 +153,7 @@
                         width: 100,
                         formatter: function(cell, formatterParams) {
                             return  '<div class="inline-flex">'+
-										'<a href="news-detail.html?news_id='+cell.getRow().getData()['id']+'" class="p-2 text-white font-medium rounded-lg text-sm no-underline bg-yy-blue hover:bg-yy-blue-900">'+
+										'<a href="news-detail.html?news_id='+cell.getRow().getData()['newsId']+'" class="p-2 text-white font-medium rounded-lg text-sm no-underline bg-yy-blue hover:bg-yy-blue-900">'+
 											'編輯'+
 										'</a>'+
 									'</div>';
@@ -168,36 +179,67 @@
                 $("[name=status]").val($("[name=status] option:first").val());
                 $('.search-btn').click();
             });
+
             $('.search-btn').on('click',function(){
-                page=1;
                 getData();
             });
 
-            $('.prev-page-btn').on('click',function(){
-                page = Math.max(1,page-1);
-                getData();
-            });
+            $(document).on('change', '[name=status_selector]', function() {
+               
+               exec('news/edit','POST',{
+                   newsId: $(this).attr('rowDataId'),
+                   status:$(this).val(),
+               },function(data){
 
-            $('.next-page-btn').on('click',function(){
-                page = Math.min(maxPage,page+1);
-                getData();
-            });
+               });
+           });
+
             getData();
+
+            function setPageBtnStatus(){
+                if(maxPage > page){
+                    $('.next-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
+                }else{
+                    $('.next-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
+                }
+
+                if(page>1){
+                    $('.prev-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
+                }else{
+                    $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
+                }
+            }
+
+
+            function getQueryDataUrl(download=false){
+                let queryData = {
+                    skip    : page -1 ,
+                    limit:10,
+                    title : $('[name=title]').val(),
+                    tag :   $('[name=tag]').val(),
+                    startPublicDate : $('[name=startPublicDate]').val(),
+                    endPublicDate : $('[name=endPublicDate]').val(),
+                    isTop : $('[name=isTop]').val(),
+                    status : $('[name=status]').val(),
+                };
+
+                if(download){
+                    queryData['limit'] = 9999999;
+                }else{
+                    queryData['skip'] = page -1;
+                }
+
+                for (var i in queryData) {
+                    if(queryData[i]===""){
+                        delete queryData[i];
+                    }
+                }
+                console.log(queryData)
+                return new URLSearchParams(queryData).toString();
+            }
+
         });
 
-        function setPageBtnStatus(){
-            if(maxPage > page){
-                $('.next-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
-            }else{
-                $('.next-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
-            }
-
-            if(page>1){
-                $('.prev-page-btn').removeClass('bg-gray-300').addClass('bg-gray-800').addClass('hover:bg-gray-900');
-            }else{
-                $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
-            }
-        }
 
     </script>
 </head>
@@ -218,7 +260,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <input type="input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <input type="input" name="title" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </div>
                     </div>
@@ -230,9 +272,9 @@
                             
                             <div class="w-full">
                                 <div class="lg:flex">
-                                    <input type="date" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
+                                    <input type="date" name="startPublicDate" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
                                     <span class="p-0.5 hidden md:block"></span>
-                                    <input type="date" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
+                                    <input type="date" name="endPublicDate" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full lg:w-1/2 py-3 px-1">
                                 </div>
                             </div>
                         </div>
@@ -244,12 +286,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="type" name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value=""></option>
-                                    <option value="行銷">行銷</option>
-                                    <option value="新聞">新聞</option>
-                                    <option value="活動">活動</option>
-                                </select>
+                                <input type="input" name="tag" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </div>
                     </div>
@@ -259,8 +296,8 @@
                                 <span class="w-10 md:w-20 block mx-2 py-1 mb-2 w-fill text-base text-black">狀態</span>
                             </label>
                             <div class="w-full">
-                                <select id="is_active" name="is_active" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value=""></option>
+                                <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="all"></option>
                                     <option value="1">啟用</option>
                                     <option value="0">停用</option>
                                 </select>
@@ -274,7 +311,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="is_top" name="is_top" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <select id="isTop" name="isTop" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <option value=""></option>
                                     <option value="1">是</option>
                                     <option value="0">否</option>
@@ -284,8 +321,8 @@
                     </div>
                 </div>
                 <div class="py-2.5 px-1 w-full text-right">
-                    <button class="px-6 py-2.5 w-1/3 md:w-22 md:w-28 min-w-fit text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300">重設</a>	
-                    <button class="px-6 py-2.5 w-1/3 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900">搜尋</button>	
+                    <button class="px-6 py-2.5 w-1/3 md:w-22 md:w-28 min-w-fit text-black font-medium rounded-lg text-sm no-underline bg-gray-200 hover:bg-gray-300 form-reset-btn">重設</a>	
+                    <button class="px-6 py-2.5 w-1/3 md:w-22 md:w-28 min-w-fit ml-2 md:ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 search-btn">搜尋</button>	
                 </div>
             </div>
             <div class="w-11/12 mx-auto">
