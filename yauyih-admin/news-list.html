@@ -77,7 +77,13 @@
                 };
 
                 for(let i in data){
-                    if(isEmpty(data[i])){
+                    if(i == 'isTop'){
+                        if(data[i]==""){
+                            delete data[i];
+                        }else{
+                            data[i] = data[i]=="1" ? true:false;
+                        }
+                    }else if(isEmpty(data[i]) && i!='isTop'){
                         delete data[i];
                     }
                 }
