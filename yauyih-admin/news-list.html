@@ -82,7 +82,7 @@
                     }
                 }
                 exec('news/list','POST',data,function(data){
-                    maxPage = Math.ceil(data['totalCount'] / pageSize);
+                    maxPage = Math.ceil(data['total'] / pageSize);
                     console.log(data);
                     table.setData(data['news'])
                     setPageBtnStatus();
@@ -194,6 +194,16 @@
                });
            });
 
+            $('.prev-page-btn').on('click',function(){
+                page = Math.max(1,page-1);
+                getData();
+            });
+
+            $('.next-page-btn').on('click',function(){
+                page = Math.min(maxPage,page+1);
+                getData();
+            });
+            
             getData();
 
             function setPageBtnStatus(){
@@ -208,34 +218,6 @@
                 }else{
                     $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
                 }
-            }
-
-
-            function getQueryDataUrl(download=false){
-                let queryData = {
-                    skip    : page -1 ,
-                    limit:10,
-                    title : $('[name=title]').val(),
-                    tag :   $('[name=tag]').val(),
-                    startPublicDate : $('[name=startPublicDate]').val(),
-                    endPublicDate : $('[name=endPublicDate]').val(),
-                    isTop : $('[name=isTop]').val(),
-                    status : $('[name=status]').val(),
-                };
-
-                if(download){
-                    queryData['limit'] = 9999999;
-                }else{
-                    queryData['skip'] = page -1;
-                }
-
-                for (var i in queryData) {
-                    if(queryData[i]===""){
-                        delete queryData[i];
-                    }
-                }
-                console.log(queryData)
-                return new URLSearchParams(queryData).toString();
             }
 
         });
