@@ -35,7 +35,7 @@ body::before{
 
 </head>
 <body>
-  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1680px] injwang-h-full injwang-shadow-md">
+  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] injwang-h-full injwang-shadow-md">
     <div id="title-warp" class="injwang-pt-2 lg:injwang-pt-6">
       <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
         <div class="injwang-w-full injwang-relative">
@@ -47,7 +47,7 @@ body::before{
         </div>
       </div>
     </div>
-    <div id="app" class="injwang-w-full injwang-mt-[-25px]"></div>
+    <div id="app" class="injwang-w-full injwang-mt-[20px]"></div>
   </div>
 </body>
 
@@ -100,7 +100,7 @@ body::before{
 
   var config = {
     "prologue": "",
-    "maxRatio":0.85,
+    "maxRatio":0.6,
     "questions": [
       option[Math.floor(Math.random()*option.length)]
       // [
@@ -112,6 +112,8 @@ body::before{
       //   "../../public/imgs/games/07-1/26/baby.png        ,baby       ,6,../../public/imgs/games/07-1/26/mommy.png     ,mommy    ,4"
       // ]
     ],
+    "errorDuration": 3000,
+    "gapX": 6,
     "onFinish":function(){
       Swal.fire({
         title: '好棒唷！全部答對～',
@@ -125,8 +127,20 @@ body::before{
           window.location.reload()
         }
       });
+    },
+    "onError":function(){
+      setTimeout(function() {
+        Swal.fire({
+          title: '差一點點喔！請重新嘗試...',
+          showCancelButton: false,
+          confirmButtonText: '確認',
+          allowOutsideClick: true,
+          allowEscapeKey:false,
+          reverseButtons:true,
+        });  
+      }, 2000);
     }
   };
 
 </script> 
-<script type="module" crossorigin src="../../public/js/games/dot-link.js"></script>
+<script type="module" crossorigin src="../../public/js/games/dot-link-new.js"></script>

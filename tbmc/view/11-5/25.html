@@ -46,7 +46,7 @@ body::before{
         </div>
       </div>
     </div>
-    <div id="app" class="injwang-w-full injwang-mt-[-25px]"></div>
+    <div id="app" class="injwang-w-full injwang-mt-[20px]"></div>
   </div>
 
 </body>
@@ -65,7 +65,7 @@ body::before{
         pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
 
   var config = {
-    "maxRatio":0.65,
+    "maxRatio":0.6,
     "questions": [
       [
         "../../public/imgs/games/11-5/25/stick_insect.jpg, ,1,../../public/imgs/games/11-5/25/empty.png,stick insect,3",
@@ -74,6 +74,8 @@ body::before{
         "../../public/imgs/games/11-5/25/bee.jpg         , ,4,../../public/imgs/games/11-5/25/empty.png,bee         ,4",
       ]
     ],
+    "errorDuration": 3000,
+    "gapX": 6,
     "onFinish":function(){
       Swal.fire({
         title: '好棒唷！全部答對～',
@@ -87,8 +89,20 @@ body::before{
           window.location.reload()
         }
       });
+    },
+    "onError":function(){
+      setTimeout(function() {
+        Swal.fire({
+          title: '差一點點喔！請重新嘗試...',
+          showCancelButton: false,
+          confirmButtonText: '確認',
+          allowOutsideClick: true,
+          allowEscapeKey:false,
+          reverseButtons:true,
+        });  
+      }, 2000);
     }
   };
 
 </script> 
-<script type="module" crossorigin src="../../public/js/games/dot-link.js"></script>
+<script type="module" crossorigin src="../../public/js/games/dot-link-new.js"></script>
