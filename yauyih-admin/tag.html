@@ -377,12 +377,6 @@ function refractNodeInfo(nodes){
 
     console.log(nodes);
 
-    try {
-        nodes[0]['childs'] = nodes[0]['childs'][0]['childs']; //因項目階層邏輯較特別，故直接往上挪動一層
-    } catch (error) {
-        console.log(error)
-    }
-
     renderTreeNode($(".tree > ul"),nodes[0],0);
 }
 
