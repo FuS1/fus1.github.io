@@ -364,7 +364,7 @@ function refractNodeInfo(nodes){
     nodes.push({
         name:$('#tag-selecter option[value='+$('#tag-selecter').val()+']').text(),
         parent:-1,
-        tagId:-1,
+        tagId:$('#tag-selecter').val(),
         childs:[],
         level:0
     });
