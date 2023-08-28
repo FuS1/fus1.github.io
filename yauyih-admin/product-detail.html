@@ -95,14 +95,43 @@
                         $('[name=brandId]').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
                     }
                 });
-                $('[name=brandId]').trigger('change')
-            });
 
-            exec('tag/list-root','POST',{},function(tags){
-                tags.forEach(function(tag) {
-                    $('[name=tagId]').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
+                exec('tag/list-root','POST',{},function(tags){
+                    tags.forEach(function(tag) {
+                        $('[name=tagId]').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
+                    });
+
+
+                    if(getUrlParam("product_id")!=''){
+                        exec('product/'+getUrlParam("product_id"),'POST',{
+
+                        },function(data){
+                            productData=data['product'];
+                            console.log(productData)
+                            setFormValue($('form'),productData);
+                            initFiles(productData['pdfs']);
+                            initAttribute(productData['attributes']);
+                            productData['brandTags'] = _.sortBy(productData['brandTags'], 'brandTagId');
+                            productData['tags'] = _.sortBy(productData['tags'], 'tagId');
+                            $('[name=keywords]').val(productData['keywords'].join(','))
+                            $('[name=brandId]').val(productData['brandId']).trigger('change');
+                            $('[name=tagId]').val(productData['tags'][0]['tagId']).trigger('change'); //因項目階層資料結構不同，故從Tags中取第一筆
+                            setTimeout(function() {
+                                $('[name=brandTag-level-1]').val( (_.first(productData['brandTags'])||{})['brandTagId'] ).trigger('change');    
+                                $('[name=tag-level-1]').val( (productData['tags'][1]||{})['tagId'] ).trigger('change');    //因項目階層資料結構不同，故從Tags中取第二筆
+                                setTimeout(function() {
+                                    $('[name=brandTag-level-2]').val(productData['brandTagId']).trigger('change');
+                                    $('[name=tag-level-2]').val(productData['tagId']).trigger('change');
+                                }, 300);
+                            }, 300);
+                        });
+                    }else{
+                        $('[name=brandId]').trigger('change');
+                        $('[name=tagId]').trigger('change')
+                        initFiles();
+                        initAttribute();
+                    }
                 });
-                $('[name=tagId]').trigger('change')
             });
 
             $('.btn-cancel').on('click',function(){
@@ -284,7 +313,7 @@
 
                 let dom = $(fileTpl).clone();
                 dom.attr("productDocId","");
-                dom.find('input[type=file]').click();
+
                 
                 dom.find('input[type=file]').on('change',function(e){
                     Swal.fire({
@@ -301,6 +330,8 @@
                         },function(data){
                             console.log(data)
                             Swal.close();
+                            dom.attr("link",data['pdfId']);
+                            dom.attr("docPreviewId",data['previewId']);
                             dom.find('[name=cover]').attr('value',data['previewId']);
                             dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
                             dom.find('a').text(data['pdfFileName']);
@@ -309,6 +340,40 @@
                         },true);
                     });
                 });
+
+                dom.find('input[type=file]').click();
+            });
+
+            $(document).on('click', 'tr .fa-pen', function() {
+                let table = $(this).closest('section').find('table');
+                let dom = $(this).closest('tr');
+
+                dom.find('input[type=file]').on('change',function(e){
+                    Swal.fire({
+                        title: '上傳中，請稍後...',
+                        allowOutsideClick:false,
+                        didOpen: function() {
+                            Swal.showLoading();
+                        }
+                    });
+                    
+                    loadFileDataURI(e,function(file){
+                        exec('pdf/upload','POST',{
+                            pdf:file,
+                        },function(data){
+                            console.log(data)
+                            Swal.close();
+                            dom.attr("link",data['pdfId']);
+                            dom.attr("docPreviewId",data['previewId']);
+                            dom.find('[name=cover]').attr('value',data['previewId']);
+                            dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
+                            dom.find('a').text(data['pdfFileName']);
+                            resetFilesIdx(table);
+                        },true);
+                    });
+                });
+
+                dom.find('input[type=file]').click();
             });
 
             //檔案的刪除按鈕
@@ -317,9 +382,9 @@
 
                 //若為本次新增的，非DB原有的，則直接刪除
                 if($(this).closest('tr').attr("productDocId")!=="" ){
-                    $(this).closest('tr').remove();
-                }else{
                     $(this).closest('tr').addClass('hidden').attr('remove',true);
+                }else{
+                    $(this).closest('tr').remove();
                 }
                 resetFilesIdx(table);
             });
@@ -328,33 +393,6 @@
                 addAttributeSelector()
             });
 
-            if(getUrlParam("product_id")!=''){
-                exec('product/'+getUrlParam("product_id"),'POST',{
-
-                },function(data){
-                    productData=data['product'];
-                    console.log(productData)
-                    setFormValue($('form'),productData);
-                    initFiles(productData['pdfs']);
-                    initAttribute(productData['attributes']);
-                    productData['brandTags'] = _.sortBy(productData['brandTags'], 'brandTagId');
-                    productData['tags'] = _.sortBy(productData['tags'], 'tagId');
-                    $('[name=keywords]').val(productData['keywords'].join(','))
-                    $('[name=brandId]').val(productData['brandId']).trigger('change');
-                    $('[name=tagId]').val(productData['tags'][0]['tagId']).trigger('change'); //因項目階層資料結構不同，故從Tags中取第一筆
-                    setTimeout(function() {
-                        $('[name=brandTag-level-1]').val( (_.first(productData['brandTags'])||{})['brandTagId'] ).trigger('change');    
-                        $('[name=tag-level-1]').val( (productData['tags'][1]||{})['tagId'] ).trigger('change');    //因項目階層資料結構不同，故從Tags中取第二筆
-                        setTimeout(function() {
-                            $('[name=brandTag-level-2]').val(productData['brandTagId']).trigger('change');
-                            $('[name=tag-level-2]').val(productData['tagId']).trigger('change');
-                        }, 300);
-                    }, 1000);
-                });
-            }else{
-                initFiles();
-                initAttribute();
-            }
         });
 
         function initFiles(files=[]){
@@ -369,13 +407,15 @@
             for(var type in files){
                 files[type].forEach(function(file) {
                     let dom = $(fileTpl).clone();
+                    dom.attr("link",file['link']);
+                    dom.attr("docPreviewId",file['docPreviewId']);
                     dom.attr("productDocId",file['productDocId']);
                     dom.find('[name=language]').val(file['language']);
                     dom.find('[name=name]').val(file['name']);
                     dom.find('[name=cover]').val(file['link']);
                     dom.find('a').attr('href','https://drive.google.com/file/d/'+file['link']+'/preview');
                     dom.find('a').text(file['docOriginName']);
-                    if(productData && productData['preview'] == file['link']){
+                    if(productData && productData['preview'] == file['docPreviewId']){
                         dom.find('[name=cover]').attr('checked','checked');
                     }
                     $('[name='+type+'] tbody').append(dom);
@@ -397,7 +437,7 @@
                table.find('[name=cover]').remove();
             }
 
-            if(table.find('tbody > tr [name=cover]:checked').length>=1){
+            if(table.find('tbody > tr:not([remove=true]) [name=cover]:checked').length>=1){
                 haveSelectedCover=true
             }
             
@@ -414,8 +454,9 @@
             return $(".file-item").map(function(){
                 let data = {
                     label:$(this).closest('section').attr('name'),
-                    link:$(this).find('[name=cover]').val(),
                     language: $(this).find('[name=language]').val(),
+                    link:$(this).attr('link'),
+                    docPreviewId: $(this).attr('docPreviewId'),
                 }
                 if($(this).attr('productDocId') !== ""){
                     data['productDocId'] = $(this).attr('productDocId')

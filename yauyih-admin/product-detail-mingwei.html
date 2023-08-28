@@ -111,14 +111,45 @@
                         $('[name=brandId]').append('<option value="'+brand['brandId']+'">'+brand['brandName']+'</option>');
                     }
                 });
-                $('[name=brandId]').trigger('change')
-            });
 
-            exec('tag/list-root','POST',{},function(tags){
-                tags.forEach(function(tag) {
-                    $('[name=tagId]').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
+                exec('tag/list-root','POST',{},function(tags){
+                    tags.forEach(function(tag) {
+                        $('[name=tagId]').append('<option value="'+tag['tagId']+'">'+tag['name']+'</option>');
+                    });
+
+
+                    if(getUrlParam("product_id")!=''){
+                        exec('product/'+getUrlParam("product_id"),'POST',{
+
+                        },function(data){
+                            productData=data['product'];
+                            console.log(productData)
+                            setFormValue($('form'),productData);
+                            initFiles(productData['pdfs']);
+                            initAttribute(productData['attributes']);
+
+                            productData['brandTags'] = _.sortBy(productData['brandTags'], 'brandTagId');
+                            productData['tags'] = _.sortBy(productData['tags'], 'tagId');
+                            $('[name=keywords]').val(productData['keywords'].join(','))
+                            $('[name=brandId]').val(productData['brandId']).trigger('change');
+                            $('[name=tagId]').val(productData['tags'][0]['tagId']).trigger('change'); //因項目階層資料結構不同，故從Tags中取第一筆
+                            $('[name=cover] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+productData['preview']);
+                            setTimeout(function() {
+                                $('[name=brandTag-level-1]').val( (_.first(productData['brandTags'])||{})['brandTagId'] ).trigger('change');    
+                                $('[name=tag-level-1]').val( (productData['tags'][1]||{})['tagId'] ).trigger('change');    //因項目階層資料結構不同，故從Tags中取第二筆
+                                setTimeout(function() {
+                                    $('[name=brandTag-level-2]').val(productData['brandTagId']).trigger('change');
+                                    $('[name=tag-level-2]').val(productData['tagId']).trigger('change');
+                                }, 300);
+                            }, 1000);
+                        });
+                    }else{
+                        $('[name=brandId]').trigger('change');
+                        $('[name=tagId]').trigger('change')
+                        initFiles();
+                        initAttribute();
+                    }
                 });
-                $('[name=tagId]').trigger('change')
             });
 
             $('.btn-cancel').on('click',function(){
@@ -328,37 +359,6 @@
             $(".add-attribute-btn").on('click',function(){
                 addAttributeSelector()
             });
-
-            if(getUrlParam("product_id")!=''){
-                exec('product/'+getUrlParam("product_id"),'POST',{
-
-                },function(data){
-                    productData=data['product'];
-                    console.log(productData)
-                    setFormValue($('form'),productData);
-                    initFiles(productData['pdfs']);
-                    initAttribute(productData['attributes']);
-
-                    productData['brandTags'] = _.sortBy(productData['brandTags'], 'brandTagId');
-                    productData['tags'] = _.sortBy(productData['tags'], 'tagId');
-                    $('[name=keywords]').val(productData['keywords'].join(','))
-                    $('[name=brandId]').val(productData['brandId']).trigger('change');
-                    $('[name=tagId]').val(productData['tags'][0]['tagId']).trigger('change'); //因項目階層資料結構不同，故從Tags中取第一筆
-                    $('[name=cover] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+productData['preview']);
-                    setTimeout(function() {
-                        $('[name=brandTag-level-1]').val( (_.first(productData['brandTags'])||{})['brandTagId'] ).trigger('change');    
-                        $('[name=tag-level-1]').val( (productData['tags'][1]||{})['tagId'] ).trigger('change');    //因項目階層資料結構不同，故從Tags中取第二筆
-                        setTimeout(function() {
-                            $('[name=brandTag-level-2]').val(productData['brandTagId']).trigger('change');
-                            $('[name=tag-level-2]').val(productData['tagId']).trigger('change');
-                        }, 300);
-                    }, 1000);
-                });
-            }else{
-
-                initFiles();
-                initAttribute();
-            }
 
         });
         function initFiles(files=[]){
