@@ -359,12 +359,14 @@ function refractNodeInfo(nodes){
     nodes = _.map(nodes, function(node){ return Object.assign(node,{
         childs:[],
         level:1
-    }) });
+    }) }).filter(function(node){
+        return node.parent!==0;
+    });
 
     nodes.push({
         name:$('#tag-selecter option[value='+$('#tag-selecter').val()+']').text(),
         parent:-1,
-        tagId:$('#tag-selecter').val(),
+        tagId:Number($('#tag-selecter').val()),
         childs:[],
         level:0
     });
