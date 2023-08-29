@@ -16219,7 +16219,18 @@ class $m extends Et {
             width: h,
             height: l
         } = i;
-        this.x = n, this.y = o, this.img = this.addChild(new Xe(O.from(s))), this.img.anchor.set(.5, this.config[a].anchor), this.img.width = h, this.img.height = l, this.caption = this.addChild(new Ae(r, {
+        this.x = n, 
+        this.y = o, 
+        this.img = this.addChild(new Xe(O.from(s))), 
+        this.img.anchor.set(.5, this.config[a].anchor), 
+        this.img.width = h, 
+        this.img.height = l, 
+        // this.img.eventMode = 'static',
+        // this.img.cursor = 'pointer',
+        // this.img.on('pointerdown', function(){
+        //     console.log('abc')
+        // }),
+        this.caption = this.addChild(new Ae(r, {
             fontFamily: "monospace",
             fontSize: 36,
             fill: 3355443,
@@ -16317,7 +16328,7 @@ class Wm {
         //     } else this.app.view.style.width = "100vw", this.app.view.style.height = "56.25vw", this.ratio = window.innerWidth / It.APP_WIDTH, this.app.stage.scale.set(this.ratio)
         // });
         W(this, "onResize", () => {
-            this.app.view.style.width = $("#app").width(), this.ratio = window.innerWidth / It.APP_WIDTH ,this.ratio>this.config.maxRatio ? this.ratio=this.config.maxRatio:this.ratio=this.ratio, this.app.stage.scale.set(this.ratio)
+            this.app.view.style.width = $("#app").width(), this.ratio =  $("#app").width() / It.APP_WIDTH , this.app.stage.scale.set(this.ratio)
         });
         W(this, "tempLineTo", (t, i) => {
             this.dragging.length !== 0 && (this.tempLine.clear(), this.tempLine.lineStyle(5, 0xf97316), this.tempLine.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), this.tempLine.lineTo(t / this.ratio, i / this.ratio))

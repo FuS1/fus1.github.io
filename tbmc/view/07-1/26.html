@@ -47,7 +47,7 @@ body::before{
         </div>
       </div>
     </div>
-    <div id="app" class="injwang-w-full injwang-mt-[20px]"></div>
+    <div id="app" class="injwang-w-[90%] injwang-mx-auto injwang-mt-[20px]"></div>
   </div>
 </body>
 
@@ -56,13 +56,20 @@ body::before{
 <script>
     /**
      * 串接系統設定值
-     * backUrl 為遊戲完成時，要跳轉回的路由
      * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
      * pleaseRotationImgUrl 為提示使用將平板轉為橫式
+     * finishedUrl 為完成遊戲時的圖片連結
      */
-     var backUrl = "../../index.html",
-        useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
-        pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png';
+     var useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
+        pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png',
+        finishedImgUrls = [
+          '../../public/imgs/games/finishImg1.png',
+          '../../public/imgs/games/finishImg2.png',
+          '../../public/imgs/games/finishImg3.png',
+        ],
+        finishedImgUrl = function(){
+          return finishedImgUrls[Math.floor(Math.random()*finishedImgUrls.length)];
+        };
 
   var option = [
     [
@@ -100,7 +107,6 @@ body::before{
 
   var config = {
     "prologue": "",
-    "maxRatio":0.6,
     "questions": [
       option[Math.floor(Math.random()*option.length)]
       // [
@@ -113,10 +119,12 @@ body::before{
       // ]
     ],
     "errorDuration": 3000,
-    "gapX": 6,
+    "gapX": 50,
     "onFinish":function(){
       Swal.fire({
         title: '好棒唷！全部答對～',
+        imageUrl: finishedImgUrl(),
+        imageWidth:250,
         showCancelButton: false,
         confirmButtonText: '再玩一次',
         allowOutsideClick: true,

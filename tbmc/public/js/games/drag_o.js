@@ -39,6 +39,8 @@
             if(checkAnswer()){
                 Swal.fire({
                     title: '好棒唷！全部答對～',
+                    imageUrl: finishedImgUrl(),
+                    imageWidth:250,
                     showCancelButton: false,
                     confirmButtonText: '再玩一次',
                     allowOutsideClick: true,

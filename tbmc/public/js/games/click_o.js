@@ -4,11 +4,13 @@
     if($(this).data('answer')==='right'){
       $(this).parent().find('q-option').hide();
       $(this).parent().data('answered',true);
-      $(this).show().addClass('injwang-text-emerald-700');
+      $(this).show().addClass('!injwang-text-emerald-700');
 
       if( checkAnswer()){
         Swal.fire({
           title: '好棒唷！全部答對～',
+          imageUrl: finishedImgUrl(),
+          imageWidth:250,
           showCancelButton: false,
           confirmButtonText: '再玩一次',
           allowOutsideClick: true,
@@ -24,16 +26,13 @@
     }else{
       var _option = $(this);
       var nowColor = _option.css('color');
-      console.log(nowColor);
-      _option.animate({
-        color: "#FF0000",
-      }, 300, function() {
-        setTimeout(function() {
-          _option.animate({
-            color: nowColor,
-          }, 800);
-        }, 700);
-      });
+
+      $(this).show().addClass('!injwang-text-red-700');
+      
+      setTimeout(function() {
+        $(this).show().removeClass('!injwang-text-red-700');
+      }, 700);
+
     }
     
   });
