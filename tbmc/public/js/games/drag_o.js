@@ -1,10 +1,5 @@
 
 (function($) {
-    var questionIsAnswered = {};
-    //初始化問題是否已回答
-    $(".question").each(function(){
-        questionIsAnswered[$(this).data('answer')]='stock';
-    });
 
     $.fn.centerOnDrop = function(ui) {
         ui.draggable.position({
@@ -26,25 +21,29 @@
 
     $('.droppable').droppable({
         accept: function($item) {
-            return true ;// $(this).data('answer') === $item.data('value') || $(this).data('is_stock_area')=='yes';
+            console.log($(this).attr('now-answer'));
+            return $(this).attr('now-answer')==undefined || $(this).attr('now-answer')=='' ;// $(this).data('answer') === $item.data('value') || $(this).data('is_stock_area')=='yes';
         },
         drop: function(event, ui) {
-
-            $(this).droppable('option', 'accept', ui.draggable);//一格僅接受一個物件
             
+            $('[now-answer='+ui.draggable[0]['dataset']['value']+']').attr('now-answer','');
+
             if($(this).data('answer')=='stock'){
-                questionIsAnswered[ui.draggable[0]['dataset']['value']]='stock';
+                $(ui.draggable[0]).removeClass('injwang-text-red-500'); 
+                $(ui.draggable[0]).css('left','0px');
+                $(ui.draggable[0]).css('top','0px');
             }else if($(this).data('answer') === ui.draggable[0]['dataset']['value']){
-                questionIsAnswered[$(this).data('answer')]='right';
+                $(this).attr('now-answer',ui.draggable[0]['dataset']['value']);
                 $(this).centerOnDrop(ui);
             }else{
-                questionIsAnswered[$(this).data('answer')]='wrong';
+                $(this).attr('now-answer',ui.draggable[0]['dataset']['value']);
                 $(this).centerOnDrop(ui);
             }
             
+
             let result = checkAnswer();
             if(result['allAnswered']){
-                if(result.result){
+                if(result.wrong.length<=0){
                     Swal.fire({
                         title: '好棒唷！全部答對～',
                         imageUrl: finishedImgUrl(),
@@ -60,22 +59,16 @@
                         }
                     });
                 }else{
-                    for (var i in questionIsAnswered) {
-                        if(questionIsAnswered[i]=='wrong'){
+                    result.wrong.forEach(function(wrongItem){
+                        $("[data-value="+wrongItem+"]").addClass('injwang-text-red-500');
+                        setTimeout(function() {
+                            $('[now-answer='+wrongItem+']').attr('now-answer','');
+                            $("[data-value="+wrongItem+"]").removeClass('injwang-text-red-500'); 
+                            $("[data-value="+wrongItem+"]").css('left','0px');
+                            $("[data-value="+wrongItem+"]").css('top','0px');
+                        }, 3000);
+                    });
 
-                            $("[data-value="+i+"]").addClass('injwang-text-red-500');
-                            setTimeout(function() {
-                                for (var i in questionIsAnswered) {
-                                    if(questionIsAnswered[i]=='wrong'){
-                                        questionIsAnswered[i]='stock';
-                                        $("[data-value="+i+"]").removeClass('injwang-text-red-500'); 
-                                        $("[data-value="+i+"]").css('left','0px');
-                                        $("[data-value="+i+"]").css('top','0px');
-                                    }
-                                }
-                            }, 3000);
-                        }
-                    }
                     setTimeout(function() {
                         Swal.fire({
                           title: '差一點點喔！請重新嘗試...',
@@ -91,25 +84,26 @@
             }
 
         },
-        out: function(event, ui){
-            $(this).droppable('option', 'accept', '.draggable-item');//一格僅接受一個物件
-        }   
     });
     
     function checkAnswer(){
         var allAnswered = true;
-        var result = true;
-        for (var i in questionIsAnswered) {
-            if(questionIsAnswered[i] === 'stock'){
+        var wrong = [];
+        
+        $(".droppable:not([data-answer=stock])").each(function(key,item){
+            if($(item).attr('now-answer') == undefined || $(item).attr('now-answer') == ""){
                 allAnswered=false;
-            }else if(questionIsAnswered[i] === 'wrong' ){
-                result = false;
             }
-        }
+            if($(item).attr('now-answer') !== $(item).attr('data-answer')){
+                wrong.push($(item).attr('now-answer'));
+            }
+        });
+        
         return {
             allAnswered:allAnswered,
-            result:result
+            wrong:wrong
         }
     }
+    
 
 })(jQuery);
