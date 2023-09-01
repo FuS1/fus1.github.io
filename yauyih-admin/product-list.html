@@ -115,7 +115,7 @@
                         width: 80,
                         headerSort: false,
                         formatter:function(cell, formatterParams) {
-                            return `<input type="number" name="hot-input" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-1" min="1" placeholder="請輸入熱門度" value="`+(cell.getValue()||0)+`">`;
+                            return `<input type="number" name="hot-input" rowDataId="`+cell.getRow().getData()['productId']+`" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-1" min="1" placeholder="請輸入熱門度" value="`+(cell.getValue()||0)+`">`;
                         }
                     },
                     {
@@ -124,7 +124,7 @@
                         headerSort: false,
                         formatter:function(cell, formatterParams) {
                             var status = cell.getRow().getData()['status'] ;
-                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['bannerId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['productId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
                                 <option value="1" `+( status?'selected':'')+`>啟用</option>
                                 <option value="0" `+(!status?'selected':'')+`>停用</option>
                             </select>`;
@@ -183,10 +183,24 @@
                     $('.prev-page-btn').removeClass('bg-gray-800 hover:bg-gray-900').addClass('bg-gray-300');
                 }
             }
+            
+            $(document).on('blur', '[name=hot-input]', function() {
+                exec('product/edit','POST',{
+                    productId:$(this).attr('rowDataId'),
+                    hot:Number($(this).val()),
+                },function(data){
+                    console.log(data);
+                });
+            });
 
+            $(document).on('change', '[name=status_selector]', function() {
 
-            $(document).on('change', '[name=hot-input],[name=status_selector]', function() {
-               alert('這裡還沒串接');
+                exec('product/edit','POST',{
+                    productId:$(this).attr('rowDataId'),
+                    status:Number($(this).val()),
+                },function(data){
+                    console.log(data);
+                });
             });
 
         });
