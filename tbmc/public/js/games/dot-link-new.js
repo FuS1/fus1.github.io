@@ -14214,7 +14214,7 @@ vt.experimentalLetterSpacing = !1;
 vt._fonts = {};
 vt._newlines = [10, 13];
 vt._breakingSpaces = [9, 32, 8192, 8193, 8194, 8195, 8196, 8197, 8198, 8200, 8201, 8202, 8287, 12288];
-const pm = ["serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui"],
+const pm = ["serif", "sans-serif", "Verdana", "cursive", "fantasy", "system-ui"],
     Ii = class {
         constructor(e) {
             this.styleID = 0, this.reset(), Lr(this, e, e)
@@ -14427,7 +14427,7 @@ fe.defaultStyle = {
     fill: "black",
     fillGradientType: Qs.LINEAR_VERTICAL,
     fillGradientStops: [],
-    fontFamily: "monospace",
+    fontFamily: "Verdana",
     fontSize: 26,
     fontStyle: "normal",
     fontVariant: "normal",
@@ -15883,7 +15883,7 @@ const ti = class extends fe {
     cleanFonts() {
         this._fonts.length > 0 && (this._fonts.forEach(e => {
             URL.revokeObjectURL(e.src), e.refs--, e.refs === 0 && (e.fontFace && document.fonts.delete(e.fontFace), delete ti.availableFonts[e.originalUrl])
-        }), this.fontFamily = "monospace", this._fonts.length = 0, this.styleID++, this.fontsDirty = !0)
+        }), this.fontFamily = "Verdana", this._fonts.length = 0, this.styleID++, this.fontsDirty = !0)
     }
     loadFont(e, t = {}) {
         const {
@@ -16024,7 +16024,7 @@ Fi.defaultOptions = {
     dropShadowColor: "black",
     dropShadowDistance: 5,
     fill: "black",
-    fontFamily: "monospace",
+    fontFamily: "Verdana",
     fontSize: 26,
     fontStyle: "normal",
     fontVariant: "normal",
@@ -16231,7 +16231,7 @@ class $m extends Et {
         //     console.log('abc')
         // }),
         this.caption = this.addChild(new Ae(r, {
-            fontFamily: "monospace",
+            fontFamily: "Verdana",
             fontSize: 36,
             fill: 3355443,
             align: "center"
@@ -16258,12 +16258,12 @@ class Vm extends Et {
         W(this, "text");
         W(this, "onStart", () => {});
         this.position.set(It.APP_WIDTH / 2, It.APP_HEIGHT / 2), this.openingWords = new Ae(i, {
-            fontFamily: "monospace",
+            fontFamily: "Verdana",
             fontSize: 72,
             fill: 3355443,
             align: "center"
         }), this.openingWords.anchor.set(.5), this.addChild(this.openingWords), this.text = new Ae("開始", {
-            fontFamily: "monospace",
+            fontFamily: "Verdana",
             fontSize: 48,
             fontWeight: "bolder",
             fill: 16711680
@@ -16278,7 +16278,7 @@ class Xm extends Et {
         W(this, "next");
         W(this, "onNext", () => {});
         this.next = new Ae(i, {
-            fontFamily: "monospace",
+            fontFamily: "Verdana",
             fontSize: 72,
             fill: 3355443,
             align: "center"
@@ -16293,7 +16293,7 @@ class zm extends Et {
         W(this, "restart");
         W(this, "onRestart", () => {});
         this.restart = new Ae(i, {
-            fontFamily: "monospace",
+            fontFamily: "Verdana",
             fontSize: 72,
             fill: 3355443,
             align: "center"

@@ -16,7 +16,7 @@
 <style>
 
 body {
-  font-family: monospace;  
+  font-family: Verdana;  
   position: relative;
 }
 
