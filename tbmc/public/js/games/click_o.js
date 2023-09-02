@@ -30,9 +30,20 @@
                 }
             });
             
-            audio = document.createElement("audio");
-            audio.src = finishedSoundUrl();
-            audio.play();
+            var sound = new Howl({
+                src: [finishedSoundUrl()],
+                onplayerror: function() {
+                    sound.once('unlock', function() {
+                        sound.play();
+                    });
+                }
+            });
+            
+            sound.play();
+
+            // audio = document.createElement("audio");
+            // audio.src = finishedSoundUrl();
+            // audio.play();
         
         }else{
             result.wrong.forEach(function(wrongItem){
