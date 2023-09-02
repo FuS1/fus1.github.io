@@ -15,9 +15,10 @@
 
     if(result['allAnswered']){
         if(result.wrong.length<=0){
+            var _finishData = finishedDataUrl();
             Swal.fire({
                 title: '好棒唷！全部答對～',
-                imageUrl: finishedImgUrl(),
+                imageUrl: _finishData['img'],
                 imageWidth:250,
                 showCancelButton: false,
                 confirmButtonText: '再玩一次',
@@ -31,7 +32,7 @@
             });
             
             var sound = new Howl({
-                src: [finishedSoundUrl()],
+                src: [_finishData['sound']],
                 onplayerror: function() {
                     sound.once('unlock', function() {
                         sound.play();
@@ -42,7 +43,7 @@
             sound.play();
 
             // audio = document.createElement("audio");
-            // audio.src = finishedSoundUrl();
+            // audio.src = _finishData['sound'];
             // audio.play();
         
         }else{

@@ -11,6 +11,7 @@
   <script src="../../public/js/games/tailwindcss.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
   <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>
+  <script src="../../public/js/games/howler.min.js"></script>
   <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
@@ -144,21 +145,19 @@ body::before{
      */
      var useComputerOrPadImgUrl = '../../public/imgs/games/computerOrPad.png',
         pleaseRotationImgUrl = '../../public/imgs/games/pleaseRotation.png',
-        finishedImgUrls = [
-          '../../public/imgs/games/finishImg1.png',
-          '../../public/imgs/games/finishImg2.png',
-          '../../public/imgs/games/finishImg3.png',
+        finishedDatas=[{
+            img: '../../public/imgs/games/finishImg1.png',
+            sound:'../../public/sounds/games/finishSound1.mp3',
+          },{
+            img: '../../public/imgs/games/finishImg2.png',
+            sound:'../../public/sounds/games/finishSound2.mp3',
+          },{
+            img: '../../public/imgs/games/finishImg3.png',
+            sound:'../../public/sounds/games/finishSound3.mp3',
+          }
         ],
-        finishedImgUrl = function(){
-          return finishedImgUrls[Math.floor(Math.random()*finishedImgUrls.length)];
-        };
-        finishedSoundUrls = [
-          '../../public/sounds/games/finishSound1.mp3',
-          '../../public/sounds/games/finishSound2.mp3',
-          '../../public/sounds/games/finishSound3.mp3',
-        ],
-        finishedSoundUrl = function(){
-          return finishedSoundUrls[Math.floor(Math.random()*finishedSoundUrls.length)];
+        finishedDataUrl = function(){
+          return finishedDatas[Math.floor(Math.random()*finishedDatas.length)];
         };
 </script> 
-<script src="../../public/js/games/click_o.js"></script>
+<script src="../../public/js/games/click.js"></script>
