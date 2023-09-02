@@ -63,9 +63,16 @@
                             window.location.reload()
                         }
                     });
-                    audio = document.createElement("audio");
-                    audio.src = finishedSoundUrl();
-                    audio.play();
+                    var sound = new Howl({
+                        src: [finishedSoundUrl()],
+                        onplayerror: function() {
+                            sound.once('unlock', function() {
+                                sound.play();
+                            });
+                        }
+                    });
+                    
+                    sound.play();
                 }else{
                     result.wrong.forEach(function(wrongItem){
                         $("[data-value="+wrongItem+"]").addClass('injwang-text-red-500');
