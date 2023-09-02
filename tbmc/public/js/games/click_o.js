@@ -1,5 +1,10 @@
 (function($) {
-  
+    
+    // 第一期心眼
+    if( !['Word Scramble','Getting to Know a Cat','Mommy and Baby','Spell and Count','Guess Who','Growing a Seed','Where is the Insect ?','Matching Game','Guess Who'].includes($('.game-title').text().trim()) ){
+        return ;
+    }
+
   $('q-option').on('click',function(){
     
     $(this).parent().find('q-option').hide();
@@ -24,6 +29,11 @@
                     window.location.reload()
                 }
             });
+            
+            audio = document.createElement("audio");
+            audio.src = finishedSoundUrl();
+            audio.play();
+        
         }else{
             result.wrong.forEach(function(wrongItem){
                 $("[data-answer="+wrongItem+"] q-option").addClass('!injwang-text-red-500');

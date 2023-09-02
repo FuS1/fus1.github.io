@@ -38,7 +38,7 @@ body::before{
       <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
         <div class="injwang-w-full injwang-relative">
           <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Growing a Seed </div>
+          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Growing a Seed </div>
           <div class="lg:injwang-flex">
             <div class="injwang-w-[65%]">
             Do you know how a seed grows ?<br>
@@ -136,6 +136,14 @@ body::before{
         ],
         finishedImgUrl = function(){
           return finishedImgUrls[Math.floor(Math.random()*finishedImgUrls.length)];
+        };
+        finishedSoundUrls = [
+          '../../public/sounds/games/finishSound1.mp3',
+          '../../public/sounds/games/finishSound2.mp3',
+          '../../public/sounds/games/finishSound3.mp3',
+        ],
+        finishedSoundUrl = function(){
+          return finishedSoundUrls[Math.floor(Math.random()*finishedSoundUrls.length)];
         };
     (function($) {
       
