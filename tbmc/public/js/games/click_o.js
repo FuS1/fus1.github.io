@@ -10,13 +10,15 @@
     $(this).parent().find('q-option').hide();
     $(this).show();
     $(this).parent().attr('now-answer',$(this).attr("data-option-answer"));
+    $(this).removeClass('!injwang-bg-red-400'); 
+    $(this).removeClass('!injwang-text-red-800'); 
+    $(this).addClass('!injwang-text-orange-400');
+
     
     let result = checkAnswer();
 
     if(result['allAnswered']){
         
-        $("q-option").addClass('!injwang-bg-green-200');
-
         if(result.wrong.length<=0){
             var _finishData = finishedDataUrl();
             Swal.fire({
@@ -53,8 +55,8 @@
         }else{
 
             result.wrong.forEach(function(wrongItem){
-                $("[data-answer="+wrongItem+"] q-option").removeClass('!injwang-bg-green-200'); 
-                $("[data-answer="+wrongItem+"] q-option").addClass('!injwang-bg-red-200');
+                $("[data-answer="+wrongItem+"] .\\!injwang-text-orange-400").addClass('!injwang-bg-red-400');
+                $("[data-answer="+wrongItem+"] .\\!injwang-text-orange-400").addClass('!injwang-text-red-800'); 
                 setTimeout(function() {
                     $("[data-answer="+wrongItem+"]").attr('now-answer','');
                     $("[data-answer="+wrongItem+"] q-option").removeClass('!injwang-bg-red-200'); 
