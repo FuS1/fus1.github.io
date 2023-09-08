@@ -14,6 +14,9 @@
     let result = checkAnswer();
 
     if(result['allAnswered']){
+        
+        $("q-option").addClass('!injwang-bg-green-200');
+
         if(result.wrong.length<=0){
             var _finishData = finishedDataUrl();
             Swal.fire({
@@ -47,11 +50,13 @@
             // audio.play();
         
         }else{
+
             result.wrong.forEach(function(wrongItem){
-                $("[data-answer="+wrongItem+"] q-option").addClass('!injwang-text-red-500');
+                $("[data-answer="+wrongItem+"] q-option").removeClass('!injwang-bg-green-200'); 
+                $("[data-answer="+wrongItem+"] q-option").addClass('!injwang-bg-red-200');
                 setTimeout(function() {
                     $("[data-answer="+wrongItem+"]").attr('now-answer','');
-                    $("[data-answer="+wrongItem+"] q-option").removeClass('!injwang-text-red-500'); 
+                    $("[data-answer="+wrongItem+"] q-option").removeClass('!injwang-bg-red-200'); 
                     $("[data-answer="+wrongItem+"] q-option").show(''); 
                 }, 3000);
             });
