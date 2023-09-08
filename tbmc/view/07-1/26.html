@@ -11,7 +11,9 @@
   <script src="../../public/js/games/tailwindcss.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
   <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script> 
+  <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
+
   <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
@@ -140,6 +142,7 @@ body::before{
         reverseButtons:true,
       }).then(function(result){
         if (result.isConfirmed) {
+          $.cookie('isReload', '1');
           window.location.reload()
         }
       });

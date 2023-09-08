@@ -11,6 +11,7 @@
   <script src="../../public/js/games/tailwindcss.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
   <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>
+  <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
@@ -57,9 +58,9 @@ body::before{
           </div>
           <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
             <div class="injwang-flex injwang-items-center injwang-mx-auto">
-              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="6">
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="6">6</q-option>
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="7">7</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="1-6">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="1-6">6</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="1-7">7</q-option>
               </question>
             </div>
           </div>
@@ -70,14 +71,19 @@ body::before{
         <div class="injwang-text-3xl injwang-flex injwang-items-center">
           <div class="injwang-w-3/4 injwang-h-[95px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
             <div class="injwang-w-fit injwang-mx-auto injwang-flex injwang-items-center">
-              <span>ck</span><question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="i"><q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="i">i</q-option><q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="e">e</q-option></question><span>ck</span>
+              <span>ck</span>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="2-i">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-i">i</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-e">e</q-option>
+              </question>
+              <span>ck</span>
             </div>
           </div>
           <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
             <div class="injwang-flex injwang-items-center injwang-mx-auto">
-              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="3">
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4">4</q-option>
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="3">3</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="2-3">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-4">4</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-3">3</q-option>
               </question>
             </div>
           </div>
@@ -93,9 +99,9 @@ body::before{
           </div>
           <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
             <div class="injwang-flex injwang-items-center injwang-mx-auto">
-              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="3">
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="3">3</q-option>
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2">2</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="3-3">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="3-3">3</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="3-2">2</q-option>
               </question>
             </div>
           </div>
@@ -107,23 +113,23 @@ body::before{
           <div class="injwang-w-3/4 injwang-h-[95px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
             <div class="injwang-w-fit injwang-mx-auto injwang-flex injwang-items-center">
               <span>t</span>
-              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="a">
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="a">a</q-option>
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="o">o</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="4-1-a">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-1-a">a</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-1-o">o</q-option>
               </question>
               <span>dp</span>
-              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="o">
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="o">o</q-option>
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="e">e</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="4-o">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-o">o</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-e">e</q-option>
               </question>
               <span>le</span>
             </div>
           </div>
           <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
             <div class="injwang-flex injwang-items-center injwang-mx-auto">
-              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="8">
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="8">8</q-option>
-                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="5">5</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="4-8">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-8">8</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-border injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-5">5</q-option>
               </question>
             </div>
           </div>

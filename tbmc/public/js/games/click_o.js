@@ -30,6 +30,7 @@
                 reverseButtons:true,
             }).then(function(result){
                 if (result.isConfirmed) {
+                    $.cookie('isReload', '1');
                     window.location.reload()
                 }
             });
