@@ -176,7 +176,7 @@
                 const response = await fetch(_ENV['API_HOST']+'message/download?'+getQueryDataUrl(true), {
                     method: 'POST', 
                     headers: {
-                        Authentication: "Bearer "+(getLocalStorage('BearerToken') || '')
+                        authorization: "Bearer "+(getLocalStorage('BearerToken') || '')
                     },
                 });
 
