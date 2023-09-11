@@ -175,6 +175,7 @@
             $('.download-btn').on('click', async () => {
                 const response = await fetch(_ENV['API_HOST']+'message/download?'+getQueryDataUrl(true), {
                     method: 'POST', 
+                    Authentication: "Bearer "+(getLocalStorage('BearerToken') || '')
                 });
 
                 if (response.ok) {
