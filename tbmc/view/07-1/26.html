@@ -21,7 +21,7 @@
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  
+
 <style>
 
 body {
@@ -138,31 +138,38 @@ body::before{
     "gapX": 50,
     "onFinish":function(){
       var _finishData = finishedDataUrl();
-      Swal.fire({
-        title: '好棒唷！全部答對～',
-        imageUrl: _finishData['img'],
-        imageWidth:250,
-        showCancelButton: false,
-        confirmButtonText: '再玩一次',
-        allowOutsideClick: true,
-        allowEscapeKey:false,
-        reverseButtons:true,
-      }).then(function(result){
-        if (result.isConfirmed) {
-          $.cookie('isReload', '1');
-          window.location.reload()
-        }
-      });
-      var sound = new Howl({
-          src: [_finishData['sound']],
-          onplayerror: function() {
-              sound.once('unlock', function() {
-                  sound.play();
-              });
-          }
-      });
+      (function(){
+
       
-      sound.play();
+        Swal.fire({
+          title: '好棒唷！全部答對～',
+          imageUrl: _finishData['img'],
+          imageWidth:250,
+          showCancelButton: false,
+          confirmButtonText: '再玩一次',
+          allowOutsideClick: true,
+          allowEscapeKey:false,
+          reverseButtons:true,
+        }).then(function(result){
+          if (result.isConfirmed) {
+            $.cookie('isReload', '1');
+            window.location.reload()
+          }
+        });
+      }());
+
+      setTimeout(function() {
+        var sound = new Howl({
+            src: [_finishData['sound']],
+            onplayerror: function() {
+                sound.once('unlock', function() {
+                    sound.play();
+                });
+            }
+        });
+        
+        sound.play();
+      }, 300);
     },
     "onError":function(){
       setTimeout(function() {

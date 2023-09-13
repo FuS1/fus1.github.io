@@ -21,7 +21,10 @@
         
         if(result.wrong.length<=0){
             var _finishData = finishedDataUrl();
-            Swal.fire({
+            (function(){
+
+            
+                Swal.fire({
                 title: '好棒唷！全部答對～',
                 imageUrl: _finishData['img'],
                 imageWidth:250,
@@ -30,23 +33,26 @@
                 allowOutsideClick: true,
                 allowEscapeKey:false,
                 reverseButtons:true,
-            }).then(function(result){
+                }).then(function(result){
                 if (result.isConfirmed) {
                     $.cookie('isReload', '1');
                     window.location.reload()
                 }
-            });
-            
-            var sound = new Howl({
-                src: [_finishData['sound']],
-                onplayerror: function() {
-                    sound.once('unlock', function() {
-                        sound.play();
-                    });
-                }
-            });
-            
-            sound.play();
+                });
+            }());
+
+            setTimeout(function() {
+                var sound = new Howl({
+                    src: [_finishData['sound']],
+                    onplayerror: function() {
+                        sound.once('unlock', function() {
+                            sound.play();
+                        });
+                    }
+                });
+                
+                sound.play();
+            }, 300);
 
             // audio = document.createElement("audio");
             // audio.src = _finishData['sound'];
