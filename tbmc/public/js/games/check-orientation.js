@@ -59,8 +59,12 @@ window.onresize = function (event) {
 }
   
 setTimeout(function(){
-    isReload = $.cookie('isReload');
-    $.removeCookie('isReload');
+    try {
+        isReload = $.cookie('isReload');
+        $.removeCookie('isReload');
+    } catch (error) {
+        
+    }
     applyDeviceCheck();
-},100);
+},500);
 
