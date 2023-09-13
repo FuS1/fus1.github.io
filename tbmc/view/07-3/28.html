@@ -3,6 +3,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <script>
+    window.onerror = function(message, source, line, column, error) {
+        alert(line);
+        alert(message);
+        alert(source);
+    };
+  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
@@ -13,7 +20,7 @@
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  <script>tailwind.config = { prefix: 'injwang-' }</script>
+  
 <style>
 
 body {
@@ -35,14 +42,14 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container injwang-relative injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
-    <div class="injwang-pt-2 lg:injwang-pt-4">
-      <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
-        <div class="injwang-w-full injwang-relative">
-          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Growing a Seed </div>
-          <div class="lg:injwang-flex">
-            <div class="injwang-w-[65%]">
+  <div class="container relative bg-white lg:text-2xl max-w-[1180px] lg:min-h-full lg:shadow-md">
+    <div class="pt-2 lg:pt-4">
+      <div class="flex items-center mx-auto w-[90%]">
+        <div class="w-full relative">
+          <img class="absolute left-[-2.5rem] top-1 h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="game-title text-orange-500 text-2xl lg:text-4xl border-b lg:pb-4 lg:mb-2">Growing a Seed </div>
+          <div class="lg:flex">
+            <div class="w-[65%]">
             Do you know how a seed grows ?<br>
             See the pictures and click the correct answer. 
             </div>
@@ -50,91 +57,91 @@ body::before{
         </div>
       </div>
     </div>
-    <div class="injwang-w-[360px] lg:injwang-w-[80%] injwang-mx-auto injwang-pt-2 injwang-grid injwang-grid-cols-1 lg:injwang-grid-cols-2 injwang-gap-2 injwang-text-lg injwang-pb-16">
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/1.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+    <div class="w-[360px] lg:w-[80%] mx-auto pt-2 grid grid-cols-1 lg:grid-cols-2 gap-2 text-lg pb-16">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/1.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>1.Plant a</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="seed">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="seed">seed</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="flower">flower</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="seed">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="seed">seed</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="flower">flower</q-option>
           </question>
           <span>into a hole.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/2.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/2.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>2.Cover the seed with</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="soil">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="water">water</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="soil">soil</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="soil">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="water">water</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="soil">soil</q-option>
           </question>
           <span>.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/3.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/3.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>3.Sprinkle the seed with a little</span>
-            <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="water">
-              <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="water">water</q-option>
-              <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="sand">sand</q-option>
+            <question class="mx-1 border-slate-400 grid" data-answer="water">
+              <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="water">water</q-option>
+              <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="sand">sand</q-option>
             </question>
             <span>.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/4.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/4.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>4.Bake the seed in the</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="sun">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="snow">snow</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="sun">sun</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="sun">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="snow">snow</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="sun">sun</q-option>
           </question>
           <span>.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/5.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/5.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>5.The little seed is ready to</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="grow">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="grow">grow</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="flow">flow</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="grow">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="grow">grow</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="flow">flow</q-option>
           </question>
           <span>.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/6.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/6.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>6.Little</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="stem">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="stem">stem</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="flower">flower</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="stem">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="stem">stem</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="flower">flower</q-option>
           </question>
           <span>grows every day.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/7.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/7.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>7.The stem</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="climbs">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="jump">jump</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="climbs">climbs</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="climbs">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="jump">jump</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="climbs">climbs</q-option>
           </question>
           <span>up to pole.</span>
         </div>
       </div>
-      <div class="injwang-border">
-        <img class="injwang-w-full injwang-h-[300px] injwang-object-cover injwang-border" src="../../public/imgs/games/07-3/28/8.jpg">
-        <div class="injwang-w-fulltext-center injwang-flex injwang-items-center injwang-h-20 injwang-pl-2">
+      <div class="border">
+        <img class="w-full h-[300px] object-cover border" src="../../public/imgs/games/07-3/28/8.jpg">
+        <div class="w-fulltext-center flex items-center h-20 pl-2">
           <span>8.The flower bud is ready to</span>
-          <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="open">
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="open">open</q-option>
-            <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-text-center" data-option-answer="close">close</q-option>
+          <question class="mx-1 border-slate-400 grid" data-answer="open">
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="open">open</q-option>
+            <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded text-center" data-option-answer="close">close</q-option>
           </question>
           <span>up.</span>
         </div>

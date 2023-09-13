@@ -3,17 +3,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <script>
+    window.onerror = function(message, source, line, column, error) {
+        alert(line);
+        alert(message);
+        alert(source);
+    };
+  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
   <script src="../../public/js/games/bootstrap.bundle.min.js"></script>
   <script src="../../public/js/games/sweetalert2.min.js"></script>
   <script src="../../public/js/games/tailwindcss.min.js"></script>
-  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script> 
+  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  <script>tailwind.config = { prefix: 'injwang-' }</script>
+  
 <style>
 
 body {
@@ -36,12 +43,12 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
-    <div id="title-warp" class="injwang-pt-2 lg:injwang-pt-6">
-      <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
-        <div class="injwang-w-full injwang-relative">
-          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Where is the Insect ?</div>
+  <div class="container bg-white lg:text-2xl max-w-[1180px] lg:min-h-full lg:shadow-md">
+    <div id="title-warp" class="pt-2 lg:pt-6">
+      <div class="flex items-center mx-auto w-[90%]">
+        <div class="w-full relative">
+          <img class="absolute left-[-2.5rem] top-1 h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="game-title text-orange-500 text-2xl lg:text-4xl border-b lg:pb-4 lg:mb-2">Where is the Insect ?</div>
           <div>
             Insects are everywhere. Do you know where they are ?<br>
             Look at the pictures below; then connect it to the correct word.
@@ -49,7 +56,7 @@ body::before{
         </div>
       </div>
     </div>
-    <div id="app" class="injwang-w-[90%] injwang-mx-auto injwang-mt-[20px]"></div>
+    <div id="app" class="w-[90%] mx-auto mt-[20px]"></div>
   </div>
 </body>
 

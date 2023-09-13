@@ -31,8 +31,8 @@
         drop: function(event, ui) {
             
             $('[now-answer='+ui.draggable[0]['dataset']['value']+']').attr('now-answer','');
-            $(ui.draggable[0]).removeClass('!injwang-bg-green-200'); 
-            $(ui.draggable[0]).removeClass('!injwang-bg-red-200'); 
+            $(ui.draggable[0]).removeClass('!bg-green-200'); 
+            $(ui.draggable[0]).removeClass('!bg-red-200'); 
 
             if($(this).data('answer')=='stock'){
                 $(ui.draggable[0]).css('left','0px');
@@ -49,7 +49,7 @@
             let result = checkAnswer();
             if(result['allAnswered']){
 
-                $(".draggable-item").addClass('!injwang-bg-green-200');
+                $(".draggable-item").addClass('!bg-green-200');
 
                 if(result.wrong.length<=0){
                     var _finishData = finishedDataUrl();
@@ -80,11 +80,11 @@
                     sound.play();
                 }else{
                     result.wrong.forEach(function(wrongItem){
-                        $("[data-value="+wrongItem+"]").removeClass('!injwang-bg-green-200'); 
-                        $("[data-value="+wrongItem+"]").addClass('!injwang-bg-red-200');
+                        $("[data-value="+wrongItem+"]").removeClass('!bg-green-200'); 
+                        $("[data-value="+wrongItem+"]").addClass('!bg-red-200');
                         setTimeout(function() {
                             $('[now-answer='+wrongItem+']').attr('now-answer','');
-                            $("[data-value="+wrongItem+"]").removeClass('!injwang-bg-red-200'); 
+                            $("[data-value="+wrongItem+"]").removeClass('!bg-red-200'); 
                             $("[data-value="+wrongItem+"]").css('left','0px');
                             $("[data-value="+wrongItem+"]").css('top','0px');
                         }, 3000);

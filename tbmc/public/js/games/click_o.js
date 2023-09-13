@@ -10,9 +10,9 @@
     $(this).parent().find('q-option').hide();
     $(this).show();
     $(this).parent().attr('now-answer',$(this).attr("data-option-answer"));
-    $(this).removeClass('!injwang-bg-red-400'); 
-    $(this).removeClass('!injwang-text-red-800'); 
-    $(this).addClass('!injwang-text-orange-400');
+    $(this).removeClass('!bg-red-400'); 
+    $(this).removeClass('!text-red-800'); 
+    $(this).addClass('!text-orange-400');
 
     
     let result = checkAnswer();
@@ -55,11 +55,11 @@
         }else{
 
             result.wrong.forEach(function(wrongItem){
-                $("[data-answer="+wrongItem+"] .\\!injwang-text-orange-400").addClass('!injwang-bg-red-400');
-                $("[data-answer="+wrongItem+"] .\\!injwang-text-orange-400").addClass('!injwang-text-red-800'); 
+                $("[data-answer="+wrongItem+"] .\\!text-orange-400").addClass('!bg-red-400');
+                $("[data-answer="+wrongItem+"] .\\!text-orange-400").addClass('!text-red-800'); 
                 setTimeout(function() {
                     $("[data-answer="+wrongItem+"]").attr('now-answer','');
-                    $("[data-answer="+wrongItem+"] q-option").removeClass('!injwang-bg-red-200'); 
+                    $("[data-answer="+wrongItem+"] q-option").removeClass('!bg-red-200'); 
                     $("[data-answer="+wrongItem+"] q-option").show(''); 
                 }, 3000);
             });
