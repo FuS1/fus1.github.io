@@ -3,13 +3,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
-  <script>
-    window.onerror = function(message, source, line, column, error) {
-        alert(line);
-        alert(message);
-        alert(source);
-    };
-  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
@@ -20,7 +13,7 @@
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  
+  <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
 body {
@@ -42,106 +35,106 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container bg-white lg:text-2xl max-w-[1180px] lg:min-h-full lg:shadow-md">
-    <div class="pt-2 lg:pt-4">
-      <div class="flex items-center mx-auto ml-14 w-[92%]">
-        <div class="w-full relative">
-          <img class="absolute left-[-2.5rem] top-1 h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="game-title text-orange-500 text-2xl lg:text-4xl border-b lg:pb-4 lg:mb-4">Spell and Count </div>
+  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
+    <div class="injwang-pt-2 lg:injwang-pt-4">
+      <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-ml-14 injwang-w-[92%]">
+        <div class="injwang-w-full injwang-relative">
+          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-4">Spell and Count </div>
           <div>
             Click the right letter to complete each word, then click the number correctly. 
           </div>
         </div>
       </div>
     </div>
-    <div class="w-[30%] min-w-[300px] mx-auto pt-6 lg:w-[70%] grid grid-cols-1 lg:grid-cols-2 gap-2">
-      <div class="border min-w-[369px]">
-        <img class="w-full h-[180px] object-cover" src="../../public/imgs/games/07-1/28/butterfly.jpg">
-        <div class="text-3xl flex items-center">
-          <div class="w-3/4 h-[95px] text-center py-2 border flex items-center flex items-center">
-            <div class="w-fit mx-auto flex items-center">
+    <div class="injwang-w-[30%] injwang-min-w-[300px] injwang-mx-auto injwang-pt-6 lg:injwang-w-[70%] injwang-grid injwang-grid-cols-1 lg:injwang-grid-cols-2 injwang-gap-2">
+      <div class="injwang-border injwang-min-w-[369px]">
+        <img class="injwang-w-full injwang-h-[180px] injwang-object-cover" src="../../public/imgs/games/07-1/28/butterfly.jpg">
+        <div class="injwang-text-3xl injwang-flex injwang-items-center">
+          <div class="injwang-w-3/4 injwang-h-[95px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center injwang-flex injwang-items-center">
+            <div class="injwang-w-fit injwang-mx-auto injwang-flex injwang-items-center">
               butterfly            
             </div>
           </div>
-          <div class="w-1/4 h-[95px] min-w-[85px] text-center py-2 border flex items-center">
-            <div class="flex items-center mx-auto">
-              <question class="mx-1 border-slate-400 grid" data-answer="1-6">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="1-6">6</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="1-7">7</q-option>
+          <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
+            <div class="injwang-flex injwang-items-center injwang-mx-auto">
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="1-6">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="1-6">6</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="1-7">7</q-option>
               </question>
             </div>
           </div>
         </div>
       </div>
-      <div class="border min-w-[369px]">
-        <img class="w-full h-[180px] object-cover" src="../../public/imgs/games/07-1/28/chick.jpg">
-        <div class="text-3xl flex items-center">
-          <div class="w-3/4 h-[95px] text-center py-2 border flex items-center">
-            <div class="w-fit mx-auto flex items-center">
+      <div class="injwang-border injwang-min-w-[369px]">
+        <img class="injwang-w-full injwang-h-[180px] injwang-object-cover" src="../../public/imgs/games/07-1/28/chick.jpg">
+        <div class="injwang-text-3xl injwang-flex injwang-items-center">
+          <div class="injwang-w-3/4 injwang-h-[95px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
+            <div class="injwang-w-fit injwang-mx-auto injwang-flex injwang-items-center">
               <span>ck</span>
-              <question class="mx-1 border-slate-400 grid" data-answer="2-i">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="2-i">i</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="2-e">e</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="2-i">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-i">i</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-e">e</q-option>
               </question>
               <span>ck</span>
             </div>
           </div>
-          <div class="w-1/4 h-[95px] min-w-[85px] text-center py-2 flex items-center">
-            <div class="flex items-center mx-auto">
-              <question class="mx-1 border-slate-400 grid" data-answer="2-3">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="2-4">4</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="2-3">3</q-option>
+          <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-flex injwang-items-center">
+            <div class="injwang-flex injwang-items-center injwang-mx-auto">
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="2-3">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-4">4</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="2-3">3</q-option>
               </question>
             </div>
           </div>
         </div>
       </div>
-      <div class="border min-w-[369px]">
-        <img class="w-full h-[180px] object-cover" src="../../public/imgs/games/07-1/28/puppy.jpg">
-        <div class="text-3xl flex items-center">
-          <div class="w-3/4 h-[95px] text-center py-2 border flex items-center">
-            <div class="w-fit mx-auto flex items-center">
+      <div class="injwang-border injwang-min-w-[369px]">
+        <img class="injwang-w-full injwang-h-[180px] injwang-object-cover" src="../../public/imgs/games/07-1/28/puppy.jpg">
+        <div class="injwang-text-3xl injwang-flex injwang-items-center">
+          <div class="injwang-w-3/4 injwang-h-[95px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
+            <div class="injwang-w-fit injwang-mx-auto injwang-flex injwang-items-center">
               <span>p</span>
-              <question class="mx-1 border-slate-400 grid" data-answer="u">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="a">a</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="u">u</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="u">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="a">a</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="u">u</q-option>
               </question>
               <span>ppy</span>
             </div>
           </div>
-          <div class="w-1/4 h-[95px] min-w-[85px] text-center py-2 border flex items-center">
-            <div class="flex items-center mx-auto">
-              <question class="mx-1 border-slate-400 grid" data-answer="3-3">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="3-3">3</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="3-2">2</q-option>
+          <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
+            <div class="injwang-flex injwang-items-center injwang-mx-auto">
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="3-3">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="3-3">3</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="3-2">2</q-option>
               </question>
             </div>
           </div>
         </div>
       </div>
-      <div class="border min-w-[369px]">
-        <img class="w-full h-[180px] object-cover" src="../../public/imgs/games/07-1/28/tadpole.jpg">
-        <div class="text-3xl flex items-center">
-          <div class="w-3/4 h-[95px] text-center py-2 border flex items-center">
-            <div class="w-fit mx-auto flex items-center">
+      <div class="injwang-border injwang-min-w-[369px]">
+        <img class="injwang-w-full injwang-h-[180px] injwang-object-cover" src="../../public/imgs/games/07-1/28/tadpole.jpg">
+        <div class="injwang-text-3xl injwang-flex injwang-items-center">
+          <div class="injwang-w-3/4 injwang-h-[95px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
+            <div class="injwang-w-fit injwang-mx-auto injwang-flex injwang-items-center">
               <span>t</span>
-              <question class="mx-1 border-slate-400 grid" data-answer="4-1-a">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="4-1-a">a</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="4-1-o">o</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="4-1-a">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-1-a">a</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-1-o">o</q-option>
               </question>
               <span>dp</span>
-              <question class="mx-1 border-slate-400 grid" data-answer="4-o">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="4-o">o</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="4-e">e</q-option>
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="4-o">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-o">o</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-e">e</q-option>
               </question>
               <span>le</span>
             </div>
           </div>
-          <div class="w-1/4 h-[95px] min-w-[85px] text-center py-2 border flex items-center">
-            <div class="flex items-center mx-auto">
-              <question class="mx-1 border-slate-400 grid" data-answer="4-8">
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="4-8">8</q-option>
-                <q-option class="px-2 text-slate-600 cursor-pointer hover:bg-slate-200 rounded mt-1 text-center" data-option-answer="4-5">5</q-option>
+          <div class="injwang-w-1/4 injwang-h-[95px] injwang-min-w-[85px] injwang-text-center injwang-py-2 injwang-border injwang-flex injwang-items-center">
+            <div class="injwang-flex injwang-items-center injwang-mx-auto">
+              <question class="injwang-mx-1 injwang-border-slate-400 injwang-grid" data-answer="4-8">
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-8">8</q-option>
+                <q-option class="injwang-px-2 injwang-text-slate-600 injwang-cursor-pointer hover:injwang-bg-slate-200 injwang-rounded injwang-mt-1 injwang-text-center" data-option-answer="4-5">5</q-option>
               </question>
             </div>
           </div>

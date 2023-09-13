@@ -3,13 +3,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script>
-    window.onerror = function(message, source, line, column, error) {
-        alert(line);
-        alert(message);
-        alert(source);
-    };
-  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
@@ -20,7 +13,7 @@
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  
+  <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
 body {
@@ -42,76 +35,76 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container bg-white lg:text-2xl max-w-[1180px] lg:min-h-full lg:shadow-md">
-    <div class="pt-1 lg:pt-2 lg:pt-6 mb-1 lg:mb-6">
-      <div class="flex items-center mx-auto w-[90%]">
-        <div class="w-5/6 relative">
-          <img class="absolute left-[-2.5rem] top-1 h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="game-title text-orange-500 text-2xl lg:text-4xl border-b lg:pb-4 lg:mb-4">Guess Who</div>
+  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
+    <div class="injwang-pt-1 lg:injwang-pt-2 lg:injwang-pt-6 injwang-mb-1 lg:injwang-mb-6">
+      <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
+        <div class="injwang-w-5/6 injwang-relative">
+          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-4">Guess Who</div>
           <div>
             Fill in the blanks and complete the sentences. 
           </div>
         </div>
-        <div class="ml-5 w-1/6">
-          <img class="w-full" src="../../public/imgs/games/07-1/29/cow.png">
+        <div class="injwang-ml-5 injwang-w-1/6">
+          <img class="injwang-w-full" src="../../public/imgs/games/07-1/29/cow.png">
         </div>
       </div>
     </div>
-    <div class="droppable min-h-5 p-2 border-2 border-dashed border-amber-900 rounded flex my-2  lg:my-6 bg-slate-100 w-[90%] mx-auto ui-droppable" data-answer="stock">
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="scratch" style="position: relative;">scratch</div>
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="run" style="position: relative;">run</div>
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="wings" style="position: relative;">wings</div>
+    <div class="droppable injwang-min-h-5 injwang-p-2 injwang-border-2 injwang-border-dashed injwang-border-amber-900 injwang-rounded injwang-flex injwang-my-2  lg:injwang-my-6 injwang-bg-slate-100 injwang-w-[90%] injwang-mx-auto ui-droppable" data-answer="stock">
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="scratch" style="position: relative;">scratch</div>
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="run" style="position: relative;">run</div>
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="wings" style="position: relative;">wings</div>
     </div>
-    <div class="text-xl mx-0 my-0 lg:mx-[2.5rem] p-2 lg:p-[22px] grid grid-cols-1 lg:grid-cols-2 lg:gap-2" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;">
-      <div class="flex mx-auto lg:mx-0">
-        <div class="border-l-4 pl-2 pt-5 border-orange-300  leading-8 lg:leading-10 my-6">
-          <div class="w-max">As a puppy grows bigger, </div>
-          <div class="flex">
-            <div class="w-max">it can</div>
-            <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="run"></div>
+    <div class="injwang-text-xl injwang-mx-0 injwang-my-0 lg:injwang-mx-[2.5rem] injwang-p-2 lg:injwang-p-[22px] injwang-grid injwang-grid-cols-1 lg:injwang-grid-cols-2 lg:injwang-gap-2" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;">
+      <div class="injwang-flex injwang-mx-auto lg:injwang-mx-0">
+        <div class="injwang-border-l-4 injwang-pl-2 injwang-pt-5 injwang-border-orange-300  injwang-leading-8 lg:injwang-leading-10 injwang-my-6">
+          <div class="injwang-w-max">As a puppy grows bigger, </div>
+          <div class="injwang-flex">
+            <div class="injwang-w-max">it can</div>
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="run"></div>
             fast.
           </div>
         </div>
         <div>
-          <img class="h-[100px] mt-6 ml-6 max-[400px]:hidden" src="../../public/imgs/games/07-1/29/dog.png">
+          <img class="injwang-h-[100px] injwang-mt-6 injwang-ml-6 max-[400px]:injwang-hidden" src="../../public/imgs/games/07-1/29/dog.png">
         </div>
       </div>
-      <div class="flex mx-auto lg:mx-0">
-        <div class="border-l-4 pl-2 pt-5 border-orange-300  leading-8 lg:leading-10 my-6">
-          <div class="w-max">As a kitten grows bigger,</div>
-          <div class="flex">
-            <div class="w-max">it likes to</div>
-            <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="scratch"></div>
+      <div class="injwang-flex injwang-mx-auto lg:injwang-mx-0">
+        <div class="injwang-border-l-4 injwang-pl-2 injwang-pt-5 injwang-border-orange-300  injwang-leading-8 lg:injwang-leading-10 injwang-my-6">
+          <div class="injwang-w-max">As a kitten grows bigger,</div>
+          <div class="injwang-flex">
+            <div class="injwang-w-max">it likes to</div>
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="scratch"></div>
             .
           </div>
         </div>
         <div>
-          <img class="h-[100px] mt-6 ml-6 max-[400px]:hidden" src="../../public/imgs/games/07-1/29/cat.png">
+          <img class="injwang-h-[100px] injwang-mt-6 injwang-ml-6 max-[400px]:injwang-hidden" src="../../public/imgs/games/07-1/29/cat.png">
         </div>
       </div>
-      <div class="flex mx-auto lg:mx-0">
-        <div class="border-l-4 pl-2 pt-5 border-orange-300  leading-8 lg:leading-10 my-6">
-          <div class="w-max">As a tadpole grows bigger,</div>
-          <div class="flex">
-            <div class="w-max">it can</div>
-            <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="jump"></div>
+      <div class="injwang-flex injwang-mx-auto lg:injwang-mx-0">
+        <div class="injwang-border-l-4 injwang-pl-2 injwang-pt-5 injwang-border-orange-300  injwang-leading-8 lg:injwang-leading-10 injwang-my-6">
+          <div class="injwang-w-max">As a tadpole grows bigger,</div>
+          <div class="injwang-flex">
+            <div class="injwang-w-max">it can</div>
+            <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="jump"></div>
             .
           </div>
         </div>
         <div>
-          <img class="h-[100px] mt-10 ml-4 max-[400px]:hidden" src="../../public/imgs/games/07-1/29/fog.png">
+          <img class="injwang-h-[100px] injwang-mt-10 injwang-ml-4 max-[400px]:injwang-hidden" src="../../public/imgs/games/07-1/29/fog.png">
         </div>
       </div>
-      <div class="flex mx-auto lg:mx-0">
-        <div class="border-l-4 pl-2 pt-5 border-orange-300  leading-8 lg:leading-10 my-6">
-          <div class="w-max">As a caterpillar grows bigger,</div>
-          <div class="inline-flex">
-            <div class="w-max">it grows a pair of</div><div class="droppable question mx-1 border-b border-amber-700 w-24 h-10 ui-droppable" data-answer="wings"></div>.
+      <div class="injwang-flex injwang-mx-auto lg:injwang-mx-0">
+        <div class="injwang-border-l-4 injwang-pl-2 injwang-pt-5 injwang-border-orange-300  injwang-leading-8 lg:injwang-leading-10 injwang-my-6">
+          <div class="injwang-w-max">As a caterpillar grows bigger,</div>
+          <div class="injwang-inline-flex">
+            <div class="injwang-w-max">it grows a pair of</div><div class="droppable question injwang-mx-1 injwang-border-b injwang-border-amber-700 injwang-w-24 injwang-h-10 ui-droppable" data-answer="wings"></div>.
           </div>
         </div>
         <div>
-          <img class="h-[100px] mt-6 ml-4 max-[400px]:hidden" src="../../public/imgs/games/07-1/29/butterfly.png">
+          <img class="injwang-h-[100px] injwang-mt-6 injwang-ml-4 max-[400px]:injwang-hidden" src="../../public/imgs/games/07-1/29/butterfly.png">
         </div>
       </div>
     </div>

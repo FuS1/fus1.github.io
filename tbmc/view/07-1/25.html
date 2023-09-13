@@ -3,13 +3,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script>
-    window.onerror = function(message, source, line, column, error) {
-        alert(line);
-        alert(message);
-        alert(source);
-    };
-  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
@@ -20,7 +13,7 @@
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  
+  <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
 body {
@@ -41,35 +34,35 @@ body::before{
 
 </style>
 </head>
-<body class="bg-[#fffbc7] md:bg-[#ffffff]">
-  <div class="container bg-[#fffbc7] lg:text-2xl max-w-[1180px] min-h-full lg:shadow-md" aria-hidden="true">
-    <div class="pt-2 lg:pt-6">
-      <div class="flex items-center mx-auto w-full sm:w-[90%]">
-        <div class="w-5/6 relative">
-          <img class="sm:absolute sm:left-[-2.5rem] sm:top-1 h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="game-title text-orange-500 text-2xl lg:text-4xl border-b lg:pb-4 lg:mb-2">Getting to Know a Cat</div>
+<body class="injwang-bg-[#fffbc7] md:injwang-bg-[#ffffff]">
+  <div class="container injwang-bg-[#fffbc7] lg:injwang-text-2xl injwang-max-w-[1180px] injwang-min-h-full lg:injwang-shadow-md" aria-hidden="true">
+    <div class="injwang-pt-2 lg:injwang-pt-6">
+      <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-full sm:injwang-w-[90%]">
+        <div class="injwang-w-5/6 injwang-relative">
+          <img class="sm:injwang-absolute sm:injwang-left-[-2.5rem] sm:injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Getting to Know a Cat</div>
           <div>
             Match each card to the right part of the cat.
           </div>
         </div>
       </div>
     </div>
-    <div class="droppable p-1 lg:p-3 border-2 border-dashed border-amber-900 rounded flex mt-4 xl:mx-10 xl:mt-6 bg-slate-100 sm:w-[90%] lg:min-h-2 lg:min-h-5 mx-auto ui-droppable" data-answer="stock">
-      <div id="draggable-1" class="draggable-item m-[0.1rem] sm:m-2 cursor-grab bg-white border border-slate-600 p-2 rounded z-10 ui-draggable ui-draggable-handle" data-value="ear" style="position: relative;">ear</div>
-      <div id="draggable-1" class="draggable-item m-[0.1rem] sm:m-2 cursor-grab bg-white border border-slate-600 p-2 rounded z-10 ui-draggable ui-draggable-handle" data-value="eye" style="position: relative;">eye</div>
-      <div id="draggable-1" class="draggable-item m-[0.1rem] sm:m-2 cursor-grab bg-white border border-slate-600 p-2 rounded z-10 ui-draggable ui-draggable-handle" data-value="whisker" style="position: relative;">whisker</div>
-      <div id="draggable-1" class="draggable-item m-[0.1rem] sm:m-2 cursor-grab bg-white border border-slate-600 p-2 rounded z-10 ui-draggable ui-draggable-handle" data-value="paw" style="position: relative;">paw</div>
-      <div id="draggable-1" class="draggable-item m-[0.1rem] sm:m-2 cursor-grab bg-white border border-slate-600 p-2 rounded z-10 ui-draggable ui-draggable-handle" data-value="fur" style="position: relative;">fur</div>
-      <div id="draggable-1" class="draggable-item m-[0.1rem] sm:m-2 cursor-grab bg-white border border-slate-600 p-2 rounded z-10 ui-draggable ui-draggable-handle" data-value="tail" style="position: relative;">tail</div>
+    <div class="droppable injwang-p-1 lg:injwang-p-3 injwang-border-2 injwang-border-dashed injwang-border-amber-900 injwang-rounded injwang-flex injwang-mt-4 xl:injwang-mx-10 xl:injwang-mt-6 injwang-bg-slate-100 sm:injwang-w-[90%] lg:injwang-min-h-2 lg:injwang-min-h-5 injwang-mx-auto ui-droppable" data-answer="stock">
+      <div id="draggable-1" class="draggable-item injwang-m-[0.1rem] sm:injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded injwang-z-10 ui-draggable ui-draggable-handle" data-value="ear" style="position: relative;">ear</div>
+      <div id="draggable-1" class="draggable-item injwang-m-[0.1rem] sm:injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded injwang-z-10 ui-draggable ui-draggable-handle" data-value="eye" style="position: relative;">eye</div>
+      <div id="draggable-1" class="draggable-item injwang-m-[0.1rem] sm:injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded injwang-z-10 ui-draggable ui-draggable-handle" data-value="whisker" style="position: relative;">whisker</div>
+      <div id="draggable-1" class="draggable-item injwang-m-[0.1rem] sm:injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded injwang-z-10 ui-draggable ui-draggable-handle" data-value="paw" style="position: relative;">paw</div>
+      <div id="draggable-1" class="draggable-item injwang-m-[0.1rem] sm:injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded injwang-z-10 ui-draggable ui-draggable-handle" data-value="fur" style="position: relative;">fur</div>
+      <div id="draggable-1" class="draggable-item injwang-m-[0.1rem] sm:injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded injwang-z-10 ui-draggable ui-draggable-handle" data-value="tail" style="position: relative;">tail</div>
     </div>
-    <div class="relative w-full mx-auto mt-[-10px] lg:mt-[-15px] xl:ml-auto xl:mt-3" aria-hidden="true">
-      <img class="mx-auto w-[300px] lg:w-[620px] lg:w-[550px]" src="../../public/imgs/games/07-1/25/cat.png">
-      <div class="droppable question mx-2 border-2 border-gray-500 w-24 h-12 lg:w-32 lg:h-14 bg-white absolute top-[18%] lg:top-[18%]   left-[-5%] sm:left-[18%] min-[880px]:left-[25%] lg:left-[14%] ui-droppable" data-answer="ear"></div>
-      <div class="droppable question mx-2 border-2 border-gray-500 w-24 h-12 lg:w-32 lg:h-14 bg-white absolute top-[46%] lg:top-[49.5%] left-[-5%] sm:left-[18%] min-[880px]:left-[25%] lg:left-[14%] ui-droppable" data-answer="eye"></div>
-      <div class="droppable question mx-2 border-2 border-gray-500 w-24 h-12 lg:w-32 lg:h-14 bg-white absolute top-[74%] lg:top-[74%]   left-[-5%] sm:left-[18%] min-[880px]:left-[25%] lg:left-[14%] ui-droppable" data-answer="paw"></div>
-      <div class="droppable question mx-2 border-2 border-gray-500 w-24 h-12 lg:w-32 lg:h-14 bg-white absolute top-[18%] lg:top-[18%]   left-[70%] sm:left-[59%] min-[880px]:left-[59%] lg:left-[63%] ui-droppable" data-answer="tail"></div>
-      <div class="droppable question mx-2 border-2 border-gray-500 w-24 h-12 lg:w-32 lg:h-14 bg-white absolute top-[49%] lg:top-[53%]   left-[70%] sm:left-[59%] min-[880px]:left-[59%] lg:left-[63%] ui-droppable" data-answer="whisker"></div>
-      <div class="droppable question mx-2 border-2 border-gray-500 w-24 h-12 lg:w-32 lg:h-14 bg-white absolute top-[10%] lg:top-[18%]   left-[33%] sm:left-[35%] min-[880px]:left-[40%] lg:left-[36%] ui-droppable" data-answer="fur"></div>
+    <div class="injwang-relative injwang-w-full injwang-mx-auto injwang-mt-[-10px] lg:injwang-mt-[-15px] xl:injwang-ml-auto xl:injwang-mt-3" aria-hidden="true">
+      <img class="injwang-mx-auto injwang-w-[300px] lg:injwang-w-[620px] lg:injwang-w-[550px]" src="../../public/imgs/games/07-1/25/cat.png">
+      <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[18%] lg:injwang-top-[18%]   injwang-left-[-5%] sm:injwang-left-[18%] min-[880px]:injwang-left-[25%] lg:injwang-left-[14%] ui-droppable" data-answer="ear"></div>
+      <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[46%] lg:injwang-top-[49.5%] injwang-left-[-5%] sm:injwang-left-[18%] min-[880px]:injwang-left-[25%] lg:injwang-left-[14%] ui-droppable" data-answer="eye"></div>
+      <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[74%] lg:injwang-top-[74%]   injwang-left-[-5%] sm:injwang-left-[18%] min-[880px]:injwang-left-[25%] lg:injwang-left-[14%] ui-droppable" data-answer="paw"></div>
+      <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[18%] lg:injwang-top-[18%]   injwang-left-[70%] sm:injwang-left-[59%] min-[880px]:injwang-left-[59%] lg:injwang-left-[63%] ui-droppable" data-answer="tail"></div>
+      <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[49%] lg:injwang-top-[53%]   injwang-left-[70%] sm:injwang-left-[59%] min-[880px]:injwang-left-[59%] lg:injwang-left-[63%] ui-droppable" data-answer="whisker"></div>
+      <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[10%] lg:injwang-top-[18%]   injwang-left-[33%] sm:injwang-left-[35%] min-[880px]:injwang-left-[40%] lg:injwang-left-[36%] ui-droppable" data-answer="fur"></div>
     </div>
   </div>
 

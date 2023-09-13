@@ -3,13 +3,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script>
-    window.onerror = function(message, source, line, column, error) {
-        alert(line);
-        alert(message);
-        alert(source);
-    };
-  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
@@ -20,7 +13,7 @@
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  
+  <script>tailwind.config = { prefix: 'injwang-' }</script>
 <style>
 
 body {
@@ -42,57 +35,57 @@ body::before{
 </style>
 </head>
 <body>
-  <div class="container bg-white lg:text-2xl max-w-[1180px] lg:min-h-full lg:shadow-md">
-    <div class="pt-1 lg:pt-2 lg:pt-6 mb-1 lg:mb-6">
-      <div class="flex items-center ml-20 w-[90%]">
-        <div class="w-5/6 relative">
-          <img class="absolute left-[-2.5rem] top-1 h-8" src="../../public/imgs/games/title-fog.png">
-          <div class="game-title text-orange-500 text-2xl lg:text-4xl border-b lg:pb-4 lg:mb-2">Guess Who</div>
+  <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] lg:injwang-min-h-full lg:injwang-shadow-md">
+    <div class="injwang-pt-1 lg:injwang-pt-2 lg:injwang-pt-6 injwang-mb-1 lg:injwang-mb-6">
+      <div class="injwang-flex injwang-items-center injwang-ml-20 injwang-w-[90%]">
+        <div class="injwang-w-5/6 injwang-relative">
+          <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+          <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Guess Who</div>
           <div>
             Fill In the blanks complete the sentences.
           </div>
         </div>
-        <div class="ml-10 w-1/8">
-          <img class="w-full" src="../../public/imgs/games/11-5/29/child.jpg">
+        <div class="injwang-ml-10 injwang-w-1/8">
+          <img class="injwang-w-full" src="../../public/imgs/games/11-5/29/child.jpg">
         </div>
       </div>
     </div>
-    <div class="droppable min-h-5 p-3 border-2 border-dashed border-amber-900 rounded flex my-2  lg:my-6 bg-slate-100 w-[90%] mx-auto ui-droppable" data-answer="stock" >
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="sing" style="position: relative;">sing</div>
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="pretend" style="position: relative;">pretend</div>
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
-      <div id="draggable-1" class="draggable-item m-2 cursor-grab bg-white border border-slate-600 p-2 rounded ui-draggable ui-draggable-handle" data-value="fight" style="position: relative;">fight</div>
+    <div class="droppable injwang-min-h-5 injwang-p-3 injwang-border-2 injwang-border-dashed injwang-border-amber-900 injwang-rounded injwang-flex injwang-my-2  lg:injwang-my-6 injwang-bg-slate-100 injwang-w-[90%] injwang-mx-auto ui-droppable" data-answer="stock" >
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="sing" style="position: relative;">sing</div>
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="pretend" style="position: relative;">pretend</div>
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="jump" style="position: relative;">jump</div>
+      <div id="draggable-1" class="draggable-item injwang-m-2 injwang-cursor-grab injwang-bg-white injwang-border injwang-border-slate-600 injwang-p-2 injwang-rounded ui-draggable ui-draggable-handle" data-value="fight" style="position: relative;">fight</div>
     </div>
-    <div class="mx-0 my-0 lg:mx-[2.5rem] p-2 lg:p-[22px] grid grid-cols-2 gap-2" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;">
-      <div class="border-l-4 border-orange-300 pl-3 py-1 lg:p-3 lg:mx-10 my-2 lg:my-6 leading-8 lg:leading-10">
+    <div class="injwang-mx-0 injwang-my-0 lg:injwang-mx-[2.5rem] injwang-p-2 lg:injwang-p-[22px] injwang-grid injwang-grid-cols-2 injwang-gap-2" style="box-shadow: 11px 14px 1px 1px rgb(132 203 241);border-radius: 30px;">
+      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
         <div>I am a grasshopper.</div>
-        <div class="flex">
+        <div class="injwang-flex">
           I know how to 
-          <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="jump"></div>
+          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="jump"></div>
           .
         </div>
       </div>
-      <div class="border-l-4 border-orange-300 pl-3 py-1 lg:p-3 lg:mx-10 my-2 lg:my-6 leading-8 lg:leading-10">
+      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
         <div>I am a cicada.</div>
-        <div class="flex">
+        <div class="injwang-flex">
           I know how to 
-          <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="sing"></div>
+          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="sing"></div>
           .
         </div>
       </div>
-      <div class="border-l-4 border-orange-300 pl-3 py-1 lg:p-3 lg:mx-10 my-2 lg:my-6 leading-8 lg:leading-10">
+      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
         <div>I am a male stag bettle.</div>
-        <div class="flex">
+        <div class="injwang-flex">
           I know how to 
-          <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="fight"></div>
+          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="fight"></div>
           .
         </div>
       </div>
-      <div class="border-l-4 border-orange-300 pl-3 py-1 lg:p-3 lg:mx-10 my-2 lg:my-6 leading-8 lg:leading-10">
+      <div class="injwang-border-l-4 injwang-border-orange-300 injwang-pl-3 injwang-py-1 lg:injwang-p-3 lg:injwang-mx-10 injwang-my-2 lg:injwang-my-6 injwang-leading-8 lg:injwang-leading-10">
         <div>I am a stick insect.</div>
-        <div class="flex">
+        <div class="injwang-flex">
           I know how to 
-          <div class="droppable question mx-2 border-b border-amber-700 w-28 h-10 ui-droppable" data-answer="pretend"></div>
+          <div class="droppable question injwang-mx-2 injwang-border-b injwang-border-amber-700 injwang-w-28 injwang-h-10 ui-droppable" data-answer="pretend"></div>
           .
         </div>
       </div>
