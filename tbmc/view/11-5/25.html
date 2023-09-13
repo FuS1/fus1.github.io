@@ -3,17 +3,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <script>
+    window.onerror = function(message, source, line, column, error) {
+        alert(line);
+        alert(message);
+        alert(source);
+    };
+  </script>
   <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
   <script src="../../public/js/games/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
+  <link rel="stylesheet" href="../../public/css/games/tailwind.css">
   <script src="../../public/js/games/bootstrap.bundle.min.js"></script>
   <script src="../../public/js/games/sweetalert2.min.js"></script>
-  <script src="../../public/js/games/tailwindcss.min.js"></script>
-  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>    
+  <!-- <script src="../../public/js/games/tailwindcss.min.js"></script> -->
+  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>
   <script src="../../public/js/games/jquery.cookie.min.js"></script>
   <script src="../../public/js/games/howler.min.js"></script>
   <script src="../../public/js/games/check-orientation.js"></script>
-  <script>tailwind.config = { prefix: 'injwang-' }</script>
+  
 <style>
 
 body {
