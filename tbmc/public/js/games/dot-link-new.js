@@ -16397,7 +16397,7 @@ class Wm {
                         this.dragging = [], this.tempLine.clear()
                     }
                 }
-            $('#app > canvas').attr('height',window.innerHeight * 2.5);
+            $('#app > canvas').attr('height',t *2.5);
         });
         W(this, "parseQuestion", t => t.map(i => {
             const s = i.split(",");
@@ -16415,6 +16415,7 @@ class Wm {
             width: It.APP_WIDTH,
             height: It.APP_HEIGHT,
             backgroundColor: It.APP_BG_COLOR,
+            backgroundAlpha: 0,
             resolution: window.devicePixelRatio
         });
         const s = document.getElementById(t) ?? document.body;
