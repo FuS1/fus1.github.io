@@ -27,17 +27,16 @@
 
 body {
   font-family: Verdana;
-  overflow-y: hidden;
 }
 
-body::before{
-  display: block;
+.bg-img{
+  display: flex;
   width: 100%;
   height: 100%;
   content: '';
   background: url(../../public/imgs/games/light_gray_concrete_wall.jpg) repeat 50% 50%;
   background-size: cover;
-  position: absolute;
+  position: fixed;
   opacity: 0.2;
   z-index: -9999;
 }
@@ -46,6 +45,7 @@ body::before{
 
 </head>
 <body>
+  <div class="bg-img"></div>
   <div class="container injwang-bg-white lg:injwang-text-2xl injwang-max-w-[1180px] injwang-h-full injwang-shadow-md">
     <div id="title-warp" class="injwang-pt-2 lg:injwang-pt-6">
       <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
