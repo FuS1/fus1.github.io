@@ -16397,7 +16397,7 @@ class Wm {
                         this.dragging = [], this.tempLine.clear()
                     }
                 }
-            $('#app > canvas').attr('height',window.innerHeight);
+            $('#app > canvas').attr('height',window.innerHeight * 1.5);
         });
         W(this, "parseQuestion", t => t.map(i => {
             const s = i.split(",");
