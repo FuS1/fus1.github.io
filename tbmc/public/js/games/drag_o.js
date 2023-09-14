@@ -62,7 +62,7 @@
                         imageWidth:250,
                         showCancelButton: false,
                         confirmButtonText: '再玩一次',
-                        allowOutsideClick: true,
+                        allowOutsideClick: false,
                         allowEscapeKey:false,
                         reverseButtons:true,
                         }).then(function(result){

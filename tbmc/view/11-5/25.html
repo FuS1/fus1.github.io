@@ -10,18 +10,18 @@
         alert(source);
     };
   </script>
-  <script src="../../public/js/games/jquery-3.7.0.min.js"></script>
-  <script src="../../public/js/games/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css">
-  <link rel="stylesheet" href="../../public/css/games/tailwind.css">
-  <script src="../../public/js/games/bootstrap.bundle.min.js"></script>
-  <script src="../../public/js/games/sweetalert2.min.js"></script>
+  <script src="../../public/js/games/jquery-3.7.0.min.js?v=20230914"></script>
+  <script src="../../public/js/games/jquery-ui.min.js?v=20230914"></script>
+  <link rel="stylesheet" href="../../public/css/games/tailwind.css?v=20230914">
+  <link rel="stylesheet" href="../../public/css/games/bootstrap.min.css?v=20230914">
+  <link rel="stylesheet" href="../../public/css/games/sweetalert2.min.css?v=20230914">
+  <script src="../../public/js/games/bootstrap.bundle.min.js?v=20230914"></script>
+  <script src="../../public/js/games/sweetalert2.min.js?v=20230914"></script>
   <!-- <script src="../../public/js/games/tailwindcss.min.js"></script> -->
-  <script src="../../public/js/games/jquery.ui.touch-punch.min.js"></script>
-  <script src="../../public/js/games/jquery.cookie.min.js"></script>
-  <script src="../../public/js/games/howler.min.js"></script>
-  <script src="../../public/js/games/check-orientation.js"></script>
-  
+  <script src="../../public/js/games/jquery.ui.touch-punch.min.js?v=20230914"></script>
+  <script src="../../public/js/games/jquery.cookie.min.js?v=20230914"></script>
+  <script src="../../public/js/games/howler.min.js?v=20230914"></script>
+  <script src="../../public/js/games/check-orientation.js?v=20230914"></script>
 <style>
 
 body {
@@ -64,6 +64,7 @@ body::before{
 
 
 <script>
+  alert('測ios 14 失敗跳窗-7');
     /**
      * 串接系統設定值
      * useComputerOrPadImgUrl 為提示使用平板或電腦圖片路徑
@@ -109,7 +110,7 @@ body::before{
           imageWidth:250,
           showCancelButton: false,
           confirmButtonText: '再玩一次',
-          allowOutsideClick: true,
+          allowOutsideClick: false,
           allowEscapeKey:false,
           reverseButtons:true,
         }).then(function(result){
@@ -138,6 +139,7 @@ body::before{
       setTimeout(function() {
         Swal.fire({
           title: '差一點點喔！請重新嘗試...',
+          html:'',
           showCancelButton: false,
           confirmButtonText: '確認',
           allowOutsideClick: true,
