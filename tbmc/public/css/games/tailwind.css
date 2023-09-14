@@ -689,6 +689,10 @@ video {
   display: inline-flex
 }
 
+.injwang-flex-wrap{
+  flex-wrap: wrap
+}
+
 .injwang-grid{
   display: grid
 }
@@ -828,6 +832,10 @@ video {
 
 .injwang-max-w-\[1180px\]{
   max-width: 1180px
+}
+
+.injwang-max-w-full{
+  max-width: 100%
 }
 
 .injwang-cursor-grab{
@@ -1279,8 +1287,16 @@ video {
     width: 70%
   }
 
+  .lg\:injwang-w-\[75\%\]{
+    width: 75%
+  }
+
   .lg\:injwang-w-\[85\%\]{
     width: 85%
+  }
+
+  .lg\:injwang-w-\[90\%\]{
+    width: 90%
   }
 
   .lg\:injwang-grid-cols-2{

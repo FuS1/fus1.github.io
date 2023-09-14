@@ -16329,10 +16329,7 @@ class Wm {
         // });
         W(this, "onResize", () => {
             this.app.view.style.width = $("#app").width(), this.ratio =  $("#app").width() / It.APP_WIDTH , this.app.stage.scale.set(this.ratio)
-            
-            setTimeout(function(){
-                $('#app > canvas').attr('height',480 * 2.5);
-            },300);
+            $('#app > canvas').attr('height', (Number($('#app > canvas').attr('width')) * 9 / 16 ) + 100);
         });
         W(this, "tempLineTo", (t, i) => {
             this.dragging.length !== 0 && (this.tempLine.clear(), this.tempLine.lineStyle(5, 0xf97316), this.tempLine.moveTo(this.dragging[2] / this.ratio, this.dragging[3] / this.ratio), this.tempLine.lineTo(t / this.ratio, i / this.ratio))
@@ -16401,7 +16398,7 @@ class Wm {
                         this.dragging = [], this.tempLine.clear()
                     }
                 }
-                $('#app > canvas').attr('height',480 * 2.5);
+                $('#app > canvas').attr('height', (Number($('#app > canvas').attr('width')) * 9 / 16 ) + 100);
         });
         W(this, "parseQuestion", t => t.map(i => {
             const s = i.split(",");
