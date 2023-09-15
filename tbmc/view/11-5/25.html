@@ -24,9 +24,31 @@
   <script src="../../public/js/games/check-orientation.js?v=20230914"></script>
 <style>
 
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #929292 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #969696;
+  border-radius: 10px;
+  border: 3px solid #ffffff;
+}
+
 body {
   font-family: Verdana;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 .bg-img{
