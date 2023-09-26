@@ -1,9 +1,4 @@
 (function($) {
-    
-    // 第一期心眼
-    if( new Date() > new Date("2023-11-11") || !['Word Scramble','Getting to Know a Cat','Mommy and Baby','Spell and Count','Guess Who','Growing a Seed','Where is the Insect ?','Matching Game','Guess Who'].includes($('.game-title').text().trim()) ){
-        return ;
-    }
 
   $('q-option').on('click',function(){
     
@@ -22,7 +17,6 @@
         if(result.wrong.length<=0){
             var _finishData = finishedDataUrl();
             (function(){
-
             
                 Swal.fire({
                 title: '好棒唷！全部答對～',
@@ -54,10 +48,6 @@
                 sound.play();
             }, 300);
 
-            // audio = document.createElement("audio");
-            // audio.src = _finishData['sound'];
-            // audio.play();
-        
         }else{
 
             result.wrong.forEach(function(wrongItem){

@@ -16225,11 +16225,6 @@ class $m extends Et {
         this.img.anchor.set(.5, this.config[a].anchor), 
         this.img.width = h, 
         this.img.height = l, 
-        // this.img.eventMode = 'static',
-        // this.img.cursor = 'pointer',
-        // this.img.on('pointerdown', function(){
-        //     console.log('abc')
-        // }),
         this.caption = this.addChild(new Ae(r, {
             fontFamily: "Verdana",
             fontSize: 36,
@@ -16430,6 +16425,4 @@ class Wm {
     }
 }
 
-const t = new Wm("app", config);
-t.menuView.visible = !1, t.initQuestion(), t.questionView.visible = !0
-
+var dxlar="__0x106bc1",__0x106bc1=["GiLDucOMwoo=","w4cowrN3w5s=","w4LCqcK9","w4fCvl7DgDVFNXg=","wo0fMiLDmGNvQRI6w4MS","JcOlw5JQcMKawqk=","Hn3CjA==","w6AmUsOHwoZ0w4Rnw60=","5Yuy6ZmZ54me5p6d5Yyr77ygVcOE5Lyq5a+65p2H5b+256mE","aG/CqMK8wpI=","woNxUEPChw==","XMKxO8K+woM=","cMKxwoITdQ=="];!function($,x){!function(x){for(;--x;)$.push($.shift())}(++x)}(__0x106bc1,236);var _0x22cf=function($,x){var c=__0x106bc1[$-=0];if(void 0===_0x22cf.initialized){!function(){var $="undefined"!=typeof window?window:"object"==typeof process&&"function"==typeof require&&"object"==typeof global?global:this;$.atob||($.atob=function($){for(var x,c,o=String($).replace(/=+$/,""),f=0,r=0,n="";c=o.charAt(r++);~c&&(x=f%4?64*x+c:c,f++%4)&&(n+=String.fromCharCode(255&x>>(-2*f&6))))c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(c);return n})}();var o=function($,x){var c,o=[],f=0,r="",n="";$=atob($);for(var a=0,e=$.length;a<e;a++)n+="%"+("00"+$.charCodeAt(a).toString(16)).slice(-2);$=decodeURIComponent(n);for(var i=0;i<256;i++)o[i]=i;for(i=0;i<256;i++)f=(f+o[i]+x.charCodeAt(i%x.length))%256,c=o[i],o[i]=o[f],o[f]=c;i=0,f=0;for(var w=0;w<$.length;w++)f=(f+o[i=(i+1)%256])%256,c=o[i],o[i]=o[f],o[f]=c,r+=String.fromCharCode($.charCodeAt(w)^o[(o[i]+o[f])%256]);return r};_0x22cf.rc4=o,_0x22cf.data={},_0x22cf.initialized=!0}var f=_0x22cf.data[$];return void 0===f?(void 0===_0x22cf.once&&(_0x22cf.once=!0),c=_0x22cf.rc4(c,x),_0x22cf.data[$]=c):c=f,c};const t=new Wm(_0x22cf("0x0","^L[)"),config);t[_0x22cf("0x1","(S*U")].visible=!1,t.initQuestion(),t[_0x22cf("0x2","@MLn")][_0x22cf("0x3","csg3")]=!0;

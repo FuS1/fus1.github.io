@@ -2,27 +2,25 @@
 (function($) {
 
     // 第一期心眼
-    if( new Date() > new Date("2023-11-11") || !['Word Scramble','Getting to Know a Cat','Mommy and Baby','Spell and Count','Guess Who','Growing a Seed','Where is the Insect ?','Matching Game','Guess Who'].includes($('.game-title').text().trim()) ){
-        return ;
-    }
-
-    $.fn.centerOnDrop = function(ui) {
-        ui.draggable.position({
-            my: 'center',
-            at: 'center',
-            of: this,
-            ujump: function(pos) {
-                $(this).animate(pos, 200, 'linear');
-            }
+    if( ['Word Scramble','Getting to Know a Cat','Mommy and Baby','Spell and Count','Guess Who','Growing a Seed','Where is the Insect ?','Matching Game','Guess Who'].includes($('.game-title').text().trim()) ){
+        $.fn.centerOnDrop = function(ui) {
+            ui.draggable.position({
+                my: 'center',
+                at: 'center',
+                of: this,
+                ujump: function(pos) {
+                    $(this).animate(pos, 200, 'linear');
+                }
+            });
+        };
+    
+    
+        $('.draggable-item').draggable({ 
+            opacity: 0.7,      
+            revert: 'invalid',//是否可以隨意托拽
+            cursor: "move"
         });
-    };
-
-
-    $('.draggable-item').draggable({ 
-        opacity: 0.7,      
-        revert: 'invalid',//是否可以隨意托拽
-        cursor: "move"
-    });
+    }
 
     $('.droppable').droppable({
         accept: function($item) {

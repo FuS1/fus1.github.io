@@ -16216,6 +16216,11 @@ class $m extends Et {
             y: o,
             captionPos: a
         } = i;
+        // this.img.eventMode = 'static',
+        // this.img.cursor = 'pointer',
+        // this.img.on('pointerdown', function(){
+        //     console.log('abc')
+        // }),
         this.x = n, this.y = o, this.img = this.addChild(new Xe(O.from(s))), this.img.anchor.set(.5), this.caption = this.addChild(new Ae(r, {
             fontFamily: "Verdana",
             fontSize: 40,
