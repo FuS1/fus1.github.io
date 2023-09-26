@@ -57,11 +57,8 @@
       </div>
     </div>
   </div>
-@endsection
 
-
-
-<script>
+  <script>
      var useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
         pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
         finishedDatas=[{
@@ -81,3 +78,8 @@
 
 </script>
 <script src="{{ asset('/js/games/drag.js') }}"></script>
+
+@endsection
+
+
+

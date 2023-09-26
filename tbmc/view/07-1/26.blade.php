@@ -15,11 +15,8 @@
     </div>
     <div id="app" class="injwang-w-[90%] injwang-mx-auto injwang-mt-[10px]" style="margin-top: 10px;"></div>
   </div>
-@endsection
 
-
-
-<script>
+  <script>
      var useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
         pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
         finishedDatas=[{
@@ -129,3 +126,4 @@
 
 </script>
 <script src="{{ asset('/js/games/dot-link-new.js') }}"></script>
+@endsection

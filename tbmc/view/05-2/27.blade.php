@@ -48,27 +48,27 @@
       </div>
     </div>
   </div>
+    
+  <script>
+      var useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
+          pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
+          finishedDatas=[{
+              img: "{{ asset('/imgs/games/finishImg1.png') }}",
+              sound:"{{ asset('/sounds/games/finishSound1.mp3') }}",
+            },{
+              img: "{{ asset('/imgs/games/finishImg2.png') }}",
+              sound:"{{ asset('/sounds/games/finishSound2.mp3') }}",
+            },{
+              img: "{{ asset('/imgs/games/finishImg3.png') }}",
+              sound:"{{ asset('/sounds/games/finishSound3.mp3') }}",
+            }
+          ],
+          finishedDataUrl = function(){
+            return finishedDatas[Math.floor(Math.random()*finishedDatas.length)];
+          };
+
+  </script>
+  <script src="{{ asset('/js/games/click.js') }}"></script>
 @endsection
 
 
-
-<script>
-     var useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
-        pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
-        finishedDatas=[{
-            img: "{{ asset('/imgs/games/finishImg1.png') }}",
-            sound:"{{ asset('/sounds/games/finishSound1.mp3') }}",
-          },{
-            img: "{{ asset('/imgs/games/finishImg2.png') }}",
-            sound:"{{ asset('/sounds/games/finishSound2.mp3') }}",
-          },{
-            img: "{{ asset('/imgs/games/finishImg3.png') }}",
-            sound:"{{ asset('/sounds/games/finishSound3.mp3') }}",
-          }
-        ],
-        finishedDataUrl = function(){
-          return finishedDatas[Math.floor(Math.random()*finishedDatas.length)];
-        };
-
-</script>
-<script src="{{ asset('/js/games/click.js') }}"></script>

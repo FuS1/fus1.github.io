@@ -31,11 +31,8 @@
       <div class="droppable question injwang-mx-2 injwang-border-2 injwang-border-gray-500 injwang-w-24 injwang-h-12 lg:injwang-w-32 lg:injwang-h-14 injwang-bg-white injwang-absolute injwang-top-[10%] lg:injwang-top-[18%]   injwang-left-[33%] sm:injwang-left-[35%] min-[880px]:injwang-left-[40%] lg:injwang-left-[36%] ui-droppable" data-answer="fur"></div>
     </div>
   </div>
-@endsection
 
-
-
-<script>
+  <script>
      var useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
         pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
         finishedDatas=[{
@@ -53,5 +50,10 @@
           return finishedDatas[Math.floor(Math.random()*finishedDatas.length)];
         };
 
-</script>
-<script src="{{ asset('/js/games/drag.js') }}"></script>
+  </script>
+  <script src="{{ asset('/js/games/drag.js') }}"></script>
+
+@endsection
+
+
+

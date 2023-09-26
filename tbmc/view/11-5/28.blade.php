@@ -107,11 +107,7 @@
       </div>
     </div>
   </div>
-@endsection
-
-
-
-<script>
+  <script>
      var useComputerOrPadImgUrl = "{{ asset('/imgs/games/computerOrPad.png') }}",
         pleaseRotationImgUrl = "{{ asset('/imgs/games/pleaseRotation.png') }}";
         finishedDatas=[{
@@ -129,5 +125,9 @@
           return finishedDatas[Math.floor(Math.random()*finishedDatas.length)];
         };
 
-</script>
-<script src="{{ asset('/js/games/click.js') }}"></script>
+  </script>
+  <script src="{{ asset('/js/games/click.js') }}"></script>
+@endsection
+
+
+
