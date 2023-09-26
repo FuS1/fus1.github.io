@@ -3,17 +3,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
-  <script src="{{ asset('../../public/js/games/jquery-3.7.0.min.js') }}"></script>
-  <script src="{{ asset('../../public/js/games/jquery-ui.min.js') }}"></script>
-  <link rel="stylesheet" href="{{ asset('../../public/css/games/tailwind.css') }}">
-  <link rel="stylesheet" href="{{ asset('../../public/css/games/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('../../public/css/games/sweetalert2.min.css') }}">
-  <script src="{{ asset('../../public/js/games/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('../../public/js/games/sweetalert2.min.js') }}"></script>
-  <script src="{{ asset('../../public/js/games/jquery.ui.touch-punch.min.js') }}"></script>
-  <script src="{{ asset('../../public/js/games/jquery.cookie.min.js') }}"></script>
-  <script src="{{ asset('../../public/js/games/howler.min.js') }}"></script>
-  <script src="{{ asset('../../public/js/games/check-orientation.js') }}"></script>
+  <script src="{{ asset('/js/games/jquery-3.7.0.min.js') }}"></script>
+  <script src="{{ asset('/js/games/jquery-ui.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ asset('/css/games/tailwind.css') }}">
+  <link rel="stylesheet" href="{{ asset('/css/games/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('/css/games/sweetalert2.min.css') }}">
+  <script src="{{ asset('/js/games/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('/js/games/sweetalert2.min.js') }}"></script>
+  <script src="{{ asset('/js/games/jquery.ui.touch-punch.min.js') }}"></script>
+  <script src="{{ asset('/js/games/jquery.cookie.min.js') }}"></script>
+  <script src="{{ asset('/js/games/howler.min.js') }}"></script>
+  <script src="{{ asset('/js/games/check-orientation.js') }}"></script>
 
   <style>
 
