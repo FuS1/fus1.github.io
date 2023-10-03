@@ -1,8 +1,22 @@
 
 (function($) {
 
-    // import drag lib
-    var ujgfu="__0x106bbc",__0x106bbc=["wqHDnMOKwrhqwrDCng==","ZcOKdTbDjw==","w67DlsORwrRswqPCmmZJw6LDrRRhYyg=","SsO3UjfDhRjCksOfwq4=","w6DCssOzZwLDh3I=","CcOdw4bCjw==","EcOcw5TCj8KfVCFwLg==","5Yu46Zm/54u+5p685Y+n77yrwq7DpeS8k+WvjOaesuW9kOeorA==","wrTCimIleQ==","YMOXbcO1BA==","a8KvDg3DukrDicODO8OcEcORR8Ow","UhvCsjzCh8K2R8Omw5nCgx1ydw==","TMKzCQnDogfDgcKDPMKTPsKeU8K8","eh/CvRsgw6BUTsOW","w6LDpcKGwrvCtsOPw44XOAMhDFfDjcOlwroZDcK7wo7Cog==","woNYw6ZDwrRjbSNfGcKmw7hn","cUbDvwLDs2lRwrHDmMKyw7Y=","wqRkDzk=","WcOoT3I=","wrt+w5jDpHVVwovDuE0kw4IZ","w4dqM3zCvxTDuMKN","w75tbTZx","wqwsHsKJNQ==","Gl1ew4zCog=="];!function(x,a){!function(a){for(;--a;)x.push(x.shift())}(++a)}(__0x106bbc,179);var _0xa653=function(x,a){var r=__0x106bbc[x-=0];if(void 0===_0xa653.initialized){!function(){var x="undefined"!=typeof window?window:"object"==typeof process&&"function"==typeof require&&"object"==typeof global?global:this;x.atob||(x.atob=function(x){for(var a,r,o=String(x).replace(/=+$/,""),t=0,n=0,c="";r=o.charAt(n++);~r&&(a=t%4?64*a+r:r,t++%4)&&(c+=String.fromCharCode(255&a>>(-2*t&6))))r="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(r);return c})}();var o=function(x,a){var r,o=[],t=0,n="",c="";x=atob(x);for(var e=0,w=x.length;e<w;e++)c+="%"+("00"+x.charCodeAt(e).toString(16)).slice(-2);x=decodeURIComponent(c);for(var f=0;f<256;f++)o[f]=f;for(f=0;f<256;f++)t=(t+o[f]+a.charCodeAt(f%a.length))%256,r=o[f],o[f]=o[t],o[t]=r;f=0,t=0;for(var i=0;i<x.length;i++)t=(t+o[f=(f+1)%256])%256,r=o[f],o[f]=o[t],o[t]=r,n+=String.fromCharCode(x.charCodeAt(i)^o[(o[f]+o[t])%256]);return n};_0xa653.rc4=o,_0xa653.data={},_0xa653.initialized=!0}var t=_0xa653.data[x];return void 0===t?(void 0===_0xa653.once&&(_0xa653.once=!0),r=_0xa653.rc4(r,a),_0xa653.data[x]=r):r=t,r};[_0xa653("0x0","FWd%"),"Getting to Know a Cat",_0xa653("0x1","gVr$"),"Spell and Count",_0xa653("0x2","Is6z"),"Growing a Seed",_0xa653("0x3","bB6("),_0xa653("0x4","fIpz"),"Guess Who"].includes($(_0xa653("0x5","B0m5"))[_0xa653("0x6","Qsq2")]()[_0xa653("0x7","cFcK")]())&&($.fn[_0xa653("0x8","IaU]")]=function(x){var a={feQqw:function x(a,r){return a(r)},KOFfm:"linear",FduvN:"center"};x.draggable[_0xa653("0x9","^F)7")]({my:a[_0xa653("0xa","z4&7")],at:a[_0xa653("0xb","Ql94")],of:this,ujump:function(x){a[_0xa653("0xc","ytob")]($,this)[_0xa653("0xd","xtph")](x,200,a[_0xa653("0xe","nM5G")])}})},$(_0xa653("0xf","xtph"))[_0xa653("0x10","nM5G")]({opacity:.7,revert:_0xa653("0x11","s^D%"),cursor:_0xa653("0x12","HX^b")}));
+    $.fn.centerOnDrop = function(ui) {
+        ui.draggable.position({
+            my: 'center',
+            at: 'center',
+            of: this,
+            ujump: function(pos) {
+                $(this).animate(pos, 200, 'linear');
+            }
+        });
+    };
+
+    $('.draggable-item').draggable({ 
+        opacity: 0.7,      
+        revert: 'invalid',
+        cursor: "move"
+    });
 
     $('.droppable').droppable({
         accept: function($item) {
@@ -79,12 +93,12 @@
 
                     setTimeout(function() {
                         Swal.fire({
-                        title: '差一點點喔！請重新嘗試...',
-                        showCancelButton: false,
-                        confirmButtonText: '確認',
-                        allowOutsideClick: true,
-                        allowEscapeKey:false,
-                        reverseButtons:true,
+                          title: '差一點點喔！請重新嘗試...',
+                          showCancelButton: false,
+                          confirmButtonText: '確認',
+                          allowOutsideClick: true,
+                          allowEscapeKey:false,
+                          reverseButtons:true,
                         });  
                     }, 2000);
                 }
