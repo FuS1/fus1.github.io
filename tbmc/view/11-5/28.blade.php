@@ -5,7 +5,7 @@
   <div id="title-warp" class="injwang-pt-2 lg:injwang-pt-6">
     <div class="injwang-flex injwang-items-center injwang-mx-auto injwang-w-[90%]">
       <div class="injwang-w-full injwang-relative injwang-ml-4">
-        <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="../../public/imgs/games/title-fog.png">
+        <img class="injwang-absolute injwang-left-[-2.5rem] injwang-top-1 injwang-h-8" src="{{ url('/imgs/games/title-fog.png') }}">
         <div class="game-title injwang-text-orange-500 injwang-text-2xl lg:injwang-text-4xl injwang-border-b lg:injwang-pb-4 lg:injwang-mb-2">Where is the Insect ?</div>
         <div>
           Insects are everywhere. Do you know where they are ?<br>
