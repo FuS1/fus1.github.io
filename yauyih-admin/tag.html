@@ -315,6 +315,7 @@ $(function() {
             reverseButtons:true,
             preConfirm: function(input) {
                 exec('tag/new','POST',{
+                    parent: 0,
                     tagName: input,
                 },function(data){
                     window.location.reload();
