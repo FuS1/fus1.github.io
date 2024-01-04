@@ -89,12 +89,7 @@
 
         const fileTpl = `<tr class="file-item" productDocId="">
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0">
-                                <select name="language" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value="zh" selected>繁體中文</option>
-                                    <option value="ch">簡體中文</option>
-                                    <option value="en">英文</option>
-                                    <option value="ja">日文</option>
-                                </select>
+                                <input type="input" name="label" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入型錄名稱">
                             </td>
                             <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
                                 <input type="input" name="link" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="請輸入型錄網址">
@@ -200,7 +195,7 @@
                 exec(url,'POST',data,function(data){
                     console.log(data);
                     try{
-                        window.location.assign(window.location.pathname+'?product_id='+data['product']['productId']);
+                        window.location.assign(window.location.pathname+'?product_id='+productData['productId']);
                     }catch(e){
                         window.location.assign('product-list.html');
                     }
@@ -364,8 +359,8 @@
         function initFiles(files=[]){
             //將檔案種類分組
             fileGroup = files.reduce(function(group, file) {
-                group[file.label] = group[file.label] ?? [];
-                group[file.label].push(file);
+                group[file.groupName] = group[file.groupName] ?? [];
+                group[file.groupName].push(file);
                 return group;
             }, {});
 
@@ -377,7 +372,7 @@
                 fileGroup[type].forEach(function(file) {
                     let dom = $(fileTpl).clone();
                     dom.attr("productDocId",file['productDocId']);
-                    dom.find('[name=language]').val(file['language']);
+                    dom.find('[name=label]').val(file['label']);
                     dom.find('[name=link]').val(file['link']);
                     groupDom.find('tbody').append(dom);
                 });
@@ -394,9 +389,9 @@
         function getFile(){
             return $(".file-item").map(function(){
                 let data = {
-                    label:$(this).closest('file-group').find('[name=groupName]').val(),
+                    groupName:$(this).closest('file-group').find('[name=groupName]').val(),
+                    label:$(this).find('[name=label]').val(),
                     link:$(this).find('[name=link]').val(),
-                    language: $(this).find('[name=language]').val(),
                 }
                 if($(this).attr('productDocId') !== ""){
                     data['productDocId'] = $(this).attr('productDocId')
@@ -551,43 +546,7 @@
                         <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 add-file-group-btn"><i class="fa-solid fa-circle-plus"></i> 新增型錄類別</button>	
                     </div>
                     <file-group-warp>
-                    <!-- <div>
-                        <div class="flex my-2">
-                            <input type="input" name="groupName" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-50 p-2.5" placeholder="請輸入型錄群組名稱">
-                        </div>
-                        <table class="items-center bg-transparent w-full border-collapse min-w-[375px]">
-                            <thead class="bg-yy-blue text-white">
-                                <tr>
-                                    <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left   w-1/4">語系</th>
-                                    <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-left">網址</th>
-                                    <th class="px-2 align-middle border border-solid border-blueGray-100 py-1 border-l-0 border-r-0 text-center w-20"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0">
-                                    <select name="language" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                        <option value="zh" selected>繁體中文</option>
-                                        <option value="ch">簡體中文</option>
-                                        <option value="en">英文</option>
-                                        <option value="ja">日文</option>
-                                    </select>
-                                </td>
-                                <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
-                                    <div class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md hover:border-blue-500 hover:text-blue-500 block w-full p-2.5">
-                                        <input>https://www.google.com</input>
-                                    </div>
-                                </td>
-                                <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 whitespace-nowrap">
-                                    <span class="btn hover:text-red-800 cursor-pointer level-remove ml-2" title="刪除"><i class="fa-solid fa-trash-can"></i></span>
-                                </td>
-                              </tr>
-                            </tbody>
-                        </table>
-                        <div class="text-center mt-2">
-                            <button class="px-2 py-2.5 w-22 md:w-28 min-w-fit ml-6 text-white font-medium rounded-lg text-sm no-underline bg-yy-green hover:bg-yy-green-900 add-file-btn"><i class="fa-solid fa-circle-plus"></i> 新增檔案連結</button>	
-                        </div>
-                    </div>-->
+
                     </file-group-warp>
                 </section>
                 <hr class="my-6">
