@@ -459,7 +459,7 @@
                     docPreviewId: $(this).attr('docPreviewId'),
                 }
                 if($(this).attr('productDocId') !== ""){
-                    data['productDocId'] = $(this).attr('productDocId')
+                    data['productDocId'] = parseInt((this).attr('productDocId'));
                 }
                 if($(this).attr('remove') == "true"){
                     data['del'] = true;

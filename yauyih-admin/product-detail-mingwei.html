@@ -394,7 +394,7 @@
                     link:$(this).find('[name=link]').val(),
                 }
                 if($(this).attr('productDocId') !== ""){
-                    data['productDocId'] = $(this).attr('productDocId')
+                    data['productDocId'] = parseInt((this).attr('productDocId'));
                 }
                 if($(this).attr('remove') == "true"){
                     data['del'] = true;
