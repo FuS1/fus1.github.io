@@ -41,7 +41,7 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwJ0L1K-JbHEURA2DoDEJxEZC3iFWTgEs&libraries=geometry"></script>
   <script>
     const target_pos = {lat: 25.070358, lng: 121.503564}; 
-    var map, infoWindow, userCircle;
+    var map, infoWindow, userMarker, userCircle;
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -75,7 +75,7 @@
               icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 strokeColor: 'blue',
-                scale: 4
+                scale: 6
               }
             });
           } else {
@@ -86,10 +86,10 @@
           if (!userCircle) {
             userCircle = new google.maps.Circle({
               strokeColor: '#4286f4',
-              strokeOpacity: 0.5, // 調整邊框透明度
+              strokeOpacity: 0.35, // 調整邊框透明度
               strokeWeight: 2,
               fillColor: '#4286f4',
-              fillOpacity: 0.2, // 調整填充透明度
+              fillOpacity: 0.15, // 調整填充透明度
               map: map,
               center: userPos,
               radius: position.coords.accuracy // 使用用户位置的精度作为圆的半径
@@ -120,7 +120,7 @@
     }
 
     function checkLocation() {
-      var pos = userCircle.getCenter();
+      var pos = userMarker.getCenter();
       var targetLatLng = new google.maps.LatLng(target_pos.lat, target_pos.lng);
       var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, targetLatLng);
       if (distance <= 30) {
