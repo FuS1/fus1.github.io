@@ -120,7 +120,7 @@
     }
 
     function checkLocation() {
-      var pos = userMarker.getCenter();
+      var pos = userMarker.getPosition();
       var targetLatLng = new google.maps.LatLng(target_pos.lat, target_pos.lng);
       var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, targetLatLng);
       if (distance <= 30) {
