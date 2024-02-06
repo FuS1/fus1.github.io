@@ -20,15 +20,13 @@
       width: 100%;
     }
     button {
-        padding: 9px 20px;
-        font-size: 23px;
-        background-color: orange;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        width: 80%;
-        color: white;
-        font-weight: bold; 
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: orange;
+      border-radius: 10px; 
+      border: none;
+      cursor: pointer; 
+      width: 80%; 
     }
     button:hover {
       background-color: darkorange; 
@@ -41,8 +39,7 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwJ0L1K-JbHEURA2DoDEJxEZC3iFWTgEs&libraries=geometry"></script>
   <script>
     const target_pos = {lat: 25.070358, lng: 121.503564}; 
-
-    var map, infoWindow;
+    var map, infoWindow, userMarker, userCircle;
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -55,35 +52,74 @@
       });
       infoWindow = new google.maps.InfoWindow;
 
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(function(position) {
-    //       var pos = {
-    //         lat: position.coords.latitude,
-    //         lng: position.coords.longitude
-    //       };
+      // 在地图上显示目标位置
+      var targetMarker = new google.maps.Marker({
+        position: target_pos,
+        map: map,
+        title: '打卡點'
+      });
 
-    //       infoWindow.setPosition(pos);
-    //       infoWindow.setContent('您的位置');
-    //       infoWindow.open(map);
-    //       map.setCenter(pos);
-    //     }, function() {
-    //       handleLocationError(true, infoWindow, map.getCenter());
-    //     });
-    //   } else {
-    //     handleLocationError(false, infoWindow, map.getCenter());
-    //   }
+      if (navigator.geolocation) {
+        // 监听用户位置的变化
+        navigator.geolocation.watchPosition(function(position) {
+          var userPos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          // 创建或更新用户位置标记
+          if (!userMarker) {
+            userMarker = new google.maps.Marker({
+              position: userPos,
+              map: map,
+              icon: {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                strokeColor: 'blue',
+                scale: 4
+              }
+            });
+          } else {
+            userMarker.setPosition(userPos);
+          }
+
+          // 创建或更新用户位置的精度圆
+          if (!userCircle) {
+            userCircle = new google.maps.Circle({
+              strokeColor: '#4286f4',
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: '#4286f4',
+              fillOpacity: 0.35,
+              map: map,
+              center: userPos,
+              radius: position.coords.accuracy // 使用用户位置的精度作为圆的半径
+            });
+          } else {
+            userCircle.setCenter(userPos);
+            userCircle.setRadius(position.coords.accuracy);
+          }
+
+          // 移动地图中心到用户位置
+          map.setCenter(userPos);
+
+        }, function() {
+          handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
     }
 
-    // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    //     infoWindow.setPosition(pos);
-    //     infoWindow.setContent(browserHasGeolocation ?
-    //                         'Error: GPS定位功能錯誤。' :
-    //                         'Error: 該瀏覽器不支援GPS定位功能。');
-    //     infoWindow.open(map);
-    // }
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                            'Error: GPS定位功能錯誤。' :
+                            'Error: 該瀏覽器不支援GPS定位功能。');
+        infoWindow.open(map);
+    }
 
     function checkLocation() {
-      var pos = infoWindow.getPosition();
+      var pos = userMarker.getPosition();
       var targetLatLng = new google.maps.LatLng(target_pos.lat, target_pos.lng);
       var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, targetLatLng);
       if (distance <= 30) {
