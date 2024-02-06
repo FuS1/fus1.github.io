@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1"> <!-- 增加 viewport 设置 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1">
   <title>GPS 定位打卡</title>
   <style>
     #map {
@@ -48,11 +48,10 @@
         center: target_pos, 
         zoom: 16,
         disableDefaultUI: true,
-        gestureHandling: 'greedy' // 允许单指平移地图
+        gestureHandling: 'greedy'
       });
       infoWindow = new google.maps.InfoWindow;
 
-      // 在地图上显示目标位置
       var targetMarker = new google.maps.Marker({
         position: target_pos,
         map: map,
@@ -60,14 +59,12 @@
       });
 
       if (navigator.geolocation) {
-        // 监听用户位置的变化
         navigator.geolocation.watchPosition(function(position) {
           var userPos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
 
-        // 创建或更新用户位置标记
         if (!userMarker) {
             userMarker = new google.maps.Marker({
               position: userPos,
@@ -86,20 +83,19 @@
           if (!userCircle) {
             userCircle = new google.maps.Circle({
               strokeColor: '#4286f4',
-              strokeOpacity: 0.35, // 調整邊框透明度
+              strokeOpacity: 0.35,
               strokeWeight: 2,
               fillColor: '#4286f4',
-              fillOpacity: 0.15, // 調整填充透明度
+              fillOpacity: 0.15,
               map: map,
               center: userPos,
-              radius: position.coords.accuracy // 使用用户位置的精度作为圆的半径
+              radius: position.coords.accuracy
             });
           } else {
             userCircle.setCenter(userPos);
             userCircle.setRadius(position.coords.accuracy);
           }
 
-          // 移动地图中心到用户位置
           map.setCenter(userPos);
 
         }, function() {
