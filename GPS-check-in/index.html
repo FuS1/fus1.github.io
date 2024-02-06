@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1"> <!-- 增加 viewport 设置 -->
+  <title>GPS 定位打卡</title>
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+    #map-container {
+      height: 100vh; 
+      width: 100%;
+    }
+    #button-container {
+      text-align: center;
+      position: fixed;
+      bottom: 50px; 
+      width: 100%;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: orange;
+      border-radius: 10px; 
+      border: none;
+      cursor: pointer; 
+      width: 80%; 
+    }
+    button:hover {
+      background-color: darkorange; 
+    }
+    body, html {
+      margin: 0;
+      padding: 0; 
+    }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwJ0L1K-JbHEURA2DoDEJxEZC3iFWTgEs&libraries=geometry"></script>
+  <script>
+    const target_pos = {lat: 25.070358, lng: 121.503564}; 
+
+    var map, infoWindow;
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: target_pos, 
+        zoom: 16,
+        zoomControl: false, 
+        streetViewControl: false, 
+        fullscreenControl: false 
+      });
+      infoWindow = new google.maps.InfoWindow;
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+
+          infoWindow.setPosition(target_pos);
+          infoWindow.setContent('打卡點');
+          infoWindow.open(map);
+        //   map.setCenter(pos);
+        }, function() {
+          handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        handleLocationError(false, infoWindow, map.getCenter());
+      }
+    }
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+                            'Error: GPS定位功能錯誤。' :
+                            'Error: 該瀏覽器不支援GPS定位功能。');
+      infoWindow.open(map);
+    }
+
+    function checkLocation() {
+      var pos = infoWindow.getPosition();
+      var targetLatLng = new google.maps.LatLng(target_pos.lat, target_pos.lng);
+      var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, targetLatLng);
+      if (distance <= 30) {
+        alert('打卡完成');
+      } else {
+        alert("您不在指定地點30公尺範圍內，無法進行打卡");
+      }
+    }
+  </script>
+</head>
+<body onload="initMap()">
+  <div id="map-container">
+    <div id="map"></div>
+  </div>
+  <div id="button-container">
+    <button onclick="checkLocation()">打卡</button>
+  </div>
+</body>
+</html>
