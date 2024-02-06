@@ -67,6 +67,21 @@
             lng: position.coords.longitude
           };
 
+        // 创建或更新用户位置标记
+        if (!userMarker) {
+            userMarker = new google.maps.Marker({
+              position: userPos,
+              map: map,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                strokeColor: 'blue',
+                scale: 4
+              }
+            });
+          } else {
+            userMarker.setPosition(userPos);
+          }
+
           // 创建或更新用户位置的精度圆
           if (!userCircle) {
             userCircle = new google.maps.Circle({
