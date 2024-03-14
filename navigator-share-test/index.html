@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Share Example</title>
+</head>
+<body>
+
+<button id="shareBtn">分享</button>
+
+<script>
+// 檢查是否支援分享 API
+if (navigator.share) {
+    const shareButton = document.getElementById('shareBtn');
+    
+    // 點擊分享按鈕時執行分享功能
+    shareButton.addEventListener('click', async () => {
+        try {
+            await navigator.share({
+                title: '標題',
+                text: '要分享的文字內容',
+                url: 'https://example.com' // 可以是要分享的網址
+            });
+            console.log('分享成功！');
+        } catch (error) {
+            console.error('分享失敗:', error);
+        }
+    });
+} else {
+    // 若不支援分享 API，顯示提示訊息或提供替代方式
+    document.write("此瀏覽器不支援分享功能");
+}
+</script>
+
+</body>
+</html>
