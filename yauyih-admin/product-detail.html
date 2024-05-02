@@ -78,7 +78,7 @@
                             <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
                                 <div class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md hover:border-blue-500 hover:text-blue-500 block w-full h-10 p-2.5">
                                     <a href="https://supr.link/9Q4Dc" target="_blank"></a>
-                                    <input type="file" class="hidden">
+                                    <input type="file" class="hidden" accept="application/pdf">
                                 </div>
                             </td>
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 whitespace-nowrap">
@@ -325,6 +325,16 @@
                     });
                     
                     loadFileDataURI(e,function(file){
+                        if(file['name'].split('.').pop()!=='pdf'){
+                            Swal.fire({
+                                title: '僅可上傳PDF',
+                                icon: "error",
+                                showConfirmButton: false,
+                                showCancelButton: true,
+                                cancelButtonText: '確定'
+                            });
+                            return ;
+                        }
                         exec('pdf/upload','POST',{
                             pdf:file,
                         },function(data){
@@ -358,6 +368,16 @@
                     });
                     
                     loadFileDataURI(e,function(file){
+                        if(file['name'].split('.').pop()!=='pdf'){
+                            Swal.fire({
+                                title: '僅可上傳PDF',
+                                icon: "error",
+                                showConfirmButton: false,
+                                showCancelButton: true,
+                                cancelButtonText: '確定'
+                            });
+                            return ;
+                        }
                         exec('pdf/upload','POST',{
                             pdf:file,
                         },function(data){
