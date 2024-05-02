@@ -228,10 +228,10 @@ function setFormValue (form,data){
   }
 }
 
-var loadFileDataURI = function(event,callBackFun) {
+var loadFileDataURI = function(file,callBackFun) {
     
     var reader = new FileReader();
-    reader.fileName = event.target.files[0].name; 
+    reader.fileName = file.name; 
     reader.onload = function(e){
       callBackFun({
         dataURI:e.target.result,
@@ -239,7 +239,7 @@ var loadFileDataURI = function(event,callBackFun) {
         name:e.target.fileName,
       });
     };
-    reader.readAsDataURL(event.target.files[0]);
+    reader.readAsDataURL(file);
     
 };
 

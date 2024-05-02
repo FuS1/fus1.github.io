@@ -78,7 +78,7 @@
                             <td class="border-t-0 px-2 py-1 align-center border-l-0 border-r-0 whitespace-nowrap">
                                 <div class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-md hover:border-blue-500 hover:text-blue-500 block w-full h-10 p-2.5">
                                     <a href="https://supr.link/9Q4Dc" target="_blank"></a>
-                                    <input type="file" class="hidden" accept="application/pdf">
+                                    <input type="file" class="hidden" accept="application/pdf" multiple>
                                 </div>
                             </td>
                             <td class="border-t-0 px-2 py-1 align-middle border-l-0 border-r-0 whitespace-nowrap">
@@ -316,7 +316,9 @@
 
                 
                 dom.find('input[type=file]').on('change',function(e){
-                    if(e.target.files.length<=0){
+                    let fileCount = e.target.files.length;
+                    let uploadedCount = 0;
+                    if(fileCount<=0){
                         return;
                     }
                     Swal.fire({
@@ -327,31 +329,40 @@
                         }
                     });
                     
-                    loadFileDataURI(e,function(file){
-                        if(file['name'].split('.').pop()!=='pdf'){
-                            Swal.fire({
-                                title: '僅可上傳PDF',
-                                icon: "error",
-                                showConfirmButton: false,
-                                showCancelButton: true,
-                                cancelButtonText: '確定'
-                            });
-                            return ;
-                        }
-                        exec('pdf/upload','POST',{
-                            pdf:file,
-                        },function(data){
-                            console.log(data)
-                            Swal.close();
-                            dom.attr("link",data['pdfId']);
-                            dom.attr("docPreviewId",data['previewId']);
-                            dom.find('[name=cover]').attr('value',data['previewId']);
-                            dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
-                            dom.find('a').text(data['pdfFileName']);
-                            table.find('tbody').append(dom);
-                            resetFilesIdx(table);
-                        },true);
-                    });
+                    for (const i in e.target.files) {
+                        _file = e.target.files[i];
+                        loadFileDataURI(_file,function(file){
+                            if(file['name'].split('.').pop()!=='pdf'){
+                                Swal.fire({
+                                    title: '僅可上傳PDF',
+                                    icon: "error",
+                                    showConfirmButton: false,
+                                    showCancelButton: true,
+                                    cancelButtonText: '確定'
+                                });
+                                return ;
+                            }
+                            exec('pdf/upload','POST',{
+                                pdf:file,
+                            },function(data){
+                                console.log(data)
+                                let _dom = $(fileTpl).clone();
+                                _dom.attr("link",data['pdfId']);
+                                _dom.attr("docPreviewId",data['previewId']);
+                                _dom.find('[name=cover]').attr('value',data['previewId']);
+                                _dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
+                                _dom.find('a').text(data['pdfFileName']);
+                                table.find('tbody').append(_dom);
+                                resetFilesIdx(table);
+                                uploadedCount++;
+                                if(uploadedCount >= fileCount){
+                                    dom.remove();
+                                    Swal.close();
+                                }
+                            },true);
+                        });
+                    }
+                    
                 });
 
                 dom.find('input[type=file]').click();
@@ -362,7 +373,9 @@
                 let dom = $(this).closest('tr');
 
                 dom.find('input[type=file]').on('change',function(e){
-                    if(e.target.files.length<=0){
+                    let fileCount = e.target.files.length;
+                    let uploadedCount = 0;
+                    if(fileCount<=0){
                         return;
                     }
                     Swal.fire({
@@ -372,31 +385,41 @@
                             Swal.showLoading();
                         }
                     });
+
+                    for (const i in e.target.files) {
+                        _file = e.target.files[i];
+                        loadFileDataURI(_file,function(file){
+                            if(file['name'].split('.').pop()!=='pdf'){
+                                Swal.fire({
+                                    title: '僅可上傳PDF',
+                                    icon: "error",
+                                    showConfirmButton: false,
+                                    showCancelButton: true,
+                                    cancelButtonText: '確定'
+                                });
+                                return ;
+                            }
+                            exec('pdf/upload','POST',{
+                                pdf:file,
+                            },function(data){
+                                console.log(data)
+                                let _dom = $(fileTpl).clone();
+                                _dom.attr("link",data['pdfId']);
+                                _dom.attr("docPreviewId",data['previewId']);
+                                _dom.find('[name=cover]').attr('value',data['previewId']);
+                                _dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
+                                _dom.find('a').text(data['pdfFileName']);
+                                resetFilesIdx(table);
+                                uploadedCount++;
+                                if(uploadedCount >= fileCount){
+                                    dom.remove();
+                                    Swal.close();
+                                }
+                                
+                            },true);
+                        });
+                    }
                     
-                    loadFileDataURI(e,function(file){
-                        if(file['name'].split('.').pop()!=='pdf'){
-                            Swal.fire({
-                                title: '僅可上傳PDF',
-                                icon: "error",
-                                showConfirmButton: false,
-                                showCancelButton: true,
-                                cancelButtonText: '確定'
-                            });
-                            return ;
-                        }
-                        exec('pdf/upload','POST',{
-                            pdf:file,
-                        },function(data){
-                            console.log(data)
-                            Swal.close();
-                            dom.attr("link",data['pdfId']);
-                            dom.attr("docPreviewId",data['previewId']);
-                            dom.find('[name=cover]').attr('value',data['previewId']);
-                            dom.find('a').attr('href','https://drive.google.com/file/d/'+data['pdfId']+'/preview');
-                            dom.find('a').text(data['pdfFileName']);
-                            resetFilesIdx(table);
-                        },true);
-                    });
                 });
 
                 dom.find('input[type=file]').click();
