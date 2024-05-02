@@ -316,6 +316,9 @@
 
                 
                 dom.find('input[type=file]').on('change',function(e){
+                    if(e.target.files.length<=0){
+                        return;
+                    }
                     Swal.fire({
                         title: '上傳中，請稍後...',
                         allowOutsideClick:false,
@@ -359,6 +362,9 @@
                 let dom = $(this).closest('tr');
 
                 dom.find('input[type=file]').on('change',function(e){
+                    if(e.target.files.length<=0){
+                        return;
+                    }
                     Swal.fire({
                         title: '上傳中，請稍後...',
                         allowOutsideClick:false,
