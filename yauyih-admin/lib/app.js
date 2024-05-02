@@ -273,23 +273,36 @@ function initImageFileDom(dom){
   });
 
   dom.find('[name=file_input]').on('change',function(e){
-      Swal.fire({
-          title: '上傳中，請稍後...',
-          allowOutsideClick:false,
-          didOpen: function() {
-              Swal.showLoading();
-          }
-      });
-      loadFileDataURI(e,function(file){
-          exec('image/upload','POST',{
-              image:file,
-          },function(data){
-              console.log(data)
-              Swal.close();
-              dom.find('[name=file_img]').attr('src','https://drive.google.com/uc?id='+data['image']);
-              dom.find('[name=file_img]').attr('value',data['image']);
-          },true);
-      });
+    let fileCount = e.target.files.length;
+    let uploadedCount = 0;
+    if(fileCount<=0){
+        return;
+    }
+    Swal.fire({
+        title: '上傳中，請稍後...',
+        allowOutsideClick:false,
+        didOpen: function() {
+            Swal.showLoading();
+        }
+    });
+
+    for (const i in e.target.files) {
+        _file = e.target.files[i];
+
+        loadFileDataURI(_file,function(file){
+            exec('image/upload','POST',{
+                image:file,
+            },function(data){
+                console.log(data)
+                dom.find('[name=file_img]').attr('src','https://drive.google.com/uc?id='+data['image']);
+                dom.find('[name=file_img]').attr('value',data['image']);
+                uploadedCount++;
+                if(uploadedCount >= fileCount){
+                    Swal.close();
+                }
+            },true);
+        });
+    }
 
   });
 
