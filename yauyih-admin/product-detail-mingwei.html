@@ -128,7 +128,7 @@
                             $('[name=keywords]').val(productData['keywords'].join(','))
                             $('[name=brandId]').val(productData['brandId']).trigger('change');
                             $('[name=tagId]').val(productData['tags'][0]['tagId']).trigger('change'); //因項目階層資料結構不同，故從Tags中取第一筆
-                            $('[name=cover] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+productData['preview']);
+                            $('[name=cover] > [name=file_img]').attr('src','https://lh3.googleusercontent.com/d/'+productData['preview']);
                             setTimeout(function() {
                                 $('[name=brandTag-level-1]').val( (_.first(productData['brandTags'])||{})['brandTagId'] ).trigger('change');    
                                 $('[name=tag-level-1]').val( (productData['tags'][1]||{})['tagId'] ).trigger('change');    //因項目階層資料結構不同，故從Tags中取第二筆

@@ -294,7 +294,7 @@ function initImageFileDom(dom){
                 image:file,
             },function(data){
                 console.log(data)
-                dom.find('[name=file_img]').attr('src','https://drive.google.com/uc?id='+data['image']);
+                dom.find('[name=file_img]').attr('src','https://lh3.googleusercontent.com/d/'+data['image']);
                 dom.find('[name=file_img]').attr('value',data['image']);
                 uploadedCount++;
                 if(uploadedCount >= fileCount){

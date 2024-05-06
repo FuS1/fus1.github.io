@@ -121,7 +121,7 @@
                 setFormValue(form,newsData)
 
                 form.find('[name=publicDatetime]').val(moment(newsData['publicDatetime']).format('YYYY-MM-DD')) 
-                form.find('[name=image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+newsData['previewGoogleId']);
+                form.find('[name=image_google] > [name=file_img]').attr('src','https://lh3.googleusercontent.com/d/'+newsData['previewGoogleId']);
 
             });
         });
