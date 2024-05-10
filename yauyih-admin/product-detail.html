@@ -162,6 +162,9 @@
                 if(data['brandTagId']==null){
                     errorMsg.push('品牌階層請選擇至少兩層');
                 }
+                if(data['tagId']==null){
+                    errorMsg.push('項目階層請選擇至少兩層');
+                }
                 if( ! _.findWhere(data['pdfs'], {label:'產品型錄'}) ){
                     errorMsg.push('請上傳產品型錄');
                 }

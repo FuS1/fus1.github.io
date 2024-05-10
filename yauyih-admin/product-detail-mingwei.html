@@ -175,6 +175,9 @@
                 if(data['brandTagId']==null){
                     errorMsg.push('品牌階層請選擇至少兩層');
                 }
+                if(data['tagId']==null){
+                    errorMsg.push('項目階層請選擇至少兩層');
+                }
                 if( data['preview']=='' ){
                     errorMsg.push('請上傳型錄封面');
                 }
