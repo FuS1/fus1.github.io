@@ -315,7 +315,7 @@
                 let table = $(this).closest('section').find('table');
 
                 let dom = $(fileTpl).clone();
-                dom.attr("pdfId","");
+                dom.attr("productDocId","");
 
                 
                 dom.find('input[type=file]').on('change',function(e){
@@ -433,7 +433,7 @@
                 let table = $(this).closest('section').find('table');
 
                 //若為本次新增的，非DB原有的，則直接刪除
-                if($(this).closest('tr').attr("pdfId")!=="" ){
+                if($(this).closest('tr').attr("productDocId")!=="" ){
                     $(this).closest('tr').addClass('hidden').attr('remove',true);
                 }else{
                     $(this).closest('tr').remove();
@@ -461,7 +461,7 @@
                     let dom = $(fileTpl).clone();
                     dom.attr("link",file['link']);
                     dom.attr("docPreviewId",file['docPreviewId']);
-                    dom.attr("pdfId",file['pdfId']);
+                    dom.attr("productDocId",file['productDocId']);
                     dom.find('[name=language]').val(file['language']);
                     dom.find('[name=name]').val(file['name']);
                     dom.find('[name=cover]').val(file['link']);
@@ -510,8 +510,8 @@
                     link:$(this).attr('link'),
                     docPreviewId: $(this).attr('docPreviewId'),
                 }
-                if($(this).attr('pdfId') !== ""){
-                    data['pdfId'] = parseInt($(this).attr('pdfId'));
+                if($(this).attr('productDocId') !== ""){
+                    data['productDocId'] = parseInt($(this).attr('productDocId'));
                 }
                 if($(this).attr('remove') == "true"){
                     data['del'] = true;
