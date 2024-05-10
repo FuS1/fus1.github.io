@@ -511,7 +511,7 @@
                     docPreviewId: $(this).attr('docPreviewId'),
                 }
                 if($(this).attr('pdfId') !== ""){
-                    data['pdfId'] = parseInt((this).attr('pdfId'));
+                    data['pdfId'] = parseInt($(this).attr('pdfId'));
                 }
                 if($(this).attr('remove') == "true"){
                     data['del'] = true;
