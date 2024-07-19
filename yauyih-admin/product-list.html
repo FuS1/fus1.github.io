@@ -124,7 +124,7 @@
                         headerSort: false,
                         formatter:function(cell, formatterParams) {
                             var status = cell.getRow().getData()['status'] ;
-                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['productId']+`" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
+                            return `<select name="status_selector" rowDataId="`+cell.getRow().getData()['productId']+`" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2">
                                 <option value="1" `+( status?'selected':'')+`>啟用</option>
                                 <option value="0" `+(!status?'selected':'')+`>停用</option>
                             </select>`;
@@ -250,7 +250,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="brandId" name="brandId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <select id="brandId" name="brandId" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -263,7 +263,7 @@
                             </label>
                             
                             <div class="w-full">
-                                <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <select id="status" name="status" class="bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     <option value="0,1"></option>
                                     <option value="1">啟用</option>
                                     <option value="0">停用</option>

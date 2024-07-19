@@ -59,7 +59,7 @@
     <script src="lib/app.js"></script>
     <script>
 
-
+        const news_id =  getUrlParam("news_id") ;
         $(function() {
             var newsData;
             var form = $('#news-form');
@@ -69,7 +69,6 @@
 
             $('.btn-save').on('click',function(){
                 let data = {
-                    newsId          : newsData['newsId'],
                     title           : form.find('[name=title]').val(),
                     tag             : form.find('[name=tag]').val(),
                     publicDatetime  : form.find('[name=publicDatetime]').val(),
@@ -95,35 +94,49 @@
                     return;
                 }
 
-                exec('news/edit','POST',data,function(data){
-                    console.log(data)
-                    window.location.reload();
-                });
+                if(news_id!==""){
+                    data['news_id'] = news_id;
+                    exec('news/edit','POST',data,function(data){
+                        console.log(data)
+                        window.location.reload();
+                    });
+                }else{
+                    exec('news/new','POST',data,function(data){
+                        console.log(data)
+                        window.location.assign('news-detail.html?news_id='+data['newsId']);
+                    });
+                }
+
+                
             });
 
             initImageFileDom(form.find('[name=image_google]'));
             
-            exec('news/list','POST',{
-                'status':'all'
-            },function(data){
+            if(news_id!==''){
+                exec('news/list','POST',{
+                    'status':'all'
+                },function(data){
 
-                data['news'].forEach(function(news) {
-                    if( news['newsId'] == getUrlParam("news_id") ){
-                        newsData = news;
+                    data['news'].forEach(function(news) {
+                        if( news['newsId'] == getUrlParam("news_id") ){
+                            newsData = news;
+                        }
+                    });
+                    
+                    if(!newsData){
+                        showErrMsg('查無此最新消息');
+                        form.remove();
                     }
+                    console.log(newsData);
+                    setFormValue(form,newsData)
+
+                    form.find('[name=publicDatetime]').val(moment(newsData['publicDatetime']).format('YYYY-MM-DD')) 
+                    form.find('[name=image_google] > [name=file_img]').attr('src','https://lh3.googleusercontent.com/d/'+newsData['previewGoogleId']);
+
                 });
-                
-                if(!newsData){
-                    showErrMsg('查無news');
-                    form.remove();
-                }
-                console.log(newsData);
-                setFormValue(form,newsData)
+            }
 
-                form.find('[name=publicDatetime]').val(moment(newsData['publicDatetime']).format('YYYY-MM-DD')) 
-                form.find('[name=image_google] > [name=file_img]').attr('src','https://drive.google.com/uc?id='+newsData['previewGoogleId']);
-
-            });
+            
         });
         
 
