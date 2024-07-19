@@ -1,73 +1,83 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地標查詢</title>
+    <title>位置建議</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA46CHSFStq-deiR2bnD7egqli3T_HqPT0&libraries=places"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>地標查詢</h1>
-    <input type="text" id="landmark" placeholder="輸入地標名稱">
-    <button onclick="getSelectedPlace()">查詢地址</button>
-    <select id="results" onchange="selectAddress()">
-        <option value="">請選擇地址</option>
-    </select>
+    <h1>位置建議</h1>
+    <input type="text" id="location-input" placeholder="輸入地標名稱">
+    <div id="map"></div>
     <p id="address"></p>
 
     <script>
+        let map;
         let autocomplete;
-        let placeIdMapping = {};
+        let infoWindow;
+        let marker;
 
-        function initAutocomplete() {
-            const input = document.getElementById('landmark');
-            autocomplete = new google.maps.places.Autocomplete(input, {
-                types: ['geocode'],
-                componentRestrictions: { country: 'TW' }
+        function initMap() {
+            // 初始化地圖
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 25.0330, lng: 121.5654 }, // 台北市座標
+                zoom: 13
             });
-            autocomplete.setFields(['address_components', 'geometry', 'icon', 'name', 'place_id', 'formatted_address']);
+
+            // 初始化信息窗口
+            infoWindow = new google.maps.InfoWindow();
+
+            // 初始化標記
+            marker = new google.maps.Marker({
+                map: map
+            });
+
+            // 初始化自動完成
+            const input = document.getElementById('location-input');
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                componentRestrictions: { country: 'TW' },
+                types: ['establishment'] // 可以尝试这个类型，或移除 types 选项来获取所有建议
+            });
+
+            // 當用戶選擇一個地址時
             autocomplete.addListener('place_changed', onPlaceChanged);
         }
 
         function onPlaceChanged() {
             const place = autocomplete.getPlace();
+
             if (!place.geometry) {
+                // 如果地點沒有幾何數據，顯示錯誤信息
                 document.getElementById('address').innerText = '查無此地標';
                 return;
             }
 
-            // 清空之前的結果
-            const select = document.getElementById('results');
-            select.innerHTML = '';
+            // 如果地點有幾何數據，重新設置地圖中心和標記位置
+            map.setCenter(place.geometry.location);
+            map.setZoom(17); // 放大地圖
 
-            // 添加選項
-            const option = document.createElement('option');
-            option.value = place.formatted_address;
-            option.text = place.formatted_address;
-            select.appendChild(option);
-            placeIdMapping[place.formatted_address] = place.place_id;
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
 
-            select.selectedIndex = 0;
-            selectAddress();
+            // 顯示地點詳細信息
+            const address = place.formatted_address;
+            document.getElementById('address').innerText = '選擇的地址: ' + address;
+
+            // 在信息窗口中顯示地點名稱和地址
+            infoWindow.setContent(`<div><strong>${place.name}</strong><br>${address}</div>`);
+            infoWindow.open(map, marker);
         }
 
-        function selectAddress() {
-            const select = document.getElementById('results');
-            const selectedAddress = select.options[select.selectedIndex].value;
-            document.getElementById('landmark').value = selectedAddress;
-            document.getElementById('address').innerText = '選擇的地址: ' + selectedAddress;
-        }
-
-        function getSelectedPlace() {
-            const select = document.getElementById('results');
-            const selectedAddress = select.options[select.selectedIndex].value;
-            const placeId = placeIdMapping[selectedAddress];
-            console.log(`Selected Place ID: ${placeId}`);
-            // 在這裡你可以根據placeId做進一步操作
-        }
-
-        // 初始化自動完成
-        google.maps.event.addDomListener(window, 'load', initAutocomplete);
+        // 初始化地圖和自動完成
+        google.maps.event.addDomListener(window, 'load', initMap);
     </script>
 </body>
 </html>
