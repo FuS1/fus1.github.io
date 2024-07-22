@@ -15,7 +15,8 @@
 </head>
 <body>
     <h1>位置建議</h1>
-    <input type="text" id="location-input" placeholder="輸入地標名稱">
+    標的<input type="text" id="location-input" placeholder="輸入地標名稱"><br>
+    詳細地址<input type="text" id="address-input">
     <div id="map"></div>
     <p id="address"></p>
 
@@ -68,8 +69,10 @@
             marker.setVisible(true);
 
             // 顯示地點詳細信息
+            const name = place.name;
+            document.getElementById('location-input').value = name;
             const address = place.formatted_address;
-            document.getElementById('address').innerText = '選擇的地址: ' + address;
+            document.getElementById('address-input').value = address;
 
             // 在信息窗口中顯示地點名稱和地址
             infoWindow.setContent(`<div><strong>${place.name}</strong><br>${address}</div>`);
