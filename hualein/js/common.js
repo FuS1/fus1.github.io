@@ -1,5 +1,5 @@
-let header = "_component/header.html";
-let footer = "_component/footer.html";
+let header = "component/header.html";
+let footer = "component/footer.html";
 
 const requestHeader = axios.get(header);
 const requestFooter = axios.get(footer);
