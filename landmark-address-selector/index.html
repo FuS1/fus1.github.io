@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位置建議</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA46CHSFStq-deiR2bnD7egqli3T_HqPT0&libraries=places"></script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>位置建議</h1>
+    標的<input type="text" id="location-input" placeholder="輸入地標名稱"><br>
+    詳細地址<input type="text" id="address-input">
+    <div id="map"></div>
+    <p id="address"></p>
+
+    <script>
+        let map;
+        let autocomplete;
+        let infoWindow;
+        let marker;
+
+        function initMap() {
+            // 初始化地圖
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 25.0330, lng: 121.5654 }, // 台北市座標
+                zoom: 13
+            });
+
+            // 初始化信息窗口
+            infoWindow = new google.maps.InfoWindow();
+
+            // 初始化標記
+            marker = new google.maps.Marker({
+                map: map
+            });
+
+            // 初始化自動完成
+            const input = document.getElementById('location-input');
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                componentRestrictions: { country: 'TW' },
+                types: ['establishment'] // 可以尝试这个类型，或移除 types 选项来获取所有建议
+            });
+
+            // 當用戶選擇一個地址時
+            autocomplete.addListener('place_changed', onPlaceChanged);
+        }
+
+        function onPlaceChanged() {
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry) {
+                // 如果地點沒有幾何數據，顯示錯誤信息
+                document.getElementById('address').innerText = '查無此地標';
+                return;
+            }
+
+            // 如果地點有幾何數據，重新設置地圖中心和標記位置
+            map.setCenter(place.geometry.location);
+            map.setZoom(17); // 放大地圖
+
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            // 顯示地點詳細信息
+            const name = place.name;
+            document.getElementById('location-input').value = name;
+            const address = place.formatted_address;
+            document.getElementById('address-input').value = address;
+
+            // 在信息窗口中顯示地點名稱和地址
+            infoWindow.setContent(`<div><strong>${place.name}</strong><br>${address}</div>`);
+            infoWindow.open(map, marker);
+        }
+
+        // 初始化地圖和自動完成
+        google.maps.event.addDomListener(window, 'load', initMap);
+    </script>
+</body>
+</html>
