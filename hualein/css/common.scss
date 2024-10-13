@@ -99,7 +99,9 @@ $background-color_white: #fff;
 	}
 }
 .header {
-	position: relative;
+	position: sticky;
+	z-index: 100;
+	top: 0;
 	display: flex;
 	justify-content: center;
 	background: $color_blue_1;
@@ -261,11 +263,11 @@ $background-color_white: #fff;
                 background: transparent;
                 &::before {
                     transform: rotate(45deg) translateY(0);
-                    background: #fff;
+                    background: $color_blue_1;
                 }
                 &::after {
                     transform: rotate(-45deg) translateY(0);
-                    background: #fff;
+                    background: $color_blue_1;
                 }
             }
         }
@@ -308,6 +310,9 @@ $background-color_white: #fff;
     }
 }
 .navi-bar {
+	position: sticky;
+	z-index: 101;
+	top: 61px;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -315,7 +320,7 @@ $background-color_white: #fff;
     @include lg{
         display: flex;
 		position: absolute;
-		top: 0;
+		top: 61px;
 		right: 0;
 		z-index: 999;
 		background: $color_blue_1;
@@ -328,7 +333,7 @@ $background-color_white: #fff;
     }
     &.active {
         @include lg{
-            padding: 90px 0 20px 0;
+            padding: 20px 0;
             opacity: 1;
             overflow: unset;
             transform: translateX(0);

@@ -1,12 +1,15 @@
 let header = "component/header.html";
+let navibar = "component/navi.html";
 let footer = "component/footer.html";
 
 const requestHeader = axios.get(header);
+const requestNavibar = axios.get(navibar);
 const requestFooter = axios.get(footer);
 
-axios.all([requestHeader, requestFooter]).then(axios.spread((...responses) => {
+axios.all([requestHeader, requestNavibar, requestFooter]).then(axios.spread((...responses) => {
     $(".container-fluid.header").html(responses[0].data);
-    $(".container-fluid.footer-sec").html(responses[1].data);
+    $(".navi-bar").html(responses[1].data);
+    $(".container-fluid.footer-sec").html(responses[2].data);
 
     // 導覽列
     $('.mb-navi-btn').click(function() {

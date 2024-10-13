@@ -72,7 +72,9 @@
 }
 
 .header {
-  position: relative;
+  position: sticky;
+  z-index: 100;
+  top: 0;
   display: flex;
   justify-content: center;
   background: #19609f;
@@ -252,11 +254,11 @@
   }
   .mb-navi-btn.active > span::before {
     transform: rotate(45deg) translateY(0);
-    background: #fff;
+    background: #19609f;
   }
   .mb-navi-btn.active > span::after {
     transform: rotate(-45deg) translateY(0);
-    background: #fff;
+    background: #19609f;
   }
 }
 @media (max-width: 697.98px) {
@@ -298,6 +300,9 @@
 }
 
 .navi-bar {
+  position: sticky;
+  z-index: 101;
+  top: 61px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -307,7 +312,7 @@
   .navi-bar {
     display: flex;
     position: absolute;
-    top: 0;
+    top: 61px;
     right: 0;
     z-index: 999;
     background: #19609f;
@@ -321,7 +326,7 @@
 }
 @media (max-width: 991.98px) {
   .navi-bar.active {
-    padding: 90px 0 20px 0;
+    padding: 20px 0;
     opacity: 1;
     overflow: unset;
     transform: translateX(0);
