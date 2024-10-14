@@ -1,7 +1,37 @@
 <ul class="navigation">
-    <li class="navi-list active"><a href="index.html">首頁</a></li>
-    <li class="navi-list"><a href="rebuild.html">認識危老重建</a></li>
-    <li class="navi-list"><a href="laws.html">相關法令</a></li>
-    <li class="navi-list"><a href="plan.html">歷年核定計畫內容</a></li>
-    <li class="navi-list"><a href="download.html">下載專區</a></li>
+    <li class="navi-list index"><a href="index.html">首頁</a></li>
+    <li class="navi-list rebuild"><a href="rebuild.html">認識危老重建</a></li>
+    <li class="navi-list laws"><a href="laws.html">相關法令</a></li>
+    <li class="navi-list plan"><a href="plan.html">歷年核定計畫內容</a></li>
+    <li class="navi-list download"><a href="download.html">下載專區</a></li>
 </ul>
+
+
+<script>
+    
+$(document).ready(function () {
+    let page = location.pathname.split('/');
+    page=page[page.length-1]
+    console.log(page);
+    switch (page) {
+        case "":
+        case "index.html":
+        case "news.html":
+            $('.navigation .index').addClass('active');
+            break;
+        case "rebuild.html":
+            $('.navigation .rebuild').addClass('active');
+            break;
+        case "laws.html":
+            $('.navigation .laws').addClass('active');
+            break;
+        case "plan.html":
+            $('.navigation .plan').addClass('active');
+            break;
+        case "download.html":
+            $('.navigation .download').addClass('active');
+            break;
+    }
+});
+    
+</script>
