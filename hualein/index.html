@@ -7,10 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="lib/swiper/swiper-bundle.min.css">
     <!-- <link rel="icon" href="favicon.svg" /> -->
     <script src="lib/jquery-3.6.1.min.js"></script>
     <!-- 非同步事件控制用套件 -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="lib/swiper/swiper-bundle.min.js"></script>
     <script src="js/common.js"></script>
     <title>花蓮危老重建資訊網</title>
     <style>
@@ -78,13 +80,19 @@
 
     <!-- Logo images -->
     <section class="container-fluid logo-wall-sec">
-        <div class="logo-wall-wrapper">
-            <figure class="logo-wall-item"><img src="images/logo01.jpg"></figure>
-            <figure class="logo-wall-item"><img src="images/logo02.jpg"></figure>
-            <figure class="logo-wall-item"><img src="images/logo03.jpg"></figure>
-            <figure class="logo-wall-item"><img src="images/logo04.jpg"></figure>
-            <figure class="logo-wall-item"><img src="images/logo05.jpg"></figure>
-            <figure class="logo-wall-item"><img src="images/logo06.jpg"></figure>
+        <div class="logo-wall-slider swiper">
+            <div class="logo-wall-wrapper swiper-wrapper">
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+            </div>
         </div>
     </section>
 
@@ -92,6 +100,40 @@
     <section class="container-fluid footer-sec">
 
     </section>
+
+    <script>
+        // logo slider
+        const logoSlider = new Swiper('.logo-wall-slider', {
+            slidesPerView: 6,
+            centeredSlides: false,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false
+            },
+            breakpoints: {
+                0: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+                },
+                640: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+                },
+                768: {
+                slidesPerView: 6,
+                spaceBetween: 40,
+                },
+            },
+        });
+        $('.logo-wall-slider').mouseenter(function() {
+            logoSlider.autoplay.stop();
+        });
+
+        $('.logo-wall-slider').mouseleave(function() {
+            logoSlider.autoplay.start();
+        });
+    </script>
 </body>
 
 </html>
