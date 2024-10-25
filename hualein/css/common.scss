@@ -510,7 +510,7 @@ main {
 }
 .main-content-wrapper {
     background-color: $color_white;
-	padding: 30px 28px 40px 28px;
+	padding: 35px 50px 40px 50px;
 	width: 1200px;
 	box-shadow: 0 1px 20px 0 rgba(199, 199, 199, 0.5);
 	min-height: calc(100vh - 417px);
@@ -522,7 +522,7 @@ main {
 		min-height: 60vh;
 	}
 	@include sm {
-		padding: 10px;
+		padding: 20px;
 	}
     @include xs{
         width: calc(100% - 40px);
