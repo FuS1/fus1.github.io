@@ -585,6 +585,19 @@ main {
 		color: #555;
 	}
 }
+.news-item-more {
+	font-size: 14px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	color: $font_blue_1;
+	text-decoration: none;
+	opacity: 0.7;
+	transition: 0.3s;
+	&:hover {
+		opacity: 1;
+	}
+}
 
 /* logo wall */
 .logo-wall-sec {
@@ -597,6 +610,9 @@ main {
 .logo-wall-slider {
 	width: 100%;
 	overflow: hidden;
+	.swiper-button-next, .swiper-button-prev {
+		color: $font_blue_1;
+	}
 }
 .logo-wall-wrapper {
 	position: relative;
@@ -608,12 +624,46 @@ main {
 	display: flex;
 	justify-content: center;
 	> img {
-		height: 138px;
+		height: 100%;
 		position: relative;
 		display: block;
 		object-fit: contain;
 	}
 	
+}
+
+/* crumb */
+.crumb-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	margin: 0 0 16px 0;
+}
+.crunb-item {
+	list-style: none;
+	color: #777;
+	font-size: 14px;
+	color: $font_blue_1;
+	&::after {
+		display: inline-block;
+		content: '\f105';
+		font-family: 'Font Awesome 6 Free';
+		font-style: normal;
+		font-weight: 900;
+		color: #777;
+		margin: 0 8px;
+	}
+	&:nth-last-child(1)::after {
+		display: none;
+	}
+	>a {
+		text-decoration: none;
+		color: #555;
+		transition: 0.3s;
+		&:hover {
+			color: $font_blue_1;
+		}
+	}
 }
 
 /* footer */

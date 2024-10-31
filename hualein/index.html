@@ -46,6 +46,7 @@
                     <h4>最新消息標題1</h4>
                     <span class="news-item-date">更新日期：2024/10/10</span>
                     <p>質的有卻異知是法大品有嗎的。她校人了樂道每支國明書？能建員代外到的現地星報了本！政信夫麼來包國又司包定見……</p>
+                    <span class="news-item-more" href="#">更多<i class="fa-solid fa-angles-right"></i></span>
                 </a>
                 <!-- 單則消息 End -->
                  <!-- 單則消息 Start -->
@@ -53,6 +54,7 @@
                     <h4>最新消息標題2</h4>
                     <span class="news-item-date">更新日期：2024/10/10</span>
                     <p>質的有卻異知是法大品有嗎的。她校人了樂道每支國明書？能建員代外到的現地星報了本！政信夫麼來包國又司包定見……</p>
+                    <span class="news-item-more" href="#">更多<i class="fa-solid fa-angles-right"></i></span>
                 </a>
                 <!-- 單則消息 End -->
                  <!-- 單則消息 Start -->
@@ -60,18 +62,21 @@
                     <h4>最新消息標題3</h4>
                     <span class="news-item-date">更新日期：2024/10/10</span>
                     <p>質的有卻異知是法大品有嗎的。她校人了樂道每支國明書？能建員代外到的現地星報了本！政信夫麼來包國又司包定見……</p>
+                    <span class="news-item-more" href="#">更多<i class="fa-solid fa-angles-right"></i></span>
                 </a>
                 <!-- 單則消息 Start -->
                <a class="news-item" href="news.html">
                    <h4>最新消息標題4</h4>
                    <span class="news-item-date">更新日期：2024/10/10</span>
                    <p>質的有卻異知是法大品有嗎的。她校人了樂道每支國明書？能建員代外到的現地星報了本！政信夫麼來包國又司包定見……</p>
+                   <span class="news-item-more" href="#">更多<i class="fa-solid fa-angles-right"></i></span>
                </a>
                <!-- 單則消息 Start -->
               <a class="news-item" href="news.html">
                   <h4>最新消息標題5</h4>
                   <span class="news-item-date">更新日期：2024/10/10</span>
                   <p>質的有卻異知是法大品有嗎的。她校人了樂道每支國明書？能建員代外到的現地星報了本！政信夫麼來包國又司包定見……</p>
+                  <span class="news-item-more" href="#">更多<i class="fa-solid fa-angles-right"></i></span>
               </a>
                 <!-- 單則消息 End -->
             </div>
@@ -82,17 +87,15 @@
     <section class="container-fluid logo-wall-sec">
         <div class="logo-wall-slider swiper">
             <div class="logo-wall-wrapper swiper-wrapper">
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
-                <figure class="logo-wall-item swiper-slide"><img src="images/logo01.jpg"></figure>
+                <a class="logo-wall-item swiper-slide" href="https://www.moi.gov.tw/" target="_blank"><img src="images/logo_01.png"></a>
+                <a class="logo-wall-item swiper-slide" href="https://www.nlma.gov.tw/" target="_blank"><img src="images/logo_02.png"></a>
+                <a class="logo-wall-item swiper-slide" href="https://uract.nlma.gov.tw/index.php" target="_blank"><img src="images/logo_03.png"></a>
+                <a class="logo-wall-item swiper-slide" href="https://twur.nlma.gov.tw/zh/theme/main/6" target="_blank"><img src="images/logo_04.png"></a>
+                <a class="logo-wall-item swiper-slide" href="https://twur.nlma.gov.tw/zh/theme/main/5" target="_blank"><img src="images/logo_05.png"></a>
+                <a class="logo-wall-item swiper-slide" href="https://www.gov.tw/" target="_blank"><img src="images/logo_06.png"></a>
             </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
         </div>
     </section>
 
@@ -110,6 +113,10 @@
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: false
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
             },
             breakpoints: {
                 0: {

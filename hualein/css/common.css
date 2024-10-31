@@ -617,6 +617,20 @@ main {
   }
 }
 
+.news-item-more {
+  font-size: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: #2579c9;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: 0.3s;
+}
+.news-item-more:hover {
+  opacity: 1;
+}
+
 /* logo wall */
 .logo-wall-sec {
   background-color: #fff;
@@ -629,6 +643,9 @@ main {
 .logo-wall-slider {
   width: 100%;
   overflow: hidden;
+}
+.logo-wall-slider .swiper-button-next, .logo-wall-slider .swiper-button-prev {
+  color: #2579c9;
 }
 
 .logo-wall-wrapper {
@@ -643,11 +660,46 @@ main {
   justify-content: center;
 }
 .logo-wall-item > img {
-  height: 138px;
+  height: 100%;
   position: relative;
   display: block;
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+/* crumb */
+.crumb-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 0 16px 0;
+}
+
+.crunb-item {
+  list-style: none;
+  color: #777;
+  font-size: 14px;
+  color: #2579c9;
+}
+.crunb-item::after {
+  display: inline-block;
+  content: "\f105";
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  color: #777;
+  margin: 0 8px;
+}
+.crunb-item:nth-last-child(1)::after {
+  display: none;
+}
+.crunb-item > a {
+  text-decoration: none;
+  color: #555;
+  transition: 0.3s;
+}
+.crunb-item > a:hover {
+  color: #2579c9;
 }
 
 /* footer */
