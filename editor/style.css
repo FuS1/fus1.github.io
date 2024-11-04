@@ -1,0 +1,205 @@
+body, html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar, .editor-wrapper, .property-panel {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #333;
+    color: #fff;
+}
+
+.editor-wrapper {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.device-selector {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    text-align: center;
+}
+
+.device-selector button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.device-selector button:hover {
+    background-color: #555;
+}
+
+.editor-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #e0e0e0; /* 灰底 */
+    height: calc(100% - 40px); /* Adjust height for the device selector */
+}
+
+.editor {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.property-panel {
+    width: 20%;
+    background-color: #f9f9f9;
+}
+
+.template {
+    background-color: #444;
+    padding: 15px;
+    margin: 10px 0;
+    cursor: grab;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.template:hover {
+    background-color: #555;
+}
+
+.editor-item {
+    border: 1px dashed #333;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+}
+
+#editor-fields {
+    padding: 20px;
+}
+
+#editor-fields h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#editor-fields label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #555;
+}
+
+#editor-fields textarea,
+#editor-fields input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#editor-fields button {
+    padding: 10px 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#editor-fields button:hover {
+    background-color: #555;
+}
+
+
+css
+複製程式碼
+/* 表格樣式 */
+.table-editor-container {
+    margin-top: 10px;
+}
+
+.table-editor-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.table-editor-container th,
+.table-editor-container td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-settings label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+.table-settings input[type="number"] {
+    width: 50px;
+    margin: 0 5px;
+    padding: 5px;
+}
+
+.table-settings select,
+.table-settings input[type="color"] {
+    margin-top: 5px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* 中間欄的編輯區 */
+.editor-item table.editable-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.editor-item table.editable-table th,
+.editor-item table.editable-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    min-width: 50px;
+}
+
+/* 選中項目的樣式 */
+.selected-item {
+    border: 2px solid #007bff;
+    padding: 8px;
+}

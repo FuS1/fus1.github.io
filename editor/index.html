@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>網頁編輯器</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tiny.cloud/1/d4eq7cn5bcf0fncdxx53qr2xwedfye26251et2f381bmwvh6/tinymce/6/tinymce.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <!-- 左邊樣板選擇區 -->
+    <div class="sidebar" id="template-section">
+        <h2>樣板</h2>
+        <div class="template" draggable="true" data-template-type="text-image">文字 + 圖片</div>
+        <div class="template" draggable="true" data-template-type="image-image">圖片 + 圖片</div>
+        <div class="template" draggable="true" data-template-type="table">表格</div>
+
+    </div>
+
+    <!-- 中間編輯區 -->
+    <div class="editor-wrapper">
+        <div class="device-selector">
+            <button onclick="setDevice('desktop')"><i class="icon">🖥️</i></button>
+            <button onclick="setDevice('tablet')"><i class="icon">📱</i></button>
+            <button onclick="setDevice('mobile')"><i class="icon">📲</i></button>
+        </div>
+        <div class="editor-container">
+            <div class="editor" id="editor">
+                <!-- 拖曳樣板後顯示的內容將出現在這裡 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 右邊內容編輯區 -->
+    <div class="property-panel" id="property-panel">
+        <h2>內容編輯</h2>
+        <div id="editor-fields">
+            <p>請選擇樣板以進行編輯</p>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
