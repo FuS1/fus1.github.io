@@ -22,6 +22,14 @@
 
     <!-- Status display -->
     <div id="status" class="text-gray-700 text-lg"></div>
+
+    <button
+        onclick="shareToFacebook()"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+    >
+    分享作品
+    </button>
+
   </div>
 
   <!-- Facebook SDK -->
@@ -64,6 +72,17 @@
         statusChangeCallback(response);
       }, {scope: 'public_profile,email'}); // 確保這裡的範圍正確
     });
+
+    function shareToFacebook() {
+        const shareURL = 'https://www.taiwansuzuki.com.tw';
+        const quote = '這是一段分享文字，請快來幫我投票 https://www.taiwansuzuki.com.tw/';
+        const encodedURL = encodeURIComponent(shareURL);
+        const encodedQuote = encodeURIComponent(quote);
+        const facebookShareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodedURL}&quote=${encodedQuote}`;
+
+        window.open(facebookShareURL, '_blank');
+    }
+    
   </script>
 
   <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
