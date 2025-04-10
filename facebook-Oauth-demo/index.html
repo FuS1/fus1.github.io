@@ -30,6 +30,13 @@
     分享作品
     </button>
 
+    <a
+      href="fb://facewebmodal/f?href=https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.taiwansuzuki.com.tw"
+      class="block w-full text-center bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700"
+    >
+      分享到 Facebook（跳轉 App）
+    </a>
+
   </div>
 
   <!-- Facebook SDK -->
@@ -74,13 +81,10 @@
     });
 
     function shareToFacebook() {
-        const shareURL = 'https://www.taiwansuzuki.com.tw';
-        const quote = '這是一段分享文字，請快來幫我投票 https://www.taiwansuzuki.com.tw/';
-        const encodedURL = encodeURIComponent(shareURL);
-        const encodedQuote = encodeURIComponent(quote);
-        const facebookShareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodedURL}&quote=${encodedQuote}`;
-
-        window.open(facebookShareURL, '_blank');
+      const shareURL = encodeURIComponent("https://www.taiwansuzuki.com.tw");
+      const quote = encodeURIComponent("這是一段分享文字，請快來幫我投票 https://www.taiwansuzuki.com.tw/");
+      const finalURL = `https://www.facebook.com/sharer/sharer.php?u=${shareURL}&quote=${quote}`;
+      window.open(finalURL, '_blank');
     }
     
   </script>
