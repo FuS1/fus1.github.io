@@ -1,66 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-<title>Facebook Login JavaScript Example</title>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook Login JavaScript Example</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<script>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
 
-  function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
-    console.log('statusChangeCallback');
-    console.log(response);                   // The current login status of the person.
-    if (response.status === 'connected') {   // Logged into your webpage and Facebook.
-      testAPI();  
-    } else {                                 // Not logged into your webpage or we are unable to tell.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this webpage.';
+  <div class="bg-white p-6 md:p-10 rounded-2xl shadow-xl w-full max-w-md text-center space-y-6">
+    <h1 class="text-2xl font-bold text-gray-800">Facebook 登入範例</h1>
+
+    <!-- Custom Login Button -->
+    <button 
+      id="fb-login-btn" 
+      class="w-full rounded-lg px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 transition"
+    >
+      投票
+    </button>
+
+    <!-- Status display -->
+    <div id="status" class="text-gray-700 text-lg"></div>
+  </div>
+
+  <!-- Facebook SDK -->
+  <script>
+    function statusChangeCallback(response) {
+      console.log('statusChangeCallback');
+      console.log(response);
+      if (response.status === 'connected') {
+        testAPI();
+      } else {
+        document.getElementById('status').innerHTML = '請先登入此網頁。';
+      }
     }
-  }
 
+    function checkLoginState() {
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    }
 
-  function checkLoginState() {               // Called when a person is finished with the Login Button.
-    FB.getLoginStatus(function(response) {   // See the onlogin handler
-      statusChangeCallback(response);
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1568648483378458',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v22.0'
+      });
+
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    function testAPI() {
+      console.log('Welcome! Fetching your information....');
+      FB.api('/me', function(response) {
+        console.log('Successful login for: ' + response.name);
+        document.getElementById('status').innerHTML =
+          '完成登入，' + response.name + ' 您好!';
+      });
+    }
+
+    // Add event listener to the custom login button
+    document.getElementById('fb-login-btn').addEventListener('click', function() {
+      FB.login(function(response) {
+        statusChangeCallback(response);
+      }, {scope: 'public_profile,email'});
     });
-  }
+  </script>
 
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1568648483378458',
-      cookie     : true,                     // Enable cookies to allow the server to access the session.
-      xfbml      : true,                     // Parse social plugins on this webpage.
-      version    : 'v22.0'                   // Use this Graph API version for this call.
-    });
-
-
-    FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-      statusChangeCallback(response);        // Returns the login status.
-    });
-  };
- 
-  function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        '完成登入, ' + response.name + ' 您好!';
-    });
-  }
-
-</script>
-
-
-<!-- The JS SDK Login Button -->
-
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
-
-<div id="status">
-</div>
-
-<!-- Load the JS SDK asynchronously -->
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 </body>
 </html>
