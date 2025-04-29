@@ -45,7 +45,7 @@
 </head>
 <body>
 
-  <div id="qr-reader"></div>
+  <div id="qr-reader" class="w-screen h-screen"></div>
   <div id="message"><span id="message-text">訊息顯示</span></div>
 
   <script>
@@ -116,7 +116,6 @@
         { facingMode: "environment" },
         {
             fps: 10,
-            qrbox: 250,
             aspectRatio: window.innerWidth / window.innerHeight
         },
         handleScan
