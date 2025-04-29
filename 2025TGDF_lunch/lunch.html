@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>領取便當</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
@@ -11,45 +11,33 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      width: 100%;
-      overflow: hidden;
       background-color: black;
-      position: fixed;
-      inset: 0;
     }
-
     #qr-reader {
-      position: fixed;
-      top: env(safe-area-inset-top);
-      left: env(safe-area-inset-left);
-      width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
-      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-      object-fit: cover;
-      z-index: 1;
+      width: 100vw;
+      height: 100vh;
     }
-
     #message {
       position: fixed;
-      bottom: calc(20px + env(safe-area-inset-bottom));
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 12px 20px;
+      padding: 12px 24px;
       border-radius: 8px;
-      z-index: 2;
+      color: white;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.5s ease;
+      cursor: pointer;
+      z-index: 9999;
     }
-
     #message.green {
       background-color: #22c55e;
     }
-
     #message.red {
       background-color: #ef4444;
     }
-
     #message.orange {
       background-color: #f97316;
     }
@@ -58,18 +46,21 @@
 <body>
 
   <div id="qr-reader"></div>
-  <div id="message">訊息</div>
+  <div id="message"><span id="message-text">訊息顯示</span></div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       let isProcessing = false;
       const messageBox = document.getElementById('message');
+      const messageText = document.getElementById('message-text');
 
-      function showMessage(text, colorClass) {
-        messageBox.textContent = text;
-        messageBox.className = colorClass;
+      function showMessage(message, colorClass) {
+        messageBox.className = '';
+        messageBox.classList.add(colorClass);
+        messageText.textContent = message;
         messageBox.style.opacity = "1";
 
+        // 自動隱藏
         setTimeout(() => {
           messageBox.style.opacity = "0";
         }, 2500);
@@ -87,30 +78,31 @@
         try {
           data = JSON.parse(result);
         } catch (e) {
-          showMessage("無效的 QRCode", "message red");
+          showMessage("無效的 QRCode", "red");
           isProcessing = false;
           return;
         }
 
         if (!data.UUID || !data.Day) {
-          showMessage("QRCode 格式錯誤", "message red");
+          showMessage("QRCode 格式錯誤", "red");
           isProcessing = false;
           return;
         }
 
-        showMessage("正在查詢中...", "message orange");
+        // 顯示處理中
+        showMessage("正在查詢中...", "orange");
 
         fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.UUID}&day=${data.Day}`)
           .then(response => response.json())
           .then(res => {
             if (res.success && res.data === "完成兌換") {
-              showMessage("完成兌換", "message green");
+              showMessage("完成兌換", "green");
             } else {
-              showMessage(res.data || "處理失敗", "message red");
+              showMessage(res.data || "處理失敗", "red");
             }
           })
           .catch(() => {
-            showMessage("發生錯誤，請稍後再試", "message red");
+            showMessage("發生錯誤，請稍後再試", "red");
           })
           .finally(() => {
             setTimeout(() => {
@@ -123,8 +115,9 @@
       html5QrCode.start(
         { facingMode: "environment" },
         {
-          fps: 10,
-          aspectRatio: window.innerWidth / window.innerHeight
+            fps: 10,
+            qrbox: 250,
+            aspectRatio: window.innerWidth / window.innerHeight
         },
         handleScan
       );
