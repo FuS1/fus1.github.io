@@ -1,70 +1,101 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>領取便當</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+    }
+    #qr-reader {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
 
   <div class="relative w-full h-full">
-    <div id="qr-reader" class="absolute top-0 left-0 w-full h-full"></div>
-    <div id="message" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white p-4 rounded-md shadow-md opacity-0 pointer-events-none">
+    <div id="qr-reader" class="w-screen h-screen"></div>
+    <div id="message" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white p-4 rounded-md shadow-md opacity-0 pointer-events-auto cursor-pointer transition-opacity duration-500">
       <p id="message-text">訊息顯示</p>
     </div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      function showMessage(message, isSuccess) {
-        const messageBox = document.getElementById('message');
-        const messageText = document.getElementById('message-text');
+      let isProcessing = false;
+      const messageBox = document.getElementById('message');
+      const messageText = document.getElementById('message-text');
+
+      function showMessage(message, color) {
         messageText.textContent = message;
-
-        if (isSuccess) {
-          messageBox.classList.remove('bg-orange-500');
-          messageBox.classList.add('bg-green-500');
-        } else {
-          messageBox.classList.remove('bg-green-500');
-          messageBox.classList.add('bg-orange-500');
-        }
-
-        // 顯示訊息並延遲 5 秒淡出
-        messageBox.classList.remove('opacity-0');
-        messageBox.classList.add('opacity-100');
+        messageBox.className = `fixed bottom-10 left-1/2 transform -translate-x-1/2 text-white p-4 rounded-md shadow-md opacity-100 pointer-events-auto cursor-pointer transition-opacity duration-500 ${color}`;
+        
+        // 自動淡出
         setTimeout(() => {
-          messageBox.classList.remove('opacity-100');
           messageBox.classList.add('opacity-0');
         }, 5000);
       }
 
-      function handleScan(result) {
-        const data = JSON.parse(result);
-        const uuid = data.UUID;
-        const day = data.Day;
+      // 點擊訊息立即關閉
+      messageBox.addEventListener("click", () => {
+        messageBox.classList.add('opacity-0');
+      });
 
-        // 呼叫 API
-        fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${uuid}&day=${day}`)
+      function handleScan(result) {
+        if (isProcessing) return;
+        isProcessing = true;
+
+        let data;
+        try {
+          data = JSON.parse(result);
+        } catch (e) {
+          showMessage("無效的 QRCode", "bg-red-500");
+          isProcessing = false;
+          return;
+        }
+
+        if (!data.UUID || !data.Day) {
+          showMessage("QRCode 格式錯誤", "bg-red-500");
+          isProcessing = false;
+          return;
+        }
+
+        // 顯示處理中
+        showMessage("正在查詢中...", "bg-orange-500");
+
+        fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.UUID}&day=${data.Day}`)
           .then(response => response.json())
-          .then(data => {
-            if (data.success && data.data === "完成兌換") {
-              showMessage("完成兌換", true); // 成功：顯示綠色訊息
+          .then(res => {
+            if (res.success && res.data === "完成兌換") {
+              showMessage("完成兌換", "bg-green-500");
             } else {
-              showMessage("無法兌換，請檢查 QR Code 或狀態", false); // 失敗：顯示紅色訊息
+              showMessage(res.data || "處理失敗", "bg-red-500");
             }
           })
-          .catch(error => {
-            showMessage("發生錯誤，請稍後再試", false); // 顯示錯誤訊息
+          .catch(() => {
+            showMessage("發生錯誤，請稍後再試", "bg-red-500");
+          })
+          .finally(() => {
+            isProcessing = false;
           });
       }
 
-      // 啟動 QR Code 掃描
+      // 啟動 QR 掃描
       const html5QrCode = new Html5Qrcode("qr-reader");
-      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, handleScan);
-    })
-    
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 2, qrbox: 250 },
+        handleScan
+      );
+    });
   </script>
 
 </body>
