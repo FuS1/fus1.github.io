@@ -17,16 +17,36 @@
       width: 100vw;
       height: 100vh;
     }
+    #message {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      cursor: pointer;
+      z-index: 9999;
+    }
+    #message.green {
+      background-color: #22c55e;
+    }
+    #message.red {
+      background-color: #ef4444;
+    }
+    #message.orange {
+      background-color: #f97316;
+    }
   </style>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+<body>
 
-  <div class="relative w-full h-full">
-    <div id="qr-reader" class="w-screen h-screen"></div>
-    <div id="message" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white p-4 rounded-md shadow-md opacity-0 pointer-events-auto cursor-pointer transition-opacity duration-500">
-      <p id="message-text">訊息顯示</p>
-    </div>
-  </div>
+  <div id="qr-reader"></div>
+  <div id="message"><span id="message-text">訊息顯示</span></div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -34,19 +54,20 @@
       const messageBox = document.getElementById('message');
       const messageText = document.getElementById('message-text');
 
-      function showMessage(message, color) {
+      function showMessage(message, colorClass) {
+        messageBox.className = '';
+        messageBox.classList.add(colorClass);
         messageText.textContent = message;
-        messageBox.className = `fixed bottom-10 left-1/2 transform -translate-x-1/2 text-white p-4 rounded-md shadow-md opacity-100 pointer-events-auto cursor-pointer transition-opacity duration-500 ${color}`;
-        
-        // 自動淡出
+        messageBox.style.opacity = "1";
+
+        // 自動隱藏
         setTimeout(() => {
-          messageBox.classList.add('opacity-0');
-        }, 5000);
+          messageBox.style.opacity = "0";
+        }, 2500);
       }
 
-      // 點擊訊息立即關閉
       messageBox.addEventListener("click", () => {
-        messageBox.classList.add('opacity-0');
+        messageBox.style.opacity = "0";
       });
 
       function handleScan(result) {
@@ -57,42 +78,47 @@
         try {
           data = JSON.parse(result);
         } catch (e) {
-          showMessage("無效的 QRCode", "bg-red-500");
+          showMessage("無效的 QRCode", "red");
           isProcessing = false;
           return;
         }
 
         if (!data.UUID || !data.Day) {
-          showMessage("QRCode 格式錯誤", "bg-red-500");
+          showMessage("QRCode 格式錯誤", "red");
           isProcessing = false;
           return;
         }
 
         // 顯示處理中
-        showMessage("正在查詢中...", "bg-orange-500");
+        showMessage("正在查詢中...", "orange");
 
         fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.UUID}&day=${data.Day}`)
           .then(response => response.json())
           .then(res => {
             if (res.success && res.data === "完成兌換") {
-              showMessage("完成兌換", "bg-green-500");
+              showMessage("完成兌換", "green");
             } else {
-              showMessage(res.data || "處理失敗", "bg-red-500");
+              showMessage(res.data || "處理失敗", "red");
             }
           })
           .catch(() => {
-            showMessage("發生錯誤，請稍後再試", "bg-red-500");
+            showMessage("發生錯誤，請稍後再試", "red");
           })
           .finally(() => {
-            isProcessing = false;
+            setTimeout(() => {
+              isProcessing = false;
+            }, 1500);
           });
       }
 
-      // 啟動 QR 掃描
       const html5QrCode = new Html5Qrcode("qr-reader");
       html5QrCode.start(
         { facingMode: "environment" },
-        { fps: 2, qrbox: 250 },
+        {
+            fps: 10,
+            qrbox: 250,
+            aspectRatio: window.innerWidth / window.innerHeight
+        },
         handleScan
       );
     });
