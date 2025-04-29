@@ -18,7 +18,7 @@
     }
     #message {
       position: fixed;
-      width: 80vw;
+      width: fit-content;
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
@@ -68,14 +68,16 @@
       const MAX_LOG = 20;
       const STORAGE_KEY = "scan_log";
   
-      function showMessage(message, colorClass) {
+      function showMessage(message, colorClass, autoHide = true) {
         messageBox.className = '';
         messageBox.classList.add(colorClass);
         messageText.textContent = message;
         messageBox.style.opacity = "1";
-        setTimeout(() => {
-          messageBox.style.opacity = "0";
-        }, 2500);
+        if(autoHide){
+          setTimeout(() => {
+            messageBox.style.opacity = "0";
+          }, 2500);
+        }
       }
   
       function addScanLog(uuid, result) {
@@ -129,7 +131,7 @@
           return;
         }
   
-        showMessage("正在查詢中...", "orange");
+        showMessage("正在查詢中...", "orange", false);
   
         fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.UUID}&day=${data.Day}`)
           .then(response => response.json())
