@@ -18,6 +18,7 @@
     }
     #message {
       position: fixed;
+      width: 80vw;
       bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
@@ -44,7 +45,18 @@
 </head>
 <body>
 
-  <div id="qr-reader"></div>
+  <div class="w-full h-full mb-2">
+    <div id="qr-reader" class="w-full h-full"></div>
+  </div>
+
+  <!-- 🔽 掃描紀錄 -->
+  <div id="scan-log" class="bg-white text-black max-w-full w-full px-4 py-3 mt-2 overflow-y-auto max-h-60 shadow-inner rounded-t-md">
+    <h2 class="text-lg font-semibold mb-2 border-b pb-1">掃描紀錄</h2>
+    <ul id="scan-list" class="space-y-1 text-sm list-disc pl-5">
+      <!-- 掃描紀錄將插入於此 -->
+    </ul>
+  </div>
+
   <div id="message"><span id="message-text">訊息顯示</span></div>
 
   <script>
@@ -52,56 +64,87 @@
       let isProcessing = false;
       const messageBox = document.getElementById('message');
       const messageText = document.getElementById('message-text');
-
+      const scanList = document.getElementById('scan-list');
+      const MAX_LOG = 20;
+      const STORAGE_KEY = "scan_log";
+  
       function showMessage(message, colorClass) {
         messageBox.className = '';
         messageBox.classList.add(colorClass);
         messageText.textContent = message;
         messageBox.style.opacity = "1";
-
-        // 自動隱藏
         setTimeout(() => {
           messageBox.style.opacity = "0";
         }, 2500);
       }
-
+  
+      function addScanLog(uuid, result) {
+        const time = new Date().toLocaleTimeString();
+        const entry = { time, uuid, result };
+  
+        // 儲存到 localStorage
+        let log = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        log.unshift(entry); // 新增在最前
+        if (log.length > MAX_LOG) log = log.slice(0, MAX_LOG);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  
+        renderScanLog(log);
+      }
+  
+      function renderScanLog(log) {
+        scanList.innerHTML = ''; // 清空
+        log.forEach(entry => {
+          const li = document.createElement('li');
+          li.textContent = `${entry.time} - UUID: ${entry.uuid} - 結果: ${entry.result}`;
+          scanList.appendChild(li);
+        });
+      }
+  
+      // 初始化載入 localStorage 紀錄
+      const savedLog = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      renderScanLog(savedLog);
+  
       messageBox.addEventListener("click", () => {
         messageBox.style.opacity = "0";
       });
-
+  
       function handleScan(result) {
         if (isProcessing) return;
         isProcessing = true;
-
+  
         let data;
         try {
           data = JSON.parse(result);
         } catch (e) {
           showMessage("無效的 QRCode", "red");
+          addScanLog("N/A", "無效的 QRCode");
           isProcessing = false;
           return;
         }
-
+  
         if (!data.UUID || !data.Day) {
           showMessage("QRCode 格式錯誤", "red");
+          addScanLog(data.UUID || "N/A", "格式錯誤");
           isProcessing = false;
           return;
         }
-
-        // 顯示處理中
+  
         showMessage("正在查詢中...", "orange");
-
+  
         fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.UUID}&day=${data.Day}`)
           .then(response => response.json())
           .then(res => {
             if (res.success && res.data === "完成兌換") {
               showMessage("完成兌換", "green");
+              addScanLog(data.UUID, "完成兌換");
             } else {
               showMessage(res.data || "處理失敗", "red");
+              addScanLog(data.UUID, res.data || "處理失敗");
             }
           })
           .catch(() => {
             showMessage("發生錯誤，請稍後再試", "red");
+            addScanLog(data.UUID, "網路錯誤");
           })
           .finally(() => {
             setTimeout(() => {
@@ -109,14 +152,14 @@
             }, 1500);
           });
       }
-
+  
       const html5QrCode = new Html5Qrcode("qr-reader");
       html5QrCode.start(
         { facingMode: "environment" },
         {
-            fps: 10,
-            qrbox: 250,
-            aspectRatio: window.innerWidth / window.innerHeight
+          fps: 10,
+          qrbox: 250,
+          aspectRatio: window.innerWidth / window.innerHeight
         },
         handleScan
       );
