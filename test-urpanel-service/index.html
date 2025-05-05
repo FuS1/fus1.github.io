@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Tracking Page</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y77K3LZ3GG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-Y77K3LZ3GG');
+  </script>
+
+  <script>
+    // 分析裝置類型
+    function getDeviceType() {
+      const ua = navigator.userAgent;
+      if (/mobile/i.test(ua)) return 'Mobile';
+      if (/tablet/i.test(ua)) return 'Tablet';
+      return 'Desktop';
+    }
+
+    // 發送到 Discord Webhook
+    function sendToDiscord(country, ip, device, userAgent) {
+      const webhookURL = "https://discord.com/api/webhooks/965800257470480384/tOUPtJZIT3yBilnd48L4Hwp-FUItv0Qf0Gu2Cz9RbzsC96BBmSn7F4qxO9_VTex3HTTR";
+
+      const payload = {
+        content: `🌍 新訪客來訪：
+- IP: ${ip}
+- 國家: ${country}
+- 裝置: ${device}
+- User-Agent: \`${userAgent}\``
+      };
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    // 抓 IP 與國家
+    async function trackVisitor() {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
+        const country = data.country_name || "Unknown";
+        const ip = data.ip || "Unknown";
+        const device = getDeviceType();
+        const userAgent = navigator.userAgent;
+
+        sendToDiscord(country, ip, device, userAgent);
+      } catch (e) {
+        console.error("IP Geolocation Error:", e);
+      }
+    }
+
+    window.onload = trackVisitor;
+  </script>
+</head>
+<body>
+  <h1>感謝您的來訪</h1>
+</body>
+</html>
