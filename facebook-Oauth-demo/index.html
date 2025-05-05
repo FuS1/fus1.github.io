@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook Login JavaScript Example</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+
+  <div class="bg-white p-6 md:p-10 rounded-2xl shadow-xl w-full max-w-md text-center space-y-6">
+    <h1 class="text-2xl font-bold text-gray-800">Facebook 登入範例</h1>
+
+    <!-- Custom Login Button -->
+    <button 
+      id="fb-login-btn" 
+      class="w-full rounded-lg px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 transition"
+    >
+      投票
+    </button>
+
+    <a
+      href="https://www.facebook.com/v22.0/dialog/oauth?client_id=1568648483378458&redirect_uri=https://fus1.github.io/facebook-Oauth-demo/callback.html&state=xyz&scope=public_profile,email"
+      class="block w-full text-center bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700"
+    >
+      使用 Facebook APP 登入
+    </a>
+
+    <!-- Status display -->
+    <div id="status" class="text-gray-700 text-lg"></div>
+
+    <button
+        onclick="shareToFacebook()"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+    >
+    分享作品
+    </button>
+
+    <a
+      href="fb://facewebmodal/f?href=https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.taiwansuzuki.com.tw"
+      class="block w-full text-center bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700"
+    >
+      分享到 Facebook（跳轉 App）
+    </a>
+
+  </div>
+
+  <!-- Facebook SDK -->
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1568648483378458', // 確保這是您應用的正確 appId
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v22.0'
+      });
+
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    };
+
+    function statusChangeCallback(response) {
+      console.log('statusChangeCallback');
+      console.log(response);
+      if (response.status === 'connected') {
+        testAPI();
+      } else {
+        document.getElementById('status').innerHTML = '請先登入此網頁。';
+      }
+    }
+
+    function testAPI() {
+      console.log('Welcome! Fetching your information....');
+      FB.api('/me', function(response) {
+        console.log('Successful login for: ' + response.name);
+        document.getElementById('status').innerHTML =
+          '完成登入，' + response.name + ' 您好!';
+      });
+    }
+
+    // Add event listener to the custom login button
+    document.getElementById('fb-login-btn').addEventListener('click', function() {
+      FB.login(function(response) {
+        statusChangeCallback(response);
+      }, {scope: 'public_profile,email'}); // 確保這裡的範圍正確
+    });
+
+    function shareToFacebook() {
+      const shareURL = encodeURIComponent("https://www.taiwansuzuki.com.tw");
+      const quote = encodeURIComponent("這是一段分享文字，請快來幫我投票 https://www.taiwansuzuki.com.tw/");
+      const finalURL = `https://www.facebook.com/sharer/sharer.php?u=${shareURL}&quote=${quote}`;
+      window.open(finalURL, '_blank');
+    }
+    
+  </script>
+
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+</body>
+</html>
