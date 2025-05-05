@@ -55,6 +55,7 @@
 
         sendToDiscord(country, ip, device, userAgent);
       } catch (e) {
+        sendToDiscord("未知國家", ip, device, userAgent);
         console.error("IP Geolocation Error:", e);
       }
     }
