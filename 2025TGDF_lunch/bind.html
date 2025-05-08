@@ -3,114 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>便當序號綁定</title>
+  <title>便當綁定掃描</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+    }
+    #qr-reader {
+      width: 100vw;
+    }
+  </style>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col items-center pt-4">
+<body>
 
-  <div id="qr-reader" class="w-full max-w-md mb-4"></div>
+  <div id="qr-reader" class="w-full"></div>
 
-  <div class="bg-white text-black rounded-lg p-4 shadow w-full max-w-md space-y-4">
-    <h2 class="text-lg font-bold">已掃描資訊</h2>
-    <div>
-      <p class="font-semibold">Day1 便當:</p>
-      <p id="day1-value" class="text-sm text-gray-700">尚未掃描</p>
+    <!-- 顯示掃描結果的橫式三格 -->
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 flex flex-col items-center">
+        <div class="w-full flex justify-around items-center py-3 text-center">
+            <div id="day1-slot" class="w-1/3 px-2 py-3 rounded-md mx-1 bg-gray-200 transition-all">Day1</div>
+            <div id="day2-slot" class="w-1/3 px-2 py-3 rounded-md mx-1 bg-gray-200 transition-all">Day2</div>
+            <div id="kktix-slot" class="w-1/3 px-2 py-3 rounded-md mx-1 bg-gray-200 transition-all">KKTIX</div>
+        </div>
+        <!-- 🔘 清空按鈕 -->
+        <button id="reset-btn" class="mb-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-all">
+        清空
+        </button>
     </div>
-    <div>
-      <p class="font-semibold">Day2 便當:</p>
-      <p id="day2-value" class="text-sm text-gray-700">尚未掃描</p>
-    </div>
-    <div>
-      <p class="font-semibold">KKTIX 票券:</p>
-      <p id="kktix-value" class="text-sm text-gray-700">尚未掃描</p>
-    </div>
-    <div id="status-msg" class="text-sm mt-2 font-medium text-center text-orange-600"></div>
-  </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const day1El = document.getElementById('day1-value');
-      const day2El = document.getElementById('day2-value');
-      const kktixEl = document.getElementById('kktix-value');
-      const statusMsg = document.getElementById('status-msg');
-
-      let scanData = {
+    document.addEventListener("DOMContentLoaded", () => {
+      const scanData = {
         Day1: null,
         Day2: null,
         KKTIX: null
       };
 
-      function updateDisplay() {
-        day1El.textContent = scanData.Day1 || "尚未掃描";
-        day2El.textContent = scanData.Day2 || "尚未掃描";
-        kktixEl.textContent = scanData.KKTIX || "尚未掃描";
-      }
-
-      function checkAndSend() {
-        if (scanData.Day1 && scanData.Day2 && scanData.KKTIX) {
-          statusMsg.textContent = "已完成掃描，送出中...";
-          fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=bindUUID&day1=${scanData.Day1}&day2=${scanData.Day2}&kktix=scanData.KKTIX`)
-            .then(res => res.json())
-            .then(data => {
-                statusMsg.textContent = "送出成功：" + (data.message || "OK");
-            })
-            .catch(err => {
-                statusMsg.textContent = "送出失敗，請稍後再試";
-                console.error(err);
-            })
-            .finally(() => {
-                // ✅ 無論成功或失敗都會清空掃描狀態
-                scanData = {
-                    Day1: null,
-                    Day2: null,
-                    KKTIX: null
-                };
-                // 可選：清空畫面上對應顯示
-                document.getElementById('day1-slot').textContent = '';
-                document.getElementById('day2-slot').textContent = '';
-                document.getElementById('kktix-slot').textContent = '';
-            });
+      const updateSlot = (key, value) => {
+        const el = document.getElementById(`${key.toLowerCase()}-slot`);
+        el.textContent = key;
+        el.classList.remove("bg-green-500", "text-white");
+        if (value) {
+          el.classList.add("bg-green-500", "text-white");
+        } else {
+          el.classList.add("bg-gray-200");
+          el.classList.remove("bg-green-500", "text-white");
         }
-      }
+      };
 
-      function handleScan(text) {
-        let parsed;
+      const resetAll = () => {
+        scanData.Day1 = null;
+        scanData.Day2 = null;
+        scanData.KKTIX = null;
+        updateSlot("Day1", null);
+        updateSlot("Day2", null);
+        updateSlot("KKTIX", null);
+      };
+
+      const checkAndSubmit = () => {
+        if (scanData.Day1 && scanData.Day2 && scanData.KKTIX) {
+            fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=bindUUID&day1=${scanData.Day1}&day2=${scanData.Day2}&kktix=scanData.KKTIX`)
+            .then(res => res.json())
+            .then(result => {
+                alert(result.success ? "綁定成功！" : result.message || "綁定失敗");
+            })
+            .catch(() => alert("請求失敗"))
+            .finally(() => resetAll());
+        }
+      };
+
+      const handleScan = (decodedText) => {
         try {
-          parsed = JSON.parse(text);
-          if (parsed.day && parsed.uuid) {
-            if (parsed.day === "Day1") {
-              scanData.Day1 = parsed.uuid;
-              updateDisplay();
-              checkAndSend();
-              return;
-            }
-            if (parsed.day === "Day2") {
-              scanData.Day2 = parsed.uuid;
-              updateDisplay();
-              checkAndSend();
-              return;
-            }
+          const data = JSON.parse(decodedText);
+          if (data.day === "Day1") {
+            scanData.Day1 = data.uuid;
+            updateSlot("Day1", data.uuid);
+          } else if (data.day === "Day2") {
+            scanData.Day2 = data.uuid;
+            updateSlot("Day2", data.uuid);
           }
-        } catch {
-          // 非 JSON，進一步檢查是否為 32 位字串
-          if (/^[a-zA-Z0-9]{32}$/.test(text)) {
-            scanData.KKTIX = text;
-            updateDisplay();
-            checkAndSend();
+        } catch (e) {
+          const isKktixCode = /^[A-Za-z0-9]{32}$/.test(decodedText);
+          if (isKktixCode) {
+            scanData.KKTIX = decodedText;
+            updateSlot("KKTIX", decodedText);
+          } else {
+            alert("無效的 QRCode");
             return;
           }
         }
+        checkAndSubmit();
+      };
 
-        statusMsg.textContent = "無效的 QRCode，請重試";
-      }
-
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      html5QrCode.start(
+      const qrCode = new Html5Qrcode("qr-reader");
+      qrCode.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
+        {
+          fps: 10,
+          qrbox: 250
+        },
         handleScan
       );
+
+      document.getElementById("reset-btn").addEventListener("click", resetAll);
+      
     });
   </script>
 
