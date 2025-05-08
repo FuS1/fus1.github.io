@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>領取便當</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+    }
+    #qr-reader {
+      width: 100vw;
+    }
+    #message {
+      position: fixed;
+      width: fit-content;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      cursor: pointer;
+      z-index: 9999;
+    }
+    #message.green {
+      background-color: #22c55e;
+    }
+    #message.red {
+      background-color: #ef4444;
+    }
+    #message.orange {
+      background-color: #f97316;
+    }
+    #scan-list{
+      min-height: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="w-full mb-2">
+    <div id="qr-reader" class="w-screen"></div>
+  </div>
+
+  <!-- 🔽 掃描紀錄 -->
+  <div id="scan-log" class="fixed bottom-0 left-0 right-0 bg-white text-black px-4 py-3 shadow-inner z-10 border-t border-gray-300 rounded-t-2xl">
+    <h2 class="text-base font-semibold mb-2 border-b pb-1">掃描紀錄</h2>
+    <div class="max-h-40 overflow-y-auto pr-2">
+      <ul id="scan-list" class="space-y-1 text-sm list-none pl-0">
+        <!-- 掃描紀錄將插入於此 -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="message"><span id="message-text">訊息顯示</span></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const toDay = urlParams.get('date') || moment().format('YYYY-MM-DD');
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+      let isProcessing = false;
+      const messageBox = document.getElementById('message');
+      const messageText = document.getElementById('message-text');
+      const scanList = document.getElementById('scan-list');
+      const MAX_LOG = 20;
+      const STORAGE_KEY = "scan_log";
+  
+      function showMessage(message, colorClass, autoHide = true) {
+        messageBox.className = '';
+        messageBox.classList.add(colorClass);
+        messageText.textContent = message;
+        messageBox.style.opacity = "1";
+        if(autoHide){
+          setTimeout(() => {
+            messageBox.style.opacity = "0";
+          }, 2500);
+        }
+      }
+  
+      function addScanLog(uuid, result) {
+        const time = new Date().toLocaleTimeString();
+        const entry = { time, uuid, result };
+  
+        // 儲存到 localStorage
+        let log = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        log.unshift(entry); // 新增在最前
+        if (log.length > MAX_LOG) log = log.slice(0, MAX_LOG);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(log));
+  
+        renderScanLog(log);
+      }
+  
+      function renderScanLog(log) {
+        scanList.innerHTML = ''; // 清空
+        log.forEach((entry, index) => {
+          const li = document.createElement('li');
+          li.className = 'relative p-3 rounded-md shadow-sm border';
+          if (index % 2 === 0) {
+            li.classList.add('bg-gray-100');
+          } else {
+            li.classList.add('bg-white');
+          }
+
+          // 上方區塊：時間 + 結果
+          const topDiv = document.createElement('div');
+          topDiv.className = 'flex justify-between items-start mb-1';
+
+          const timeSpan = document.createElement('span');
+          timeSpan.className = 'text-xs text-gray-500';
+          timeSpan.textContent = entry.time;
+
+          const resultSpan = document.createElement('span');
+          if (entry.result === '完成兌換') {
+            resultSpan.className = 'text-green-600 text-lg';
+            resultSpan.innerHTML = '<span class="text-green-600 text-lg">&#10004;</span>';
+          } else {
+            resultSpan.className = 'text-sm text-red-500 font-medium';
+            resultSpan.textContent = entry.result;
+          }
+
+          topDiv.appendChild(timeSpan);
+          topDiv.appendChild(resultSpan);
+
+          // 下方 UUID 區塊
+          const uuidDiv = document.createElement('div');
+          uuidDiv.className = 'text-xs text-gray-600 mt-1';
+          uuidDiv.textContent = 'UUID: ' + entry.uuid;
+
+          // 組合
+          li.appendChild(topDiv);
+          li.appendChild(uuidDiv);
+          scanList.appendChild(li);
+        });
+      }
+  
+      // 初始化載入 localStorage 紀錄
+      const savedLog = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      renderScanLog(savedLog);
+  
+      messageBox.addEventListener("click", () => {
+        messageBox.style.opacity = "0";
+      });
+  
+      function handleScan(result) {
+        if (isProcessing) return;
+        isProcessing = true;
+  
+        let data;
+
+        const isKktixCode = /^[A-Za-z0-9]{32}$/.test(result);
+        if (isKktixCode) {
+          data={
+            uuid : result,
+            day  : toDay=='2025-07-09' ? "Day1" : "Day2",
+          }
+        } else {
+          showMessage("無效的 QRCode", "red");
+          addScanLog("N/A", "無效的 QRCode");
+          isProcessing = false;
+          return;
+        }
+
+        showMessage("正在查詢中...", "orange", false);
+  
+        fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUIDv2&uuid=${data.uuid}&day=${data.day}`)
+          .then(response => response.json())
+          .then(res => {
+            if (res.success && res.data === "完成兌換") {
+              showMessage("完成兌換", "green");
+              addScanLog(data.UUID, "完成兌換");
+            } else {
+              showMessage(res.data || "處理失敗", "red");
+              addScanLog(data.UUID, res.data || "處理失敗");
+            }
+          })
+          .catch(() => {
+            showMessage("發生錯誤，請稍後再試", "red");
+            addScanLog(data.UUID, "網路錯誤");
+          })
+          .finally(() => {
+            setTimeout(() => {
+              isProcessing = false;
+            }, 1500);
+          });
+      }
+  
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      html5QrCode.start(
+        { facingMode: "environment" },
+        {
+          fps: 10,
+          qrbox: 250,
+        },
+        handleScan
+      );
+    });
+  </script>
+
+</body>
+</html>
