@@ -82,7 +82,9 @@
             })
             .catch(() => alert("請求失敗"))
             .finally(function(){
-                showBindingOverlay(false);
+                setTimeout(() => {
+                    showBindingOverlay(false); //發送完畢後2秒再開放重新掃描
+                }, 2000);
                 resetAll();
             });
         }
@@ -90,7 +92,7 @@
 
       const handleScan = (decodedText) => {
         if(onRequest){ //正在Reuqest時，不進行掃描
-            return
+            return;
         }
         try {
           const data = JSON.parse(decodedText);
