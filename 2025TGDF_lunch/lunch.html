@@ -163,16 +163,16 @@
           return;
         }
   
-        if (!data.UUID || !data.Day) {
+        if (!data.uuid || !data.day) {
           showMessage("QRCode 格式錯誤", "red");
-          addScanLog(data.UUID || "N/A", "格式錯誤");
+          addScanLog(data.uuid || "N/A", "格式錯誤");
           isProcessing = false;
           return;
         }
   
         showMessage("正在查詢中...", "orange", false);
   
-        fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.UUID}&day=${data.Day}`)
+        fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=redeemUUID&uuid=${data.uuid}&day=${data.day}`)
           .then(response => response.json())
           .then(res => {
             if (res.success && res.data === "完成兌換") {
