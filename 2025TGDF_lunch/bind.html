@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>便當序號綁定</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center pt-4">
+
+  <div id="qr-reader" class="w-full max-w-md mb-4"></div>
+
+  <div class="bg-white text-black rounded-lg p-4 shadow w-full max-w-md space-y-4">
+    <h2 class="text-lg font-bold">已掃描資訊</h2>
+    <div>
+      <p class="font-semibold">Day1 便當:</p>
+      <p id="day1-value" class="text-sm text-gray-700">尚未掃描</p>
+    </div>
+    <div>
+      <p class="font-semibold">Day2 便當:</p>
+      <p id="day2-value" class="text-sm text-gray-700">尚未掃描</p>
+    </div>
+    <div>
+      <p class="font-semibold">KKTIX 票券:</p>
+      <p id="kktix-value" class="text-sm text-gray-700">尚未掃描</p>
+    </div>
+    <div id="status-msg" class="text-sm mt-2 font-medium text-center text-orange-600"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const day1El = document.getElementById('day1-value');
+      const day2El = document.getElementById('day2-value');
+      const kktixEl = document.getElementById('kktix-value');
+      const statusMsg = document.getElementById('status-msg');
+
+      let scanData = {
+        Day1: null,
+        Day2: null,
+        KKTIX: null
+      };
+
+      function updateDisplay() {
+        day1El.textContent = scanData.Day1 || "尚未掃描";
+        day2El.textContent = scanData.Day2 || "尚未掃描";
+        kktixEl.textContent = scanData.KKTIX || "尚未掃描";
+      }
+
+      function checkAndSend() {
+        if (scanData.Day1 && scanData.Day2 && scanData.KKTIX) {
+          statusMsg.textContent = "已完成掃描，送出中...";
+          fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=bindUUID&day1=${scanData.Day1}&day2=${scanData.Day2}&kktix=scanData.KKTIX`)
+            .then(res => res.json())
+            .then(data => {
+                statusMsg.textContent = "送出成功：" + (data.message || "OK");
+            })
+            .catch(err => {
+                statusMsg.textContent = "送出失敗，請稍後再試";
+                console.error(err);
+            })
+            .finally(() => {
+                // ✅ 無論成功或失敗都會清空掃描狀態
+                scanData = {
+                    Day1: null,
+                    Day2: null,
+                    KKTIX: null
+                };
+                // 可選：清空畫面上對應顯示
+                document.getElementById('day1-slot').textContent = '';
+                document.getElementById('day2-slot').textContent = '';
+                document.getElementById('kktix-slot').textContent = '';
+            });
+        }
+      }
+
+      function handleScan(text) {
+        let parsed;
+        try {
+          parsed = JSON.parse(text);
+          if (parsed.day && parsed.uuid) {
+            if (parsed.day === "Day1") {
+              scanData.Day1 = parsed.uuid;
+              updateDisplay();
+              checkAndSend();
+              return;
+            }
+            if (parsed.day === "Day2") {
+              scanData.Day2 = parsed.uuid;
+              updateDisplay();
+              checkAndSend();
+              return;
+            }
+          }
+        } catch {
+          // 非 JSON，進一步檢查是否為 32 位字串
+          if (/^[a-zA-Z0-9]{32}$/.test(text)) {
+            scanData.KKTIX = text;
+            updateDisplay();
+            checkAndSend();
+            return;
+          }
+        }
+
+        statusMsg.textContent = "無效的 QRCode，請重試";
+      }
+
+      const html5QrCode = new Html5Qrcode("qr-reader");
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        handleScan
+      );
+    });
+  </script>
+
+</body>
+</html>
