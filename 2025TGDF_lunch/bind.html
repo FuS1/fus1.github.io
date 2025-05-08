@@ -20,7 +20,7 @@
 </head>
 <body>
 
-  <div id="qr-reader" class="w-full"></div>
+    <div id="qr-reader" class="w-full"></div>
 
     <!-- 顯示掃描結果的橫式三格 -->
     <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 flex flex-col items-center">
@@ -34,8 +34,15 @@
         清空
         </button>
     </div>
+    
+    <div id="binding-overlay" class="fixed inset-0 bg-black bg-opacity-60 text-white flex items-center justify-center text-xl font-semibold z-50 hidden">
+        綁定中，請稍候…
+    </div>
 
   <script>
+
+    var onRequest = false;
+
     document.addEventListener("DOMContentLoaded", () => {
       const scanData = {
         day1: null,
@@ -66,17 +73,25 @@
 
       const checkAndSubmit = () => {
         if (scanData.day1 && scanData.day2 && scanData.KKTIX) {
+
+            showBindingOverlay(true);
             fetch(`https://script.google.com/macros/s/AKfycbx7K7uID_-tv1nZDOc3TUkcNQoetQOZ-f4Td0mSxmu5JrntplZt02QhtVs15Zf-oR3Y/exec?action=bindUUID&day1=${scanData.day1}&day2=${scanData.day2}&kktix=${scanData.KKTIX}`)
             .then(res => res.json())
             .then(result => {
                 alert(result.success ? "綁定成功！" : result.message || "綁定失敗");
             })
             .catch(() => alert("請求失敗"))
-            .finally(() => resetAll());
+            .finally(function(){
+                showBindingOverlay(false);
+                resetAll();
+            });
         }
       };
 
       const handleScan = (decodedText) => {
+        if(onRequest){ //正在Reuqest時，不進行掃描
+            return
+        }
         try {
           const data = JSON.parse(decodedText);
           if (data.day === "day1") {
@@ -110,6 +125,13 @@
       );
 
       document.getElementById("reset-btn").addEventListener("click", resetAll);
+
+      function showBindingOverlay(show) {
+        
+        onRequest=show;
+        const overlay = document.getElementById('binding-overlay');
+        overlay.classList.toggle('hidden', !show);
+      }
 
     });
   </script>
