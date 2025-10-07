@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>排班系統 (升級版)</title>
+    <title>排班系統 - 班表管理</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* 保持不變的樣式 */
@@ -406,7 +406,7 @@
                     gridHtml += '<div class="text-xs space-y-1 mt-1">';
                     daySchedules.forEach(s => {
                         const emp = employees.find(e => e.id === s.employeeId);
-                        gridHtml += `<div class="bg-purple-600 p-1 rounded truncate" title="${emp ? emp.name : ''}: ${s.start}-${s.end}">${emp ? emp.name.substring(0,3) : ''}: ${s.start}</div>`;
+                        gridHtml += `<div class="bg-purple-600 p-1 rounded truncate" title="${emp ? emp.name : ''}: ${s.start}-${s.end}">${emp ? emp.name.substring(0,3) : ''}: ${s.start}~${s.end}</div>`;
                     });
                     gridHtml += '</div>';
                 }

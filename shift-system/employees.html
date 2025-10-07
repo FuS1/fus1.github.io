@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>員工管理</title>
+    <title>排班系統 - 員工管理</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -16,7 +16,7 @@
         <header class="mb-6 flex justify-between items-center">
             <div>
                 <h1 class="text-4xl font-bold text-white">員工管理</h1>
-                <p class="text-gray-400 mt-1">在這裡新增或查看員工資料。</p>
+                <p class="text-gray-400 mt-1">在這裡新增或查看員工資料</p>
             </div>
             <a href="schedule.html" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
                 前往排班頁面 &rarr;
@@ -80,7 +80,10 @@
         
         // NEW: 如果沒有員工資料，則建立一批範例資料
         function seedInitialData() {
-            if (!localStorage.getItem('employees')) {
+            const hasEmployees = localStorage.getItem('employees');
+            const hasSchedules = localStorage.getItem('schedules');
+            
+            if (!hasEmployees) {
                 const initialEmployees = [
                     { id: 'emp_1', name: '王大明', store: '台北 旗艦店' },
                     { id: 'emp_2', name: '陳小美', store: '台北 旗艦店' },
@@ -88,9 +91,94 @@
                     { id: 'emp_4', name: '李支援', store: '高雄 旗艦店' },
                     { id: 'emp_5', name: '吳正華', store: '中壢 中原店' },
                     { id: 'emp_6', name: '張全蛋', store: '竹北 六家店' },
+                    { id: 'emp_7', name: '黃雅玲', store: '台中 旗艦店' },
+                    { id: 'emp_8', name: '周子豪', store: '高雄 夢時代店' },
+                    { id: 'emp_9', name: '蔡明哲', store: '青埔 環球店' },
+                    { id: 'emp_10', name: '簡如萍', store: '新店 威秀店' },
+                    { id: 'emp_11', name: '曾建宏', store: '公館 體驗店' },
+                    { id: 'emp_12', name: '羅欣怡', store: '台南 中山店' },
+                    { id: 'emp_13', name: '許國豪', store: '中壢 中原店' },
+                    { id: 'emp_14', name: '鄭琬婷', store: '台北 旗艦店' },
+                    { id: 'emp_15', name: '高志偉', store: '高雄 夢時代店' },
+                    { id: 'emp_16', name: '林佩君', store: '竹北 六家店' },
+                    { id: 'emp_17', name: '張育誠', store: '公館 體驗店' },
+                    { id: 'emp_18', name: '陳慧文', store: '青埔 環球店' },
+                    { id: 'emp_19', name: '劉志強', store: '台南 中山店' },
+                    { id: 'emp_20', name: '何美玲', store: '新店 威秀店' },
                 ];
                 saveEmployees(initialEmployees);
             }
+
+            if (!hasSchedules) {
+                generateAndSaveSchedules();
+            }
+
+        }
+
+        function generateAndSaveSchedules() {
+            const employees = getEmployees();
+            if (employees.length === 0) return;
+
+            const schedules = [];
+            const today = new Date();
+            const startTimes = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+            const durations = [6, 7, 8]; // in hours
+
+            function addHoursToTime(timeStr, hours) {
+                let [h, m] = timeStr.split(':').map(Number);
+                h += hours;
+                if (h >= 22) h = 22; // Cap at 22:00
+                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            }
+            
+            function formatDate(date) { return date.toISOString().split('T')[0]; }
+            
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            for (let i = 0; i < 30; i++) { // Generate for the next 30 days
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                const dateStr = formatDate(date);
+
+                stores.forEach(store => {
+                    const staffToSchedule = [];
+                    const localStaff = employees.filter(e => e.store === store);
+                    const otherStaff = employees.filter(e => e.store !== store);
+                    
+                    // Schedule 2 to 4 local staff
+                    const shuffledLocal = shuffleArray([...localStaff]);
+                    const localCount = Math.floor(Math.random() * 3) + 2; // 2, 3, or 4
+                    staffToSchedule.push(...shuffledLocal.slice(0, localCount));
+
+                    // 30% chance to add a support staff
+                    if (Math.random() < 0.3 && otherStaff.length > 0) {
+                        const supportStaff = otherStaff[Math.floor(Math.random() * otherStaff.length)];
+                        staffToSchedule.push(supportStaff);
+                    }
+
+                    staffToSchedule.forEach(emp => {
+                        const start = startTimes[Math.floor(Math.random() * startTimes.length)];
+                        const duration = durations[Math.floor(Math.random() * durations.length)];
+                        const end = addHoursToTime(start, duration);
+
+                        schedules.push({
+                            id: `sch_${Date.now()}_${Math.random()}`,
+                            store: store,
+                            date: dateStr,
+                            employeeId: emp.id,
+                            start: start,
+                            end: end
+                        });
+                    });
+                });
+            }
+            saveSchedules(schedules);
         }
 
         function populateStoreSelect() {
@@ -102,6 +190,7 @@
         
         function getEmployees() { return JSON.parse(localStorage.getItem('employees')) || []; }
         function saveEmployees(employees) { localStorage.setItem('employees', JSON.stringify(employees)); }
+        function saveSchedules(schedules) { localStorage.setItem('schedules', JSON.stringify(schedules)); }
 
         function renderEmployeeList() {
             const employees = getEmployees();
