@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>員工管理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-4xl font-bold text-white">員工管理</h1>
+                <p class="text-gray-400 mt-1">在這裡新增或查看員工資料。</p>
+            </div>
+            <a href="schedule.html" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                前往排班頁面 &rarr;
+            </a>
+        </header>
+
+        <!-- 新增員工表單 -->
+        <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">新增員工</h2>
+            <form id="employee-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div>
+                    <label for="employee-name" class="block text-sm font-medium text-gray-300 mb-1">員工姓名</label>
+                    <input type="text" id="employee-name" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="employee-store" class="block text-sm font-medium text-gray-300 mb-1">所屬門市</label>
+                    <select id="employee-store" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
+                <button type="submit" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200">
+                    新增員工
+                </button>
+            </form>
+        </div>
+
+        <!-- 員工列表 -->
+        <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+             <h2 class="text-2xl font-semibold mb-4">現有員工列表</h2>
+             <div class="overflow-x-auto">
+                <table class="w-full min-w-max text-left">
+                    <thead class="border-b border-gray-700">
+                        <tr>
+                            <th class="p-3">員工姓名</th>
+                            <th class="p-3">所屬門市</th>
+                            <th class="p-3 text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employee-list"></tbody>
+                </table>
+             </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(function() {
+        const stores = [
+            '台北 旗艦店', '公館 體驗店', '新店 威秀店',
+            '青埔 環球店', '中壢 中原店',
+            '竹北 六家店',
+            '台中 旗艦店',
+            '台南 中山店',
+            '高雄 旗艦店', '高雄 夢時代店'
+        ];
+
+        function init() {
+            seedInitialData(); // NEW: 新增預設資料
+            populateStoreSelect();
+            renderEmployeeList();
+            bindEvents();
+        }
+        
+        // NEW: 如果沒有員工資料，則建立一批範例資料
+        function seedInitialData() {
+            if (!localStorage.getItem('employees')) {
+                const initialEmployees = [
+                    { id: 'emp_1', name: '王大明', store: '台北 旗艦店' },
+                    { id: 'emp_2', name: '陳小美', store: '台北 旗艦店' },
+                    { id: 'emp_3', name: '林經理', store: '台中 旗艦店' },
+                    { id: 'emp_4', name: '李支援', store: '高雄 旗艦店' },
+                    { id: 'emp_5', name: '吳正華', store: '中壢 中原店' },
+                    { id: 'emp_6', name: '張全蛋', store: '竹北 六家店' },
+                ];
+                saveEmployees(initialEmployees);
+            }
+        }
+
+        function populateStoreSelect() {
+            const $select = $('#employee-store');
+            stores.forEach(store => {
+                $select.append(`<option value="${store}">${store}</option>`);
+            });
+        }
+        
+        function getEmployees() { return JSON.parse(localStorage.getItem('employees')) || []; }
+        function saveEmployees(employees) { localStorage.setItem('employees', JSON.stringify(employees)); }
+
+        function renderEmployeeList() {
+            const employees = getEmployees();
+            const $list = $('#employee-list');
+            $list.empty();
+            if (employees.length === 0) {
+                $list.append('<tr><td colspan="3" class="p-4 text-center text-gray-500">尚未新增任何員工。</td></tr>');
+                return;
+            }
+            employees.forEach((emp, index) => {
+                const row = `
+                    <tr class="border-b border-gray-700 hover:bg-gray-700 fade-in" style="animation-delay: ${index * 50}ms">
+                        <td class="p-3">${emp.name}</td>
+                        <td class="p-3">${emp.store}</td>
+                        <td class="p-3 text-right">
+                            <button class="delete-btn text-red-400 hover:text-red-600 text-sm" data-id="${emp.id}">刪除</button>
+                        </td>
+                    </tr>
+                `;
+                $list.append(row);
+            });
+        }
+
+        function bindEvents() {
+            $('#employee-form').on('submit', function(e) {
+                e.preventDefault();
+                const name = $('#employee-name').val();
+                const store = $('#employee-store').val();
+                if (name && store) {
+                    const employees = getEmployees();
+                    employees.push({ id: 'emp_' + Date.now(), name: name, store: store });
+                    saveEmployees(employees);
+                    renderEmployeeList();
+                    $('#employee-name').val('');
+                }
+            });
+
+            $('#employee-list').on('click', '.delete-btn', function() {
+                if (confirm('確定要刪除這位員工嗎？')) {
+                    const employeeId = $(this).data('id');
+                    let employees = getEmployees();
+                    employees = employees.filter(emp => emp.id !== employeeId);
+                    saveEmployees(employees);
+                    renderEmployeeList();
+                }
+            });
+        }
+
+        init();
+    });
+    </script>
+
+</body>
+</html>

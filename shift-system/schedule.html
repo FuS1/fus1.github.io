@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排班系統 (升級版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 保持不變的樣式 */
+        .schedule-block {
+            position: absolute; height: 80%; top: 10%; border-radius: 6px;
+            color: white; padding: 4px 8px; font-size: 12px; box-sizing: border-box;
+            overflow: hidden; border: 1px solid rgba(0,0,0,0.2); cursor: pointer;
+        }
+        .month-view-day { min-height: 120px; }
+        .view-btn.active { background-color: #2563eb; color: white; }
+        /* 修正頁籤滾動條樣式 */
+        #store-tabs::-webkit-scrollbar { height: 4px; }
+        #store-tabs::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="mb-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-4xl font-bold text-white">排班頁面</h1>
+                <p class="text-gray-400 mt-1">請選擇門市並開始排班。</p>
+            </div>
+             <a href="employees.html" class="text-blue-400 hover:text-blue-500 font-bold py-2 px-4 rounded-lg transition duration-200">
+                &larr; 回到員工管理
+            </a>
+        </header>
+
+        <!-- 控制列 -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+            <div id="view-switcher" class="flex-shrink-0 bg-gray-700 rounded-lg p-1 flex space-x-1">
+                <button class="view-btn px-3 py-1 text-sm font-semibold rounded-md" data-view="day">日</button>
+                <button class="view-btn px-3 py-1 text-sm font-semibold rounded-md" data-view="week">週</button>
+                <button class="view-btn px-3 py-1 text-sm font-semibold rounded-md" data-view="month">月</button>
+            </div>
+            <div id="date-navigator" class="flex items-center justify-center gap-4">
+                <button id="prev-btn" class="p-2 rounded-full hover:bg-gray-700">&lt;</button>
+                <div id="date-display" class="text-lg md:text-xl font-semibold text-center w-48 md:w-64"></div>
+                <button id="next-btn" class="p-2 rounded-full hover:bg-gray-700">&gt;</button>
+            </div>
+             <button id="add-schedule-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg whitespace-nowrap">新增排班</button>
+        </div>
+
+        <!-- 門市頁籤 -->
+        <div class="mb-6">
+            <nav id="store-tabs" class="flex flex-nowrap space-x-2 border-b border-gray-700 overflow-x-auto pb-2"></nav>
+        </div>
+
+        <!-- 排班表 -->
+        <main class="bg-gray-800 rounded-xl shadow-lg p-4 md:p-6 overflow-x-auto">
+            <div id="schedule-grid" class="relative"></div>
+        </main>
+    </div>
+
+    <!-- 新增/編輯排班 Modal -->
+    <div id="schedule-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-xl shadow-2xl p-6 w-11/12 md:w-1/3">
+            <h2 class="text-2xl font-semibold mb-6">新增/編輯 班次</h2>
+            <form id="schedule-form">
+                <input type="hidden" id="schedule-id">
+                <div class="mb-4">
+                    <label for="schedule-date" class="block text-sm font-medium text-gray-300 mb-1">日期</label>
+                    <input type="date" id="schedule-date" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <!-- 員工模糊搜尋 START -->
+                <div class="mb-4">
+                    <label for="employee-search" class="block text-sm font-medium text-gray-300 mb-1">選擇員工</label>
+                    <div class="relative">
+                        <input type="text" id="employee-search" placeholder="搜尋員工姓名..." autocomplete="off" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="hidden" id="schedule-employee-id" required>
+                        <div id="employee-results" class="absolute z-10 w-full bg-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto hidden mt-1">
+                        </div>
+                    </div>
+                </div>
+                <!-- 員工模糊搜尋 END -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label for="schedule-start" class="block text-sm font-medium text-gray-300 mb-1">開始時間</label>
+                        <select id="schedule-start" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"></select>
+                    </div>
+                    <div>
+                        <label for="schedule-end" class="block text-sm font-medium text-gray-300 mb-1">結束時間</label>
+                        <select id="schedule-end" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2"></select>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <button type="button" id="delete-schedule-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg hidden">刪除</button>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-schedule" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">取消</button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg">儲存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(function() {
+        const stores = [
+            '台北 旗艦店', '公館 體驗店', '新店 威秀店', '青埔 環球店', '中壢 中原店',
+            '竹北 六家店', '台中 旗艦店', '台南 中山店', '高雄 旗艦店', '高雄 夢時代店'
+        ];
+        const timeSlots = Array.from({ length: 48 }, (_, i) => {
+            const h = Math.floor(i / 2);
+            const m = (i % 2) * 30;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        });
+        
+        let currentStore = stores[0];
+        let currentView = 'day';
+        let currentDate = new Date();
+
+        function init() {
+            populateTimeDropdowns();
+            renderTabs();
+            updateDateDisplay();
+            renderScheduleGrid();
+            bindEvents();
+            $('#view-switcher .view-btn[data-view="day"]').addClass('active');
+        }
+
+        function getEmployees() { return JSON.parse(localStorage.getItem('employees')) || []; }
+        function getSchedules() { return JSON.parse(localStorage.getItem('schedules')) || []; }
+        function saveSchedules(schedules) { localStorage.setItem('schedules', JSON.stringify(schedules)); }
+        function formatDate(date) { return date.toISOString().split('T')[0]; }
+
+        function updateDateDisplay() {
+            const display = $('#date-display');
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            const day = currentDate.getDate();
+            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][currentDate.getDay()];
+
+            if (currentView === 'day') {
+                display.text(`${year}年${month}月${day}日 (${dayOfWeek})`);
+            } else if (currentView === 'week') {
+                const startOfWeek = new Date(currentDate);
+                startOfWeek.setDate(day - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1)); // Monday as start
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                display.text(`${formatDate(startOfWeek)} ~ ${formatDate(endOfWeek)}`);
+            } else { // month
+                display.text(`${year}年 ${month}月`);
+            }
+        }
+        
+        function renderTabs() {
+            const $tabs = $('#store-tabs');
+            $tabs.empty();
+            stores.forEach(store => {
+                const activeClass = store === currentStore ? 'text-white bg-blue-600' : 'text-gray-300 hover:bg-gray-700';
+                $tabs.append(`<a href="#" class="tab-item flex-shrink-0 px-4 py-2 rounded-t-lg font-semibold ${activeClass}" data-store="${store}">${store}</a>`);
+            });
+        }
+        
+        function renderScheduleGrid() {
+            updateDateDisplay();
+            const $grid = $('#schedule-grid').empty();
+            switch (currentView) {
+                case 'day': renderDayView($grid); break;
+                case 'week': renderWeekView($grid); break;
+                case 'month': renderMonthView($grid); break;
+            }
+        }
+        
+        // ... [All render functions are below to avoid being omitted] ...
+
+        function bindEvents() {
+            // FIXED: Tab switching
+            $('#store-tabs').on('click', '.tab-item', function(e) {
+                e.preventDefault();
+                currentStore = $(this).data('store');
+                renderTabs(); // Re-render tabs to show active state
+                renderScheduleGrid(); // Re-render the grid for the new store
+            });
+
+            $('#add-schedule-btn').on('click', () => openModal());
+            $('#cancel-schedule').on('click', closeModal);
+            $('#delete-schedule-btn').on('click', deleteSchedule);
+            $('#schedule-form').on('submit', saveSchedule);
+            $('#schedule-grid').on('click', '.schedule-block', function() {
+                 const scheduleId = $(this).data('schedule-id');
+                 const schedules = getSchedules();
+                 const scheduleToEdit = schedules.find(s => s.id === scheduleId);
+                 if (scheduleToEdit) openModal(scheduleToEdit);
+            });
+            
+            $('#view-switcher').on('click', '.view-btn', function() {
+                currentView = $(this).data('view');
+                $('#view-switcher .view-btn').removeClass('active');
+                $(this).addClass('active');
+                renderScheduleGrid();
+            });
+
+            $('#prev-btn').on('click', () => navigateDate(-1));
+            $('#next-btn').on('click', () => navigateDate(1));
+
+            // NEW: Employee search logic
+            $('#employee-search').on('keyup', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                const employees = getEmployees();
+                const $results = $('#employee-results');
+                
+                if (searchTerm.length < 1) {
+                    $results.addClass('hidden').empty();
+                    return;
+                }
+                
+                const filtered = employees.filter(emp => emp.name.toLowerCase().includes(searchTerm));
+                
+                $results.empty().removeClass('hidden');
+                if (filtered.length > 0) {
+                    filtered.forEach(emp => {
+                        $results.append(`<div class="p-2 hover:bg-gray-500 cursor-pointer" data-id="${emp.id}" data-name="${emp.name}">${emp.name} (${emp.store})</div>`);
+                    });
+                } else {
+                    $results.append('<div class="p-2 text-gray-400">找不到員工</div>');
+                }
+            });
+
+            $('#employee-results').on('click', 'div[data-id]', function() {
+                const empId = $(this).data('id');
+                const empName = $(this).data('name');
+                $('#employee-search').val(empName);
+                $('#schedule-employee-id').val(empId);
+                $('#employee-results').addClass('hidden');
+            });
+
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#employee-search, #employee-results').length) {
+                    $('#employee-results').addClass('hidden');
+                }
+            });
+        }
+
+        // --- All detailed functions here ---
+
+        function updateDateDisplay() {
+            const display = $('#date-display');
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            const day = currentDate.getDate();
+            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][currentDate.getDay()];
+
+            if (currentView === 'day') {
+                display.text(`${year}年${month}月${day}日 (${dayOfWeek})`);
+            } else if (currentView === 'week') {
+                const startOfWeek = new Date(currentDate);
+                startOfWeek.setDate(day - startOfWeek.getDay()); // Sunday as start
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                display.text(`${formatDate(startOfWeek)} ~ ${formatDate(endOfWeek)}`);
+            } else {
+                display.text(`${year}年 ${month}月`);
+            }
+        }
+
+        function renderTabs() {
+            const $tabs = $('#store-tabs');
+            $tabs.empty();
+            stores.forEach(store => {
+                const activeClass = store === currentStore ? 'text-white bg-blue-600' : 'text-gray-300 hover:bg-gray-700';
+                $tabs.append(`<a href="#" class="tab-item flex-shrink-0 px-4 py-2 rounded-t-lg font-semibold ${activeClass}" data-store="${store}">${store}</a>`);
+            });
+        }
+        
+        function populateTimeDropdowns() {
+            const $startSelect = $('#schedule-start'), $endSelect = $('#schedule-end');
+            $startSelect.empty(); $endSelect.empty();
+            timeSlots.forEach(time => {
+                $startSelect.append(`<option value="${time}">${time}</option>`);
+                $endSelect.append(`<option value="${time}">${time}</option>`);
+            });
+        }
+        
+        function renderDayView($grid) {
+            const schedules = getSchedules().filter(s => s.store === currentStore && s.date === formatDate(currentDate));
+            let headerHtml = '<div class="flex sticky top-0 bg-gray-900 z-10">';
+            headerHtml += '<div class="w-24 md:w-32 flex-shrink-0 p-2 border-r border-b border-gray-700">員工</div>';
+            timeSlots.forEach(time => {
+                if(time.endsWith(':00')) {
+                    headerHtml += `<div class="w-16 text-center text-xs flex-shrink-0 p-2 border-r border-b border-gray-700">${time}</div>`;
+                } else {
+                    headerHtml += `<div class="w-16 text-center text-xs flex-shrink-0 p-2 border-r border-b border-gray-700 text-gray-500">${time.split(':')[1]}</div>`;
+                }
+            });
+            headerHtml += '</div>';
+            $grid.append(headerHtml);
+
+            const scheduledEmployeeIds = [...new Set(schedules.map(s => s.employeeId))];
+            if (scheduledEmployeeIds.length === 0) {
+                 $grid.append('<p class="text-center text-gray-500 p-8">今日尚無排班</p>'); return;
+            }
+            
+            const employees = getEmployees();
+            const scheduledEmployees = employees.filter(emp => scheduledEmployeeIds.includes(emp.id));
+            const mainStaff = scheduledEmployees.filter(emp => emp.store === currentStore);
+            const supportStaff = scheduledEmployees.filter(emp => emp.store !== currentStore);
+            
+            const renderRow = (emp, schedules, $grid) => {
+                let rowHtml = `<div class="flex h-16 relative border-b border-gray-700" data-employee-id="${emp.id}">`;
+                rowHtml += `<div class="w-24 md:w-32 flex-shrink-0 p-2 border-r border-gray-700 font-medium flex items-center">${emp.name}</div>`;
+                timeSlots.forEach(() => { rowHtml += `<div class="w-16 flex-shrink-0 border-r border-gray-700"></div>`; });
+                rowHtml += '</div>';
+                const $row = $(rowHtml);
+                
+                const employeeSchedules = schedules.filter(s => s.employeeId === emp.id);
+                employeeSchedules.forEach(schedule => {
+                    const startIndex = timeSlots.indexOf(schedule.start);
+                    const endIndex = timeSlots.indexOf(schedule.end);
+                    if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) return;
+                    const duration = endIndex - startIndex;
+                    const nameColWidth = $(window).width() < 768 ? 96 : 128; // Corresponds to w-24 and md:w-32
+                    const timeColWidth = 64; // Corresponds to w-16
+                    const left = nameColWidth + startIndex * timeColWidth;
+                    const width = duration * timeColWidth;
+                    
+                    const block = $(`<div class="schedule-block bg-blue-600" style="left: ${left}px; width: ${width}px;" data-schedule-id="${schedule.id}">${schedule.start}-${schedule.end}</div>`);
+                    $row.append(block);
+                });
+                $grid.append($row);
+            };
+
+            if(mainStaff.length > 0) {
+                $grid.append('<div class="text-center font-bold bg-gray-700 p-2 my-2">主要人員</div>');
+                mainStaff.forEach(emp => renderRow(emp, schedules, $grid));
+            }
+            if(supportStaff.length > 0) {
+                 $grid.append('<div class="text-center font-bold bg-gray-700 p-2 my-2">支援人員</div>');
+                 supportStaff.forEach(emp => renderRow(emp, schedules, $grid));
+            }
+        }
+
+        function renderWeekView($grid) {
+            const startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - startOfWeek.getDay());
+            const weekDates = Array.from({length: 7}, (_, i) => { const d = new Date(startOfWeek); d.setDate(d.getDate() + i); return d; });
+            const weekDateStrings = weekDates.map(d => formatDate(d));
+            
+            const schedules = getSchedules().filter(s => s.store === currentStore && weekDateStrings.includes(s.date));
+            const employees = getEmployees();
+
+            let headerHtml = '<div class="flex sticky top-0 bg-gray-900 z-10">';
+            headerHtml += '<div class="w-24 md:w-32 flex-shrink-0 p-2 border-r border-b border-gray-700">員工</div>';
+            weekDates.forEach(d => {
+                headerHtml += `<div class="w-40 text-center flex-shrink-0 p-2 border-r border-b border-gray-700">${formatDate(d).substring(5)}<br>${['日','一','二','三','四','五','六'][d.getDay()]}</div>`;
+            });
+            headerHtml += '</div>';
+            $grid.append(headerHtml);
+            
+            const scheduledEmployeeIds = [...new Set(schedules.map(s => s.employeeId))];
+            if (scheduledEmployeeIds.length === 0) {
+                 $grid.append('<p class="text-center text-gray-500 p-8">本週尚無排班</p>'); return;
+            }
+            const scheduledEmployees = employees.filter(emp => scheduledEmployeeIds.includes(emp.id));
+
+            scheduledEmployees.forEach(emp => {
+                let rowHtml = `<div class="flex min-h-[6rem] relative border-b border-gray-700" data-employee-id="${emp.id}">`;
+                rowHtml += `<div class="w-24 md:w-32 flex-shrink-0 p-2 border-r border-gray-700 font-medium">${emp.name}</div>`;
+                weekDates.forEach(() => { rowHtml += `<div class="w-40 flex-shrink-0 border-r border-gray-700 relative p-1 space-y-1"></div>`; });
+                rowHtml += '</div>';
+                const $row = $(rowHtml);
+                
+                const empSchedules = schedules.filter(s => s.employeeId === emp.id);
+                empSchedules.forEach(schedule => {
+                    const dayIndex = weekDates.findIndex(d => formatDate(d) === schedule.date);
+                    if (dayIndex === -1) return;
+                    
+                    const block = $(`<div class="schedule-block static w-full h-auto relative bg-sky-600 text-xs" data-schedule-id="${schedule.id}">${schedule.start}-${schedule.end}</div>`);
+                    $row.find('.w-40').eq(dayIndex).append(block);
+                });
+                $grid.append($row);
+            });
+        }
+
+        function renderMonthView($grid) {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startDayOfWeek = firstDay.getDay();
+
+            const schedules = getSchedules().filter(s => s.store === currentStore && new Date(s.date).getMonth() === month);
+            const employees = getEmployees();
+
+            let gridHtml = '<div class="grid grid-cols-7 text-center font-semibold border-b border-gray-700">';
+            ['日', '一', '二', '三', '四', '五', '六'].forEach(day => { gridHtml += `<div class="p-2">${day}</div>`; });
+            gridHtml += '</div><div class="grid grid-cols-7">';
+            
+            for (let i = 0; i < startDayOfWeek; i++) { gridHtml += '<div class="border-r border-b border-gray-700"></div>'; }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const fullDate = formatDate(new Date(year, month, day));
+                const daySchedules = schedules.filter(s => s.date === fullDate);
+                gridHtml += `<div class="month-view-day border-r border-b border-gray-700 p-2 text-left">`;
+                gridHtml += `<div class="font-bold">${day}</div>`;
+                if(daySchedules.length > 0) {
+                    gridHtml += '<div class="text-xs space-y-1 mt-1">';
+                    daySchedules.forEach(s => {
+                        const emp = employees.find(e => e.id === s.employeeId);
+                        gridHtml += `<div class="bg-purple-600 p-1 rounded truncate" title="${emp ? emp.name : ''}: ${s.start}-${s.end}">${emp ? emp.name.substring(0,3) : ''}: ${s.start}</div>`;
+                    });
+                    gridHtml += '</div>';
+                }
+                gridHtml += `</div>`;
+            }
+            gridHtml += '</div>';
+            $grid.html(gridHtml);
+        }
+
+        function openModal(schedule = null) {
+            $('#schedule-form')[0].reset();
+            $('#schedule-id').val('');
+            $('#schedule-employee-id').val('');
+            $('#delete-schedule-btn').addClass('hidden');
+
+            if (schedule) { // Editing
+                $('#schedule-id').val(schedule.id);
+                $('#schedule-date').val(schedule.date);
+                $('#schedule-start').val(schedule.start);
+                $('#schedule-end').val(schedule.end);
+                
+                const emp = getEmployees().find(e => e.id === schedule.employeeId);
+                if(emp) {
+                    $('#employee-search').val(emp.name);
+                    $('#schedule-employee-id').val(emp.id);
+                }
+                $('#delete-schedule-btn').removeClass('hidden');
+            } else { // Adding new
+                // NEW: Auto-fill date if in day view
+                if(currentView === 'day') {
+                    $('#schedule-date').val(formatDate(currentDate));
+                }
+            }
+            $('#schedule-modal').removeClass('hidden');
+        }
+
+        function closeModal() { $('#schedule-modal').addClass('hidden'); }
+        
+        function saveSchedule(e) {
+            e.preventDefault();
+            const scheduleId = $('#schedule-id').val();
+            const newSchedule = {
+                id: scheduleId || 'sch_' + Date.now(),
+                store: currentStore,
+                date: $('#schedule-date').val(),
+                employeeId: $('#schedule-employee-id').val(),
+                start: $('#schedule-start').val(),
+                end: $('#schedule-end').val(),
+            };
+
+            if (!newSchedule.employeeId || !newSchedule.start || !newSchedule.end || newSchedule.start >= newSchedule.end || !newSchedule.date) {
+                alert('請填寫完整且正確的資料！'); return;
+            }
+            
+            let schedules = getSchedules();
+            if (scheduleId) {
+                schedules = schedules.map(s => s.id === scheduleId ? newSchedule : s);
+            } else {
+                schedules.push(newSchedule);
+            }
+            saveSchedules(schedules);
+            renderScheduleGrid();
+            closeModal();
+        }
+        
+        function deleteSchedule() {
+            if (confirm('確定要刪除此班次嗎？')) {
+                const scheduleId = $('#schedule-id').val();
+                let schedules = getSchedules();
+                schedules = schedules.filter(s => s.id !== scheduleId);
+                saveSchedules(schedules);
+                renderScheduleGrid();
+                closeModal();
+            }
+        }
+        
+        function navigateDate(direction) {
+            if (currentView === 'day') {
+                currentDate.setDate(currentDate.getDate() + direction);
+            } else if (currentView === 'week') {
+                currentDate.setDate(currentDate.getDate() + 7 * direction);
+            } else {
+                currentDate.setMonth(currentDate.getMonth() + direction);
+            }
+            renderScheduleGrid();
+        }
+
+        init();
+    });
+    </script>
+</body>
+</html>
