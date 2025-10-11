@@ -12,6 +12,13 @@
             display: inline-block; width: 100%; text-align: center;
             padding: 4px; border-radius: 4px; font-weight: 500;
         }
+        .date-cell-header {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .date-highlighter {
+            width: 12px; height: 12px; border-radius: 50%; cursor: pointer;
+            border: 1px solid #6b7280;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
@@ -21,9 +28,12 @@
             <div>
                 <h1 class="text-4xl font-bold text-white">月度排班表</h1>
             </div>
-             <a href="setup.html" class="text-blue-400 hover:text-blue-500 font-bold py-2 px-4 rounded-lg transition">
-                &larr; 回到系統設定
-            </a>
+            <div class="flex gap-2">
+                 <button id="auto-schedule-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition">自動排班</button>
+                 <a href="setup.html" class="text-blue-400 hover:text-blue-500 font-bold py-2 px-4 rounded-lg transition">
+                    &larr; 回到系統設定
+                </a>
+            </div>
         </header>
         
         <div class="flex items-center justify-between gap-4 mb-4 bg-gray-800 p-3 rounded-xl">
@@ -49,12 +59,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 $(function() {
-    let employees = [];
+    let allEmployees = [];
     let storesConfig = {};
     let schedules = {};
+    let dateStyles = {};
     let currentStore = '';
     let currentDate = new Date();
     
+    // UPDATED: Changed 'weekend' color to gray
+    const SPECIAL_IDS = { NO_SHIFT: '_NO_SHIFT_', MISSING: '_MISSING_' };
+    const DATE_HIGHLIGHTS = { default: '', weekend: 'bg-gray-700/60', holiday: 'bg-red-900/50' };
+
     function init() {
         loadData();
         renderStoreTabs();
@@ -63,9 +78,17 @@ $(function() {
     }
 
     function loadData() {
-        employees = JSON.parse(localStorage.getItem('employees')) || [];
         storesConfig = JSON.parse(localStorage.getItem('stores_config')) || {};
         schedules = JSON.parse(localStorage.getItem('schedules')) || {};
+        dateStyles = JSON.parse(localStorage.getItem('date_styles')) || {};
+        
+        allEmployees = [];
+        for (const storeName in storesConfig) {
+            (storesConfig[storeName].employees || []).forEach(emp => {
+                allEmployees.push({ ...emp, store: storeName });
+            });
+        }
+        
         if (Object.keys(storesConfig).length > 0) {
             currentStore = Object.keys(storesConfig)[0];
         }
@@ -73,18 +96,7 @@ $(function() {
 
     function saveData() {
         localStorage.setItem('schedules', JSON.stringify(schedules));
-    }
-
-    function renderStoreTabs() {
-        const $tabs = $('#store-tabs').empty();
-        Object.keys(storesConfig).forEach(storeName => {
-            const activeClass = storeName === currentStore ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600';
-            $tabs.append(`<button class="store-tab flex-shrink-0 px-4 py-2 rounded-lg font-semibold ${activeClass}" data-store="${storeName}">${storeName}</button>`);
-        });
-    }
-    
-    function updateDateDisplay() {
-        $('#date-display').text(`${currentDate.getFullYear()}年 ${currentDate.getMonth() + 1}月`);
+        localStorage.setItem('date_styles', JSON.stringify(dateStyles));
     }
 
     function renderGrid() {
@@ -92,46 +104,58 @@ $(function() {
         const $table = $('#schedule-table').empty();
         const storeConfig = storesConfig[currentStore];
 
-        if (!storeConfig) {
-            $table.html('<tr><td class="p-8">請先在設定頁面新增門市與班別。</td></tr>');
-            return;
-        }
+        if (!storeConfig) { $table.html('<tr><td class="p-8">請先在設定頁面新增門市。</td></tr>'); return; }
 
-        const allShifts = [...(storeConfig.shifts || []), ...(storeConfig.admin_shifts || [])];
+        const allShifts = storeConfig.shifts || [];
+        if (allShifts.length === 0) { $table.html('<tr><td class="p-8">此門市尚未設定班別。</td></tr>'); return; }
 
-        // Header
         let thead = '<thead><tr class="bg-gray-700">';
-        thead += '<th class="p-2 border-r border-gray-600 sticky left-0 bg-gray-700 z-10">日期</th>';
+        thead += '<th class="p-2 border-r border-gray-600 sticky left-0 bg-gray-700 z-10 w-40">日期</th>';
         allShifts.forEach(shift => {
             thead += `<th class="p-2 border-r border-gray-600">${shift.name}<br><span class="text-xs text-gray-400">${shift.time}</span></th>`;
         });
         thead += '</tr></thead>';
         $table.append(thead);
 
-        // Body
         let tbody = '<tbody>';
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear(), month = currentDate.getMonth();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const dateStr = date.toISOString().split('T')[0];
-            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][date.getDay()];
-            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+            const date = new Date(year, month, day), dateStr = date.toISOString().split('T')[0];
+            const dayOfWeek = date.getDay();
+            const dayOfWeekStr = ['日', '一', '二', '三', '四', '五', '六'][dayOfWeek];
+            
+            // NEW: Default to 'weekend' for Sat/Sun if not specified
+            const isWeekendByDefault = (dayOfWeek === 0 || dayOfWeek === 6);
+            let dayStyle = dateStyles[dateStr];
+            if (!dayStyle && isWeekendByDefault) {
+                dayStyle = 'weekend';
+            }
+            dayStyle = dayStyle || 'default';
 
-            tbody += `<tr class="${isWeekend ? 'bg-gray-700/50' : ''}">`;
-            tbody += `<td class="p-2 border-r border-t border-gray-600 sticky left-0 z-10 ${isWeekend ? 'bg-gray-800' : 'bg-gray-800'}">${month + 1}/${day} (${dayOfWeek})</td>`;
+
+            tbody += `<tr class="${DATE_HIGHLIGHTS[dayStyle]}">`;
+            tbody += `<td class="p-2 border-r border-t border-gray-600 sticky left-0 z-10 ${DATE_HIGHLIGHTS[dayStyle] || 'bg-gray-800'}">
+                <div class="date-cell-header">${month + 1}/${day} (${dayOfWeekStr}) <span class="date-highlighter" data-date="${dateStr}" data-style="${dayStyle}" style="background-color:${dayStyle === 'holiday' ? '#7f1d1d' : (dayStyle === 'weekend' ? '#4b5563' : '#4b5563')};"></span></div>
+            </td>`;
 
             allShifts.forEach(shift => {
                 const employeeId = schedules[dateStr]?.[currentStore]?.[shift.id];
                 let content = '';
                 if (employeeId) {
-                    const emp = employees.find(e => e.id === employeeId);
-                    if (emp) {
-                         const color = emp.color || '#374151';
-                         const textColor = isDark(color) ? 'white' : 'black';
-                         content = `<span class="employee-tag" style="background-color:${color}; color:${textColor};">${emp.name}</span>`;
+                    if (employeeId === SPECIAL_IDS.NO_SHIFT) {
+                        content = `<span class="employee-tag" style="background-color:#111827; color:white;">不排班</span>`;
+                    } else if (employeeId === SPECIAL_IDS.MISSING) {
+                        content = `<span class="employee-tag" style="background-color:#7f1d1d; color:white;">缺</span>`;
+                    } else {
+                        const emp = allEmployees.find(e => e.id === employeeId);
+                        if (emp) {
+                             const color = emp.color || '#374151', textColor = isDark(color) ? 'white' : 'black';
+                             const isSupport = emp.store !== currentStore;
+                             const displayName = isSupport ? `<i class="font-normal">支-${emp.name}</i>` : emp.name;
+                             content = `<span class="employee-tag" style="background-color:${color}; color:${textColor};">${displayName}</span>`;
+                        }
                     }
                 }
                 tbody += `<td class="schedule-cell border-r border-t border-gray-600 p-1" data-date="${dateStr}" data-shift-id="${shift.id}">${content}</td>`;
@@ -141,85 +165,136 @@ $(function() {
         tbody += '</tbody>';
         $table.append(tbody);
     }
-
-    function showFuzzySearch($cell) {
-        const rect = $cell[0].getBoundingClientRect();
-        const $search = $('#fuzzy-search');
-        $search.data('cell', $cell).css({
-            top: rect.bottom + window.scrollY,
-            left: rect.left + window.scrollX
-        }).show();
-        $('#search-input').val('').focus();
-        renderSearchResults('');
-    }
-
+    
     function renderSearchResults(term) {
         const $results = $('#search-results').empty();
-        const filtered = employees.filter(e => e.name.toLowerCase().includes(term.toLowerCase()));
+        const activeEmployees = allEmployees.filter(e => !e.resigned);
         
-        $results.append('<div class="p-2 text-red-400 hover:bg-gray-600 cursor-pointer" data-id="">-- 清除排班 --</div>');
-        filtered.forEach(emp => {
-            $results.append(`<div class="p-2 hover:bg-gray-500 cursor-pointer" data-id="${emp.id}">${emp.name}</div>`);
-        });
+        const localStaff = activeEmployees.filter(e => e.store === currentStore && e.name.toLowerCase().includes(term.toLowerCase()));
+        const supportStaff = activeEmployees.filter(e => e.store !== currentStore && e.name.toLowerCase().includes(term.toLowerCase()));
+
+        $results.append(`<div class="p-2 text-red-400 hover:bg-gray-600 cursor-pointer" data-id="">-- 清除排班 --</div>`);
+        $results.append(`<div class="p-2 hover:bg-gray-600 cursor-pointer" data-id="${SPECIAL_IDS.NO_SHIFT}">不排班</div>`);
+        $results.append(`<div class="p-2 hover:bg-gray-600 cursor-pointer" data-id="${SPECIAL_IDS.MISSING}">缺</div><hr class="border-gray-500 my-1">`);
+        
+        if(localStaff.length > 0) {
+            localStaff.forEach(emp => { $results.append(`<div class="p-2 hover:bg-gray-500 cursor-pointer" data-id="${emp.id}">${emp.name}</div>`); });
+        }
+        if(supportStaff.length > 0) {
+             if(localStaff.length > 0) $results.append('<hr class="border-gray-500 my-1">');
+             supportStaff.forEach(emp => { $results.append(`<div class="p-2 hover:bg-gray-500 cursor-pointer" data-id="${emp.id}">支-${emp.name} (${emp.store})</div>`); });
+        }
     }
     
+    function autoSchedule() {
+        if (!confirm('此操作將會自動填滿本月所有「空白」的儲存格。\n任何已安排的儲存格 (包含不排班、缺) 將不會變動。\n\n確定要繼續嗎？')) return;
+
+        const localStaffPool = (storesConfig[currentStore]?.employees || []).filter(e => !e.resigned);
+        if (localStaffPool.length === 0) {
+            alert('目前門市沒有可排班的在職員工！'); return;
+        }
+
+        const year = currentDate.getFullYear(), month = currentDate.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const shifts = storesConfig[currentStore]?.shifts || [];
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = new Date(year, month, day).toISOString().split('T')[0];
+            if (!schedules[dateStr]) schedules[dateStr] = {};
+            if (!schedules[dateStr][currentStore]) schedules[dateStr][currentStore] = {};
+            
+            const daySchedule = schedules[dateStr][currentStore];
+            const staffWorkingToday = new Set(Object.values(daySchedule).filter(id => !Object.values(SPECIAL_IDS).includes(id)));
+            let availableStaffForThisDay = [...localStaffPool].filter(emp => !staffWorkingToday.has(emp.id));
+            availableStaffForThisDay.sort(() => 0.5 - Math.random());
+            
+            shifts.forEach(shift => {
+                const currentAssignment = daySchedule[shift.id];
+                if (!currentAssignment) {
+                    if (availableStaffForThisDay.length > 0) {
+                        const assignedStaff = availableStaffForThisDay.pop();
+                        daySchedule[shift.id] = assignedStaff.id;
+                    } else {
+                        daySchedule[shift.id] = SPECIAL_IDS.MISSING;
+                    }
+                }
+            });
+        }
+        saveData();
+        renderGrid();
+        alert('自動排班完成！');
+    }
+
     function bindEvents() {
-        $('#store-tabs').on('click', '.store-tab', function() {
-            currentStore = $(this).data('store');
-            renderStoreTabs();
+        $('#store-tabs').on('click', '.store-tab', function() { currentStore = $(this).data('store'); renderStoreTabs(); renderGrid(); });
+        $('#prev-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderGrid(); });
+        $('#next-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderGrid(); });
+        $('#auto-schedule-btn').on('click', autoSchedule);
+
+        $('#schedule-table').on('click', '.schedule-cell', function() { showFuzzySearch($(this)); });
+        $('#schedule-table').on('click', '.date-highlighter', function(e) {
+            e.stopPropagation();
+            const date = $(this).data('date');
+            const currentStyle = $(this).data('style');
+            // Cycle: weekend -> holiday -> default
+            const styles = ['weekend', 'holiday', 'default'];
+            const nextIndex = (styles.indexOf(currentStyle) + 1) % styles.length;
+            dateStyles[date] = styles[nextIndex];
+            if (dateStyles[date] === 'default') delete dateStyles[date];
+            saveData();
             renderGrid();
         });
 
-        $('#prev-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderGrid(); });
-        $('#next-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderGrid(); });
-
-        $('#schedule-table').on('click', '.schedule-cell', function() {
-            showFuzzySearch($(this));
-        });
-
-        $('#search-input').on('keyup', function() {
-            renderSearchResults($(this).val());
-        });
-
+        $('#search-input').on('keyup', function() { renderSearchResults($(this).val()); });
         $('#fuzzy-search').on('click', '#search-results div', function() {
             const $cell = $('#fuzzy-search').data('cell');
-            const date = $cell.data('date');
-            const shiftId = $cell.data('shift-id');
-            const employeeId = $(this).data('id');
+            const date = $cell.data('date'), shiftId = $cell.data('shift-id'), employeeId = $(this).data('id');
 
-            // Update data structure
+            if (employeeId && !Object.values(SPECIAL_IDS).includes(employeeId)) {
+                const daySchedule = schedules[date]?.[currentStore] || {};
+                for (const otherShiftId in daySchedule) {
+                    if (otherShiftId !== shiftId && daySchedule[otherShiftId] === employeeId) {
+                        const conflictingEmp = allEmployees.find(e => e.id === employeeId);
+                        alert(`錯誤：${conflictingEmp.name} 在 ${date} 已被安排了其他班次。`);
+                        $('#fuzzy-search').hide();
+                        return;
+                    }
+                }
+            }
+
             if (!schedules[date]) schedules[date] = {};
             if (!schedules[date][currentStore]) schedules[date][currentStore] = {};
-            
-            if (employeeId) {
-                schedules[date][currentStore][shiftId] = employeeId;
-            } else {
-                delete schedules[date][currentStore][shiftId];
-            }
-            
+            if (employeeId) { schedules[date][currentStore][shiftId] = employeeId; } 
+            else { delete schedules[date][currentStore][shiftId]; }
             saveData();
-            renderGrid(); // Simple re-render, can be optimized to only update the cell
+            renderGrid();
             $('#fuzzy-search').hide();
         });
-
-        $(document).on('click', function(e) {
-            if (!$(e.target).closest('.schedule-cell, #fuzzy-search').length) {
-                $('#fuzzy-search').hide();
-            }
-        });
+        $(document).on('click', (e) => { if (!$(e.target).closest('.schedule-cell, #fuzzy-search').length) $('#fuzzy-search').hide(); });
     }
     
+    // --- Unchanged Functions ---
+    function showFuzzySearch($cell) {
+        const rect = $cell[0].getBoundingClientRect();
+        $('#fuzzy-search').data('cell', $cell).css({top: rect.bottom + window.scrollY, left: rect.left + window.scrollX}).show();
+        $('#search-input').val('').focus();
+        renderSearchResults('');
+    }
+    function renderStoreTabs() {
+        const $tabs = $('#store-tabs').empty();
+        Object.keys(storesConfig).forEach(storeName => {
+            const activeClass = storeName === currentStore ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600';
+            $tabs.append(`<button class="store-tab flex-shrink-0 px-4 py-2 rounded-lg font-semibold ${activeClass}" data-store="${storeName}">${storeName}</button>`);
+        });
+    }
+    function updateDateDisplay() { $('#date-display').text(`${currentDate.getFullYear()}年 ${currentDate.getMonth() + 1}月`); }
     function isDark(color) {
         if (!color || color.length < 7) return false;
-        const c = color.substring(1);
-        const rgb = parseInt(c, 16);
-        const r = (rgb >> 16) & 0xff;
-        const g = (rgb >> 8) & 0xff;
-        const b = (rgb >> 0) & 0xff;
-        const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        return luma < 128;
+        const c = color.substring(1), rgb = parseInt(c, 16);
+        const r = (rgb >> 16) & 0xff, g = (rgb >> 8) & 0xff, b = (rgb >> 0) & 0xff;
+        return (0.2126 * r + 0.7152 * g + 0.0722 * b) < 128;
     }
-
+    
     init();
 });
 </script>
