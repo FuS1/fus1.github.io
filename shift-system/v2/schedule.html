@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月度排班表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .schedule-cell { min-width: 120px; height: 60px; }
+        .schedule-cell:hover { background-color: #374151; }
+        .employee-tag {
+            display: inline-block; width: 100%; text-align: center;
+            padding: 4px; border-radius: 4px; font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="mb-6 flex flex-col md:flex-row justify-between md:items-center gap-4">
+            <div>
+                <h1 class="text-4xl font-bold text-white">月度排班表</h1>
+            </div>
+             <a href="setup.html" class="text-blue-400 hover:text-blue-500 font-bold py-2 px-4 rounded-lg transition">
+                &larr; 回到系統設定
+            </a>
+        </header>
+        
+        <div class="flex items-center justify-between gap-4 mb-4 bg-gray-800 p-3 rounded-xl">
+             <div id="store-tabs" class="flex flex-nowrap space-x-2 overflow-x-auto"></div>
+             <div id="date-navigator" class="flex items-center justify-center gap-2 flex-shrink-0">
+                <button id="prev-btn" class="p-2 rounded-full hover:bg-gray-700">&lt;</button>
+                <div id="date-display" class="text-lg md:text-xl font-semibold text-center w-32"></div>
+                <button id="next-btn" class="p-2 rounded-full hover:bg-gray-700">&gt;</button>
+            </div>
+        </div>
+
+        <main class="bg-gray-800 rounded-xl shadow-lg overflow-x-auto">
+            <table class="w-full text-center" id="schedule-table"></table>
+        </main>
+    </div>
+
+    <!-- Fuzzy Search Dropdown -->
+    <div id="fuzzy-search" class="absolute z-50 bg-gray-700 rounded-lg shadow-2xl p-2 hidden">
+        <input type="text" id="search-input" class="w-full bg-gray-600 p-2 rounded-md mb-2" placeholder="搜尋員工...">
+        <div id="search-results" class="max-h-60 overflow-y-auto"></div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+$(function() {
+    let employees = [];
+    let storesConfig = {};
+    let schedules = {};
+    let currentStore = '';
+    let currentDate = new Date();
+    
+    function init() {
+        loadData();
+        renderStoreTabs();
+        renderGrid();
+        bindEvents();
+    }
+
+    function loadData() {
+        employees = JSON.parse(localStorage.getItem('employees')) || [];
+        storesConfig = JSON.parse(localStorage.getItem('stores_config')) || {};
+        schedules = JSON.parse(localStorage.getItem('schedules')) || {};
+        if (Object.keys(storesConfig).length > 0) {
+            currentStore = Object.keys(storesConfig)[0];
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem('schedules', JSON.stringify(schedules));
+    }
+
+    function renderStoreTabs() {
+        const $tabs = $('#store-tabs').empty();
+        Object.keys(storesConfig).forEach(storeName => {
+            const activeClass = storeName === currentStore ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600';
+            $tabs.append(`<button class="store-tab flex-shrink-0 px-4 py-2 rounded-lg font-semibold ${activeClass}" data-store="${storeName}">${storeName}</button>`);
+        });
+    }
+    
+    function updateDateDisplay() {
+        $('#date-display').text(`${currentDate.getFullYear()}年 ${currentDate.getMonth() + 1}月`);
+    }
+
+    function renderGrid() {
+        updateDateDisplay();
+        const $table = $('#schedule-table').empty();
+        const storeConfig = storesConfig[currentStore];
+
+        if (!storeConfig) {
+            $table.html('<tr><td class="p-8">請先在設定頁面新增門市與班別。</td></tr>');
+            return;
+        }
+
+        const allShifts = [...(storeConfig.shifts || []), ...(storeConfig.admin_shifts || [])];
+
+        // Header
+        let thead = '<thead><tr class="bg-gray-700">';
+        thead += '<th class="p-2 border-r border-gray-600 sticky left-0 bg-gray-700 z-10">日期</th>';
+        allShifts.forEach(shift => {
+            thead += `<th class="p-2 border-r border-gray-600">${shift.name}<br><span class="text-xs text-gray-400">${shift.time}</span></th>`;
+        });
+        thead += '</tr></thead>';
+        $table.append(thead);
+
+        // Body
+        let tbody = '<tbody>';
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const dateStr = date.toISOString().split('T')[0];
+            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][date.getDay()];
+            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+            tbody += `<tr class="${isWeekend ? 'bg-gray-700/50' : ''}">`;
+            tbody += `<td class="p-2 border-r border-t border-gray-600 sticky left-0 z-10 ${isWeekend ? 'bg-gray-800' : 'bg-gray-800'}">${month + 1}/${day} (${dayOfWeek})</td>`;
+
+            allShifts.forEach(shift => {
+                const employeeId = schedules[dateStr]?.[currentStore]?.[shift.id];
+                let content = '';
+                if (employeeId) {
+                    const emp = employees.find(e => e.id === employeeId);
+                    if (emp) {
+                         const color = emp.color || '#374151';
+                         const textColor = isDark(color) ? 'white' : 'black';
+                         content = `<span class="employee-tag" style="background-color:${color}; color:${textColor};">${emp.name}</span>`;
+                    }
+                }
+                tbody += `<td class="schedule-cell border-r border-t border-gray-600 p-1" data-date="${dateStr}" data-shift-id="${shift.id}">${content}</td>`;
+            });
+            tbody += '</tr>';
+        }
+        tbody += '</tbody>';
+        $table.append(tbody);
+    }
+
+    function showFuzzySearch($cell) {
+        const rect = $cell[0].getBoundingClientRect();
+        const $search = $('#fuzzy-search');
+        $search.data('cell', $cell).css({
+            top: rect.bottom + window.scrollY,
+            left: rect.left + window.scrollX
+        }).show();
+        $('#search-input').val('').focus();
+        renderSearchResults('');
+    }
+
+    function renderSearchResults(term) {
+        const $results = $('#search-results').empty();
+        const filtered = employees.filter(e => e.name.toLowerCase().includes(term.toLowerCase()));
+        
+        $results.append('<div class="p-2 text-red-400 hover:bg-gray-600 cursor-pointer" data-id="">-- 清除排班 --</div>');
+        filtered.forEach(emp => {
+            $results.append(`<div class="p-2 hover:bg-gray-500 cursor-pointer" data-id="${emp.id}">${emp.name}</div>`);
+        });
+    }
+    
+    function bindEvents() {
+        $('#store-tabs').on('click', '.store-tab', function() {
+            currentStore = $(this).data('store');
+            renderStoreTabs();
+            renderGrid();
+        });
+
+        $('#prev-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderGrid(); });
+        $('#next-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderGrid(); });
+
+        $('#schedule-table').on('click', '.schedule-cell', function() {
+            showFuzzySearch($(this));
+        });
+
+        $('#search-input').on('keyup', function() {
+            renderSearchResults($(this).val());
+        });
+
+        $('#fuzzy-search').on('click', '#search-results div', function() {
+            const $cell = $('#fuzzy-search').data('cell');
+            const date = $cell.data('date');
+            const shiftId = $cell.data('shift-id');
+            const employeeId = $(this).data('id');
+
+            // Update data structure
+            if (!schedules[date]) schedules[date] = {};
+            if (!schedules[date][currentStore]) schedules[date][currentStore] = {};
+            
+            if (employeeId) {
+                schedules[date][currentStore][shiftId] = employeeId;
+            } else {
+                delete schedules[date][currentStore][shiftId];
+            }
+            
+            saveData();
+            renderGrid(); // Simple re-render, can be optimized to only update the cell
+            $('#fuzzy-search').hide();
+        });
+
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.schedule-cell, #fuzzy-search').length) {
+                $('#fuzzy-search').hide();
+            }
+        });
+    }
+    
+    function isDark(color) {
+        if (!color || color.length < 7) return false;
+        const c = color.substring(1);
+        const rgb = parseInt(c, 16);
+        const r = (rgb >> 16) & 0xff;
+        const g = (rgb >> 8) & 0xff;
+        const b = (rgb >> 0) & 0xff;
+        const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        return luma < 128;
+    }
+
+    init();
+});
+</script>
+</body>
+</html>
