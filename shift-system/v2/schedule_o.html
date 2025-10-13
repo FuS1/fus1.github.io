@@ -23,9 +23,8 @@
             opacity: 0; transition: opacity 0.3s; white-space: pre-wrap;
         }
         .schedule-cell:hover .tooltip { visibility: visible; opacity: 1; }
-        .date-cell { cursor: pointer; } /* Make the whole date cell clickable */
         .date-cell-header { display: flex; justify-content: space-between; align-items: center; }
-        .date-highlighter-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #6b7280; }
+        .date-highlighter { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; border: 1px solid #6b7280; }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans">
@@ -144,14 +143,7 @@ $(function() {
             const isWeekendByDefault = (dayOfWeek === 0 || dayOfWeek === 6);
             let dayStyle = dateStyles[dateStr] || (isWeekendByDefault ? 'holiday' : 'default');
 
-            tbody += `<tr class="${DATE_STYLES_MAP[dayStyle]}"><td class="date-cell p-2 border-r border-t border-gray-600 sticky left-0 z-10 ${DATE_STYLES_MAP[dayStyle] || 'bg-gray-800'}" data-date="${dateStr}" data-style="${dayStyle}">
-                <div class="date-cell-header">${month + 1}/${day} (${dayOfWeekStr})
-                    <div>
-                        <span class="date-highlighter-dot" style="background-color:${dayStyle === 'double_pay' ? '#991b1b' : (dayStyle === 'holiday' ? '#4b5563' : 'transparent')};"></span>
-                        <button class="summary-btn text-xs ml-2 hover:bg-gray-600 px-1 rounded" data-date="${dateStr}">總覽</button>
-                    </div>
-                </div>
-            </td>`;
+            tbody += `<tr class="${DATE_STYLES_MAP[dayStyle]}"><td class="p-2 border-r border-t border-gray-600 sticky left-0 z-10 ${DATE_STYLES_MAP[dayStyle] || 'bg-gray-800'}"><div class="date-cell-header">${month + 1}/${day} (${dayOfWeekStr})<div><span class="date-highlighter" data-date="${dateStr}" data-style="${dayStyle}" style="background-color:${dayStyle === 'double_pay' ? '#7f1d1d' : (dayStyle === 'holiday' ? '#4b5563' : '#6b7280')};"></span><button class="summary-btn text-xs ml-2 hover:bg-gray-600 px-1 rounded" data-date="${dateStr}">總覽</button></div></div></td>`;
 
             allShifts.forEach(shift => {
                 const scheduleData = schedules[dateStr]?.[currentStore]?.[shift.id];
@@ -168,7 +160,9 @@ $(function() {
                              const displayName = isSupport ? `<i class="font-normal">支-${emp.name}</i>` : emp.name;
                              let timeOverrideHtml = '';
                              const defaultTime = shift.time.split('-');
-                             if ((plan_start && plan_start !== defaultTime[0]) || (plan_end && plan_end !== defaultTime[1])) { timeOverrideHtml = `<div class="time-override">${plan_start || defaultTime[0]}-${plan_end || defaultTime[1]}</div>`; }
+                             if ((plan_start && plan_start !== defaultTime[0]) || (plan_end && plan_end !== defaultTime[1])) {
+                                timeOverrideHtml = `<div class="time-override">${plan_start || defaultTime[0]}-${plan_end || defaultTime[1]}</div>`;
+                             }
                              let noteMarkerHtml = '';
                              if (notes) { noteMarkerHtml = `<div class="note-marker"></div><div class="tooltip">${notes}</div>`; }
                              content = `<div><span class="employee-tag" style="background-color:${color}; color:${textColor};">${displayName}</span>${timeOverrideHtml}</div>${noteMarkerHtml}`;
@@ -200,35 +194,92 @@ $(function() {
         }
     }
     
-    function autoSchedule() { /* ... unchanged ... */ }
-    function openDetailModal(date, shiftId) { /* ... unchanged ... */ }
+    // UPDATED autoSchedule function
+    function autoSchedule() {
+        if (!confirm('此操作將會自動填滿本月所有「空白」的儲存格。任何已安排的儲存格 (包含不排班、缺) 將不會變動。\n\n確定要繼續嗎？')) return;
+        const localStaffPool = (storesConfig[currentStore]?.employees || []).filter(e => !e.resigned);
+        if (localStaffPool.length === 0) { alert('目前門市沒有可排班的在職員工！'); return; }
+        const year = currentDate.getFullYear(), month = currentDate.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const shifts = storesConfig[currentStore]?.shifts || [];
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = new Date(year, month, day).toISOString().split('T')[0];
+            if (!schedules[dateStr]) schedules[dateStr] = {};
+            if (!schedules[dateStr][currentStore]) schedules[dateStr][currentStore] = {};
+            const daySchedule = schedules[dateStr][currentStore];
+            const staffWorkingToday = new Set(Object.values(daySchedule).map(d => d.employeeId).filter(id => id && !Object.values(SPECIAL_IDS).includes(id)));
+            let availableStaffForThisDay = [...localStaffPool].filter(emp => !staffWorkingToday.has(emp.id));
+            availableStaffForThisDay.sort(() => 0.5 - Math.random());
+            
+            shifts.forEach(shift => {
+                const currentAssignment = daySchedule[shift.id];
+                if (!currentAssignment) { // Only fill if completely empty
+                    if (availableStaffForThisDay.length > 0) {
+                        const assignedStaff = availableStaffForThisDay.pop();
+                        daySchedule[shift.id] = { employeeId: assignedStaff.id };
+                    } else {
+                        daySchedule[shift.id] = { employeeId: SPECIAL_IDS.MISSING };
+                    }
+                }
+            });
+        }
+        saveData(); renderGrid(); alert('自動排班完成！');
+    }
+    
+    function timeStrToMins(timeStr) { if (!timeStr) return 0; const [h, m] = timeStr.split(':').map(Number); return h * 60 + m; }
+
+    function calculateAttendanceInModal() {
+        const shiftId = $('#detail-shift-id').val();
+        const shift = (storesConfig[currentStore]?.shifts || []).find(s => s.id === shiftId);
+        if (!shift) return;
+
+        const defaultTime = shift.time.split('-');
+        const planStart = $('#detail-plan-start').val() || defaultTime[0];
+        const planEnd = $('#detail-plan-end').val() || defaultTime[1];
+        const actualIn = $('#detail-actual-start').val(), actualOut = $('#detail-actual-end').val();
+        
+        if (actualIn && actualOut) {
+            const workMins = timeStrToMins(actualOut) - timeStrToMins(actualIn);
+            $('#att-actual-hours').text(`${(workMins / 60).toFixed(2)} 小時`);
+            const lateness = timeStrToMins(actualIn) - timeStrToMins(planStart);
+            const earlyLeave = timeStrToMins(planEnd) - timeStrToMins(actualOut);
+            $('#att-lateness').text(`${(lateness > 0 ? lateness : 0) + (earlyLeave > 0 ? earlyLeave : 0)} 分`);
+        } else {
+            $('#att-actual-hours').text('--'); $('#att-lateness').text('--');
+        }
+    }
+    
+    function openDetailModal(date, shiftId) {
+        const shift = (storesConfig[currentStore].shifts || []).find(s => s.id === shiftId);
+        let scheduleData = schedules[date]?.[currentStore]?.[shiftId] || {};
+        const emp = allEmployees.find(e => e.id === scheduleData.employeeId);
+
+        $('#detail-modal-title').text(`${date} - ${shift.name}`);
+        $('#detail-date').val(date);
+        $('#detail-shift-id').val(shiftId);
+        $('#detail-employee-search').val(emp ? emp.name : '');
+        $('#detail-employee-id').val(scheduleData.employeeId);
+
+        const defaultTime = shift.time.split('-');
+        $('#detail-plan-start').val(scheduleData.plan_start || defaultTime[0]);
+        $('#detail-plan-end').val(scheduleData.plan_end || defaultTime[1]);
+        $('#detail-actual-start').val(scheduleData.actual_start || '');
+        $('#detail-actual-end').val(scheduleData.actual_end || '');
+        $('#detail-notes').val(scheduleData.notes || '');
+        
+        calculateAttendanceInModal();
+        $('#shift-detail-modal').removeClass('hidden');
+    }
+
     function showDailySummary(date) { /* ... unchanged ... */ }
     function calculateSingleAttendance(shift, scheduleData) { /* ... unchanged ... */ }
-    function timeStrToMins(timeStr) { /* ... unchanged ... */ }
-    function calculateAttendanceInModal() { /* ... unchanged ... */ }
 
     function bindEvents() {
         $('#store-tabs').on('click', '.store-tab', function() { currentStore = $(this).data('store'); renderStoreTabs(); renderGrid(); });
         $('#prev-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderGrid(); });
         $('#next-btn').on('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderGrid(); });
         $('#auto-schedule-btn').on('click', autoSchedule);
-
-        // UPDATED: Distinguish clicks on date cell vs summary button
-        $('#schedule-table').on('click', '.date-cell', function(e) {
-            if ($(e.target).hasClass('summary-btn')) {
-                e.stopPropagation();
-                showDailySummary($(this).data('date'));
-                return;
-            }
-            const date = $(this).data('date');
-            const style = $(this).data('style');
-            const styles = ['holiday', 'double_pay', 'default'];
-            const next = (styles.indexOf(style) + 1) % styles.length;
-            dateStyles[date] = styles[next];
-            if (dateStyles[date] === 'default') delete dateStyles[date];
-            saveData();
-            renderGrid();
-        });
 
         $('#schedule-table').on('click', '.schedule-cell', function() {
             const date = $(this).data('date'), shiftId = $(this).data('shift-id');
@@ -242,6 +293,9 @@ $(function() {
                 renderQuickAssignResults('', $('#search-results'));
             }
         });
+        
+        $('#schedule-table').on('click', '.date-highlighter', function(e) { e.stopPropagation(); const date = $(this).data('date'); const style = $(this).data('style'); const styles = ['holiday', 'double_pay', 'default']; const next = (styles.indexOf(style) + 1) % styles.length; dateStyles[date] = styles[next]; if (dateStyles[date] === 'default') delete dateStyles[date]; saveData(); renderGrid(); });
+        $('#schedule-table').on('click', '.summary-btn', function(e) { e.stopPropagation(); showDailySummary($(this).data('date')); });
         
         $('#search-input').on('keyup', function() { renderQuickAssignResults($(this).val(), $('#search-results')); });
         $('#quick-assign-dropdown').on('click', '#search-results div', function() {
@@ -269,39 +323,21 @@ $(function() {
         });
 
         $('.cancel-btn').on('click', () => { $('#shift-detail-modal, #summary-modal').addClass('hidden'); });
-        $('#shift-detail-form').on('submit', function(e) {
-            e.preventDefault();
-            const date = $('#detail-date').val(), shiftId = $('#detail-shift-id').val();
-            const employeeId = $('#detail-employee-id').val();
-            if (employeeId && !Object.values(SPECIAL_IDS).includes(employeeId)) {
-                const daySchedule = schedules[date]?.[currentStore] || {};
-                for (const otherShiftId in daySchedule) {
-                    if (otherShiftId !== shiftId && daySchedule[otherShiftId].employeeId === employeeId) { alert(`錯誤：該員工在 ${date} 已被安排了其他班次。`); return; }
-                }
-            }
-            if (!schedules[date]) schedules[date] = {};
-            if (!schedules[date][currentStore]) schedules[date][currentStore] = {};
-            schedules[date][currentStore][shiftId] = { employeeId: employeeId, plan_start: $('#detail-plan-start').val(), plan_end: $('#detail-plan-end').val(), actual_start: $('#detail-actual-start').val(), actual_end: $('#detail-actual-end').val(), notes: $('#detail-notes').val() };
-            saveData(); renderGrid(); $('#shift-detail-modal').addClass('hidden');
-        });
-
-        $('#shift-detail-modal input').on('input change', calculateAttendanceInModal);
+        $('#shift-detail-form').on('submit', function(e) { /* ... unchanged ... */ });
+        $('#shift-detail-modal input').on('change', calculateAttendanceInModal);
         $('#clock-in-now').on('click', () => { $('#detail-actual-start').val(new Date().toTimeString().substring(0,5)).trigger('change'); });
         $('#clock-out-now').on('click', () => { $('#detail-actual-end').val(new Date().toTimeString().substring(0,5)).trigger('change'); });
-        $(document).on('click', (e) => { if (!$(e.target).closest('.schedule-cell, .date-cell, #quick-assign-dropdown, #shift-detail-modal').length) $('#quick-assign-dropdown, #detail-employee-results').hide(); });
+        $(document).on('click', (e) => { if (!$(e.target).closest('.schedule-cell, #quick-assign-dropdown, #shift-detail-modal').length) $('#quick-assign-dropdown, #detail-employee-results').hide(); });
     }
     
     // --- Unchanged Functions ---
     function isDark(color) { if (!color || color.length < 7) return false; const c = color.substring(1), rgb = parseInt(c, 16); const r = (rgb >> 16) & 0xff, g = (rgb >> 8) & 0xff, b = (rgb >> 0) & 0xff; return (0.2126 * r + 0.7152 * g + 0.0722 * b) < 128; }
-    function autoSchedule() { if (!confirm('此操作將會自動填滿本月所有「空白」的儲存格。任何已安排的儲存格 (包含不排班、缺) 將不會變動。\n\n確定要繼續嗎？')) return; const localStaffPool = (storesConfig[currentStore]?.employees || []).filter(e => !e.resigned); if (localStaffPool.length === 0) { alert('目前門市沒有可排班的在職員工！'); return; } const year = currentDate.getFullYear(), month = currentDate.getMonth(); const daysInMonth = new Date(year, month + 1, 0).getDate(); const shifts = storesConfig[currentStore]?.shifts || []; for (let day = 1; day <= daysInMonth; day++) { const dateStr = new Date(year, month, day).toISOString().split('T')[0]; if (!schedules[dateStr]) schedules[dateStr] = {}; if (!schedules[dateStr][currentStore]) schedules[dateStr][currentStore] = {}; const daySchedule = schedules[dateStr][currentStore]; const staffWorkingToday = new Set(Object.values(daySchedule).map(d => d.employeeId).filter(id => id && !Object.values(SPECIAL_IDS).includes(id))); let availableStaffForThisDay = [...localStaffPool].filter(emp => !staffWorkingToday.has(emp.id)); availableStaffForThisDay.sort(() => 0.5 - Math.random()); shifts.forEach(shift => { const currentAssignment = daySchedule[shift.id]; if (!currentAssignment) { if (availableStaffForThisDay.length > 0) { const assignedStaff = availableStaffForThisDay.pop(); daySchedule[shift.id] = { employeeId: assignedStaff.id }; } else { daySchedule[shift.id] = { employeeId: SPECIAL_IDS.MISSING }; } } }); } saveData(); renderGrid(); alert('自動排班完成！'); }
     function renderStoreTabs() { const $tabs = $('#store-tabs').empty(); Object.keys(storesConfig).forEach(name => { const active = name === currentStore ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'; $tabs.append(`<button class="store-tab flex-shrink-0 px-4 py-2 rounded-lg font-semibold ${active}" data-store="${name}">${name}</button>`); }); }
     function updateDateDisplay() { $('#date-display').text(`${currentDate.getFullYear()}年 ${currentDate.getMonth() + 1}月`); }
-    function openDetailModal(date, shiftId) { const shift = (storesConfig[currentStore].shifts || []).find(s => s.id === shiftId); let scheduleData = schedules[date]?.[currentStore]?.[shiftId] || {}; const emp = allEmployees.find(e => e.id === scheduleData.employeeId); $('#detail-modal-title').text(`${date} - ${shift.name}`); $('#detail-date').val(date); $('#detail-shift-id').val(shiftId); $('#detail-employee-search').val(emp ? emp.name : ''); $('#detail-employee-id').val(scheduleData.employeeId); const defaultTime = shift.time.split('-'); $('#detail-plan-start').val(scheduleData.plan_start || defaultTime[0]); $('#detail-plan-end').val(scheduleData.plan_end || defaultTime[1]); $('#detail-actual-start').val(scheduleData.actual_start || ''); $('#detail-actual-end').val(scheduleData.actual_end || ''); $('#detail-notes').val(scheduleData.notes || ''); calculateAttendanceInModal(); $('#shift-detail-modal').removeClass('hidden'); }
     function showDailySummary(date) { $('#summary-title').text(`${date} 出勤總覽`); $('#summary-subtitle').text(currentStore); const $body = $('#summary-body').empty(); const daySchedule = schedules[date]?.[currentStore] || {}; const allShifts = storesConfig[currentStore]?.shifts || []; if (Object.values(daySchedule).length === 0) { $body.html('<tr><td colspan="6" class="p-4 text-center text-gray-400">本日無排班</td></tr>'); } else { allShifts.forEach(shift => { const scheduleData = daySchedule[shift.id]; if (!scheduleData || typeof scheduleData !== 'object' || !scheduleData.employeeId || Object.values(SPECIAL_IDS).includes(scheduleData.employeeId)) return; const emp = allEmployees.find(e => e.id === scheduleData.employeeId); if (!emp) return; const { hours, lateness, statusText } = calculateSingleAttendance(shift, scheduleData); $body.append(`<tr class="border-b border-gray-700"><td class="p-2">${emp.name}</td><td class="p-2 font-mono">${(scheduleData.plan_start || shift.time.split('-')[0])}-${(scheduleData.plan_end || shift.time.split('-')[1])}</td><td class="p-2 font-mono">${scheduleData.actual_start || '--'}-${scheduleData.actual_end || '--'}</td><td class="p-2">${hours}</td><td class="p-2">${lateness}</td><td class="p-2">${statusText}</td></tr>`); }); } $('#summary-modal').removeClass('hidden'); }
     function calculateSingleAttendance(shift, scheduleData) { const plan_start = scheduleData.plan_start || shift.time.split('-')[0]; const plan_end = scheduleData.plan_end || shift.time.split('-')[1]; const actualIn = scheduleData.actual_start, actualOut = scheduleData.actual_end; let hours = '--', lateness = '--', statusText = '未打卡'; if (scheduleData.status === 'leave') statusText = '請假'; else if (scheduleData.status === 'absent') statusText = '曠職'; else if (actualIn && actualOut) { const workMins = timeStrToMins(actualOut) - timeStrToMins(actualIn); hours = (workMins / 60).toFixed(2) + ' 小時'; const lateMins = timeStrToMins(actualIn) - timeStrToMins(plan_start); const earlyMins = timeStrToMins(plan_end) - timeStrToMins(actualOut); lateness = (lateMins > 0 ? lateMins : 0) + (earlyMins > 0 ? earlyMins : 0); statusText = '正常'; if (lateMins > 0) statusText = '遲到'; if (earlyMins > 0) statusText += (statusText === '正常' ? '早退' : '/早退'); } return { hours, lateness, statusText }; }
-    function timeStrToMins(timeStr) { if (!timeStr) return 0; const [h, m] = timeStr.split(':').map(Number); return h * 60 + m; }
-    function calculateAttendanceInModal() { const shiftId = $('#detail-shift-id').val(); const shift = (storesConfig[currentStore]?.shifts || []).find(s => s.id === shiftId); if (!shift) return; const defaultTime = shift.time.split('-'); const planStart = $('#detail-plan-start').val() || defaultTime[0]; const planEnd = $('#detail-plan-end').val() || defaultTime[1]; const actualIn = $('#detail-actual-start').val(), actualOut = $('#detail-actual-end').val(); if (actualIn && actualOut) { const workMins = timeStrToMins(actualOut) - timeStrToMins(actualIn); $('#att-actual-hours').text(`${(workMins / 60).toFixed(2)} 小時`); const lateness = timeStrToMins(actualIn) - timeStrToMins(planStart); const earlyLeave = timeStrToMins(planEnd) - timeStrToMins(actualOut); $('#att-lateness').text(`${(lateness > 0 ? lateness : 0) + (earlyLeave > 0 ? earlyLeave : 0)} 分`); } else { $('#att-actual-hours').text('--'); $('#att-lateness').text('--'); } }
-    
+    $('#shift-detail-form').on('submit', function(e) { e.preventDefault(); const date = $('#detail-date').val(), shiftId = $('#detail-shift-id').val(); const employeeId = $('#detail-employee-id').val(); if (employeeId && !Object.values(SPECIAL_IDS).includes(employeeId)) { const daySchedule = schedules[date]?.[currentStore] || {}; for (const otherShiftId in daySchedule) { if (otherShiftId !== shiftId && daySchedule[otherShiftId].employeeId === employeeId) { alert(`錯誤：該員工在 ${date} 已被安排了其他班次。`); return; } } } if (!schedules[date]) schedules[date] = {}; if (!schedules[date][currentStore]) schedules[date][currentStore] = {}; schedules[date][currentStore][shiftId] = { employeeId: employeeId, plan_start: $('#detail-plan-start').val(), plan_end: $('#detail-plan-end').val(), actual_start: $('#detail-actual-start').val(), actual_end: $('#detail-actual-end').val(), notes: $('#detail-notes').val() }; saveData(); renderGrid(); $('#shift-detail-modal').addClass('hidden'); });
+
     init();
 });
 </script>
