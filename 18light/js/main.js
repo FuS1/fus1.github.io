@@ -2,54 +2,114 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const sections = document.querySelectorAll(".topic-sec");
 const dotNav = document.querySelector(".dot-nav");
+const toolSec = document.querySelector(".tool-sec");
 
-// === Navigation ===
+let currentSection = 0;
+let isAnimating = false;
+let isDesktop = window.innerWidth > 767.98;
+
+// === NaviDots ===
 sections.forEach((_, i) => {
   const dot = document.createElement("div");
   dot.classList.add("dot");
   if (i === 0) dot.classList.add("active");
   dotNav.appendChild(dot);
-  dot.addEventListener("click", () => goToSection(i));
+
+  dot.addEventListener("click", () => {
+    if (isDesktop) goToSection(i);
+    else scrollToSection(i);
+  });
 });
 
-let currentSection = 0;
-let isAnimating = false;
+// === Desktop ===
+if (isDesktop) {
+  window.addEventListener("wheel", onWheel);
 
-// === Scroll ===
-window.addEventListener("wheel", (e) => {
-  if (isAnimating) return;
-  if (e.deltaY > 0 && currentSection < sections.length - 1) {
-    goToSection(currentSection + 1);
-  } else if (e.deltaY < 0 && currentSection > 0) {
-    goToSection(currentSection - 1);
+  // for touch
+  let touchStartY = 0;
+  let touchEndY = 0;
+
+  window.addEventListener("touchstart", (e) => {
+    touchStartY = e.changedTouches[0].clientY;
+  });
+
+  window.addEventListener("touchend", (e) => {
+    touchEndY = e.changedTouches[0].clientY;
+    handleTouchSwipe();
+  });
+
+  function onWheel(e) {
+    if (isAnimating) return;
+    if (e.deltaY > 0 && currentSection < sections.length - 1) {
+      goToSection(currentSection + 1);
+    } else if (e.deltaY < 0 && currentSection > 0) {
+      goToSection(currentSection - 1);
+    }
   }
-});
 
-// === for mobile ===
-let touchStartY = 0;
-let touchEndY = 0;
+  function handleTouchSwipe() {
+    if (isAnimating) return;
 
-window.addEventListener("touchstart", (e) => {
-  touchStartY = e.changedTouches[0].clientY;
-});
+    const swipeDistance = touchEndY - touchStartY;
+    const swipeThreshold = 50; 
 
-window.addEventListener("touchend", (e) => {
-  touchEndY = e.changedTouches[0].clientY;
-  handleTouchSwipe();
-});
+    if (swipeDistance < -swipeThreshold && currentSection < sections.length - 1) {
+      goToSection(currentSection + 1);
+    } else if (swipeDistance > swipeThreshold && currentSection > 0) {
+      goToSection(currentSection - 1);
+    }
+  }
+} else {
+  // === Mobile ===
+  document.body.style.overflow = "auto"; 
+  dotNav.style.display = "none"; 
+  toolSec.classList.add("active"); 
+}
 
-function handleTouchSwipe() {
+
+function goToSection(index) {
   if (isAnimating) return;
+  isAnimating = true;
 
-  const swipeDistance = touchEndY - touchStartY;
-  const swipeThreshold = 50; // 最小滑動距離（避免誤觸）
+  gsap.to(window, {
+    duration: 1,
+    scrollTo: { y: sections[index], offsetY: 0 },
+    onComplete: () => {
+      isAnimating = false;
+      currentSection = index;
+      updateDots();
+      updateToolBar();
+    },
+    ease: "power2.inOut"
+  });
+}
 
-  if (swipeDistance < -swipeThreshold && currentSection < sections.length - 1) {
-    goToSection(currentSection + 1);
-  } else if (swipeDistance > swipeThreshold && currentSection > 0) {
-    goToSection(currentSection - 1);
+function scrollToSection(index) {
+  const top = sections[index].offsetTop;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+function updateDots() {
+  document.querySelectorAll(".dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentSection);
+  });
+}
+
+function updateToolBar() {
+  if (currentSection === 0) {
+    toolSec.classList.remove("active");
+  } else {
+    toolSec.classList.add("active");
   }
 }
+
+
+window.addEventListener("resize", () => {
+  const nowDesktop = window.innerWidth > 767.98;
+  if (nowDesktop !== isDesktop) location.reload();
+});
+
+
 
 // === Section Switch Function ===
 function goToSection(index) {
@@ -64,6 +124,7 @@ function goToSection(index) {
       isAnimating = false;
       currentSection = index;
       updateDots();
+      updateToolBar();
     },
   });
 }
@@ -73,6 +134,64 @@ function updateDots() {
     dot.classList.toggle("active", i === currentSection);
   });
 }
+
+function updateToolBar() {
+  if (currentSection === 0) {
+    toolSec.classList.remove("active");
+  } else {
+    toolSec.classList.add("active");
+  }
+}
+
+// === KV Section ===
+gsap.set(".kv-sec-bg", {
+  scale: 1.05,
+  opacity: 0,
+  filter: "blur(8px)"
+});
+
+gsap.to(".kv-sec-bg", {
+  scale: 1.1,
+  opacity: 1,
+  filter: "blur(0px)",
+  duration: 2,
+  ease: "power2.out",
+  scrollTrigger: {
+    trigger: ".kv-sec",
+    start: "top 80%",
+    toggleActions: "restart none none reverse"
+  }
+});
+
+const kvBg = document.querySelector(".kv-sec-bg");
+const kvSec = document.querySelector(".kv-sec");
+
+kvSec.addEventListener("mousemove", (e) => {
+  const rect = kvSec.getBoundingClientRect();
+  const relX = e.clientX - rect.left;
+  const relY = e.clientY - rect.top;
+
+  const moveX = (relX / rect.width - 0.5) * 2;
+  const moveY = (relY / rect.height - 0.5) * 2;
+
+  gsap.to(kvBg, {
+    x: moveX * 30,       
+    y: moveY * 30,       
+    scale: 1.12,         
+    duration: 0.6,
+    ease: "power2.out"
+  });
+});
+
+kvSec.addEventListener("mouseleave", () => {
+  gsap.to(kvBg, {
+    x: 0,
+    y: 0,
+    scale: 1.1,
+    duration: 1,
+    ease: "power2.out"
+  });
+});
 
 // === Game Soft Section ===
 const gameSoftSecs = document.querySelectorAll(".game-soft-sec");
