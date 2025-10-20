@@ -40,6 +40,9 @@ if (isDesktop) {
 
   function onWheel(e) {
     if (isAnimating) return;
+
+    syncCurrentSection();
+
     if (e.deltaY > 0 && currentSection < sections.length - 1) {
       goToSection(currentSection + 1);
     } else if (e.deltaY < 0 && currentSection > 0) {
@@ -49,6 +52,8 @@ if (isDesktop) {
 
   function handleTouchSwipe() {
     if (isAnimating) return;
+
+    syncCurrentSection();
 
     const swipeDistance = touchEndY - touchStartY;
     const swipeThreshold = 50; 
@@ -141,6 +146,22 @@ function updateToolBar() {
   } else {
     toolSec.classList.add("active");
   }
+}
+
+function syncCurrentSection() {
+  let scrollY = window.scrollY;
+  let closestIndex = 0;
+  let minDiff = Infinity;
+
+  sections.forEach((sec, i) => {
+    const diff = Math.abs(sec.offsetTop - scrollY);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestIndex = i;
+    }
+  });
+
+  currentSection = closestIndex;
 }
 
 // === KV Section ===
@@ -252,4 +273,19 @@ let gameDemoSlider = new Swiper(".gamesoft-demo-slider", {
           return '<span class="' + className + '">' + "</span>";
         }
     },
+});
+
+// NaviDots Detected
+let lastSyncTime = 0;
+
+window.addEventListener("scroll", () => {
+  if (!isDesktop) return;
+
+  const now = Date.now();
+  if (now - lastSyncTime < 200) return; 
+  lastSyncTime = now;
+
+  syncCurrentSection(); 
+  updateDots();
+  updateToolBar();
 });
