@@ -64,14 +64,15 @@
                 <div id="mc_embed_signup">
                     <form id="mc-embedded-subscribe-form" novalidate>
                         <div id="mc_embed_signup_scroll">
+                            <h2>Subscribe</h2>
                             <div class="mc-field-group">
                                 <label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label>
                                 <input type="email" name="EMAIL" id="mce-EMAIL" required placeholder="輸入您的 Email">
                             </div>
 
                             <div class="mc-field-group">
-                                <label for="mce-LNAME">Last Name</label>
-                                <input type="text" name="LNAME" id="mce-LNAME" placeholder="您的姓氏">
+                                <label for="mce-FNAME">First Name</label>
+                                <input type="text" name="FNAME" id="mce-FNAME" placeholder="名字">
                             </div>
 
                             <div class="mc-field-group">
@@ -79,7 +80,7 @@
                                 <input type="text" name="PHONE" id="mce-PHONE" placeholder="電話號碼">
                             </div>
 
-                            <div hidden=""><input type="hidden" name="tags" value="689"></div>
+                            <input type="hidden" name="tags" value="115">
 
                             <div class="clear foot">
                                 <button type="submit" id="mc-embedded-subscribe" class="button">Subscribe</button>
@@ -323,34 +324,49 @@
         document.getElementById("mc-embedded-subscribe-form").addEventListener("submit", function(e) {
             e.preventDefault();
 
-            const email = document.getElementById("mce-EMAIL").value;
-            const lname = document.getElementById("mce-LNAME").value;
-            const phone = document.getElementById("mce-PHONE").value;
+            const email = document.getElementById("mce-EMAIL").value.trim();
+            const fname = document.getElementById("mce-FNAME").value.trim();
+            const phone = document.getElementById("mce-PHONE").value.trim();
             const status = document.getElementById("mc-status");
 
-            // ⚠️ 改成你的 Mailchimp JSONP endpoint (注意是 post-json，不是 post)
-            const url = "https://gmail.us22.list-manage.com/subscribe/post-json?u=807b0ab94229d2870b390b39d&id=6c314b0f05&c=?";
+            if (!email) {
+                status.textContent = "請輸入 Email";
+                status.style.color = "red";
+                return;
+            }
+
+            // JSONP API endpoint
+            const url = "https://18light.us22.list-manage.com/subscribe/post-json?u=d2dafc0aa1da36bc830a8dcc2&id=2633d14e4a&c=?";
 
             status.textContent = "送出中...";
             status.style.color = "#555";
 
-            // 利用 JSONP 呼叫 Mailchimp
+            // 建立 <script> 以 JSONP 方式呼叫 Mailchimp
             const script = document.createElement("script");
-            script.src = `${url}&EMAIL=${encodeURIComponent(email)}&LNAME=${encodeURIComponent(lname)}&PHONE=${encodeURIComponent(phone)}`;
-            
+            const params = new URLSearchParams({
+                EMAIL: email,
+                FNAME: fname,
+                PHONE: phone,
+                tags: 115, //WebSite tag ID
+                c: "mcCallback"
+            });
+
+            // 清除舊 callback，避免重複觸發
+            if (window.mcCallback) delete window.mcCallback;
+
             window.mcCallback = function(data) {
                 if (data.result === "success") {
                     status.textContent = "✅ 感謝訂閱！請至信箱確認。";
                     status.style.color = "green";
+                    document.getElementById("mc-embedded-subscribe-form").reset();
                 } else {
-                    status.textContent = "❌ 發送失敗：" + (data.msg || "請稍後再試");
+                    status.textContent = "❌ 訂閱失敗：" + (data.msg ? data.msg.replace(/(<([^>]+)>)/gi, "") : "請稍後再試");
                     status.style.color = "red";
                 }
                 script.remove();
             };
-            
-            // Mailchimp JSONP 需要 callback 參數
-            script.src += "&c=mcCallback";
+
+            script.src = url + "&" + params.toString();
             document.body.appendChild(script);
         });
     </script>
